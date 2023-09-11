@@ -1,0 +1,33 @@
+name : Auto assign TA
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  assign:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Get collaborators
+      id: collaborators
+      # use github api to get all collaborators of the repo
+      run: |
+        # exclude the logins
+        exclude_logins=("github-actions[bot]" "lazovik" "feitosa-daniel" "andrewlalis" "Heerkog" "reinsmedinga" "Erblin-Ibrahimi" "Stylo2k" "BugelNiels" "taars-bot")
+        # get all collaborators
+        collaborators=$(curl -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" -s "https://api.github.com/repos/${{ github.repository }}/collaborators?per_page=100" | jq -r '.[].login')
+        # remove the logins from the collaborators
+        for login in "${exclude_logins[@]}"; do
+          collaborators=("${collaborators[@]/$login}")
+        done
+        # assign the collaborators to the output
+        {
+          echo 'collaborators<<EOF'
+          echo ${collaborators[@]}
+          echo EOF
+        } >> $GITHUB_OUTPUT
+    - name: Assign TA
+      uses: pozil/auto-assign-issue@v1.12.0
+      with:
+        assignees: ${{ steps.collaborators.outputs.collaborators }}
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        numOfAssignee: 1
