@@ -14,15 +14,26 @@ jobs:
         # exclude the logins
         exclude_logins=("github-actions[bot]" "lazovik" "feitosa-daniel" "andrewlalis" "Heerkog" "reinsmedinga" "Erblin-Ibrahimi" "Stylo2k" "BugelNiels" "taars-bot")
         # get all collaborators
-        collaborators=$(curl -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" -s "https://api.github.com/repos/${{ github.repository }}/collaborators?per_page=100" | jq -r '.[].login')
-        # remove the logins from the collaborators
-        for login in "${exclude_logins[@]}"; do
-          collaborators=("${collaborators[@]/$login}")
+        collaborators=$(curl -H "Authorization: Bearer ${{secrets.OWNER_TOKEN}}" -s "https://api.github.com/repos/${{ github.repository }}/collaborators?per_page=100" | jq -r '.[].login')
+        
+        echo "UnFiltered collaborators: ${collaborators[@]}"
+
+        filtered_collaborators=()
+
+        # filter out the excluded logins
+        for collaborator in ${collaborators[@]}; do
+            if [[ ! " ${exclude_logins[@]} " =~ " ${collaborator} " ]]; then
+                filtered_collaborators+=($collaborator)
+            fi
         done
+        
+        # print the collaborators
+        echo "Found collaborators: ${filtered_collaborators[@]}"
+
         # assign the collaborators to the output
         {
           echo 'collaborators<<EOF'
-          echo ${collaborators[@]}
+          echo ${filtered_collaborators[@]}
           echo EOF
         } >> $GITHUB_OUTPUT
     - name: Assign TA
@@ -30,4 +41,4 @@ jobs:
       with:
         assignees: ${{ steps.collaborators.outputs.collaborators }}
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-        numOfAssignee: 1
+        numOfAssignee: 3
