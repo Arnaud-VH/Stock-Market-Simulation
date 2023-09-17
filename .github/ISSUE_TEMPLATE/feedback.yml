@@ -13,8 +13,8 @@ body:
       label: Assignment
       description: What assignment are you asking about?
       options:
-        - RPG (Assignment 2)
-        - RTS (Final Project)
+        - Networking (Assignment 2)
+        - STONKS (Final Project)
     validations:
       required: true
   - type: textarea
