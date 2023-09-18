@@ -1,7 +1,6 @@
 package nl.rug.aoop.messagequeue;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 import java.util.TreeMap;
 
 /**
