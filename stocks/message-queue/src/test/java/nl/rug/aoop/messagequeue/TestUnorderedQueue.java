@@ -26,9 +26,13 @@ public class TestUnorderedQueue {
     @Test
     void testQueueMethods() {
         List<Method> methods = List.of(queue.getClass().getDeclaredMethods());
-        assertTrue(methods.contains("enqueue"));
-        assertTrue(methods.contains("dequeue"));
-        assertTrue(methods.contains("getSize"));
+        int count = 0;
+        for (Method m : methods) {
+            if (m.getName().equals("enqueue")) count++;
+            if (m.getName().equals("dequeue")) count++;
+            if (m.getName().equals("getSize")) count++;
+        }
+        assertEquals(3, count);
     }
 
 

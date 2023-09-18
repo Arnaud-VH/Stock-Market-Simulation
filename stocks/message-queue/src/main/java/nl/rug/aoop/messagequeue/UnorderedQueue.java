@@ -20,7 +20,11 @@ public class UnorderedQueue implements MessageQueue {
 
     @Override
     public Message dequeue() {
-        return unorderedQueue.remove();
+        if (unorderedQueue.size() > 0) {
+            return unorderedQueue.remove();
+        } else {
+            return null;
+        }
     }
 
     @Override

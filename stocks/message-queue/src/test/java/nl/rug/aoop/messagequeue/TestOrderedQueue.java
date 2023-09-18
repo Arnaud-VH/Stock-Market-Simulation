@@ -21,7 +21,6 @@ public class TestOrderedQueue {
     void testQueueConstructor() {
         assertNotNull(queue);
     }
-
     @Test
     void testQueueMethods() {
         List<Method> methods = List.of(queue.getClass().getDeclaredMethods());
