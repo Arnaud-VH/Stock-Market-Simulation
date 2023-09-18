@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.internal.matchers.Null;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -28,13 +29,13 @@ public class TestUnorderedQueue {
     @Test
     void testQueueMethods() {
         List<Method> methods = List.of(queue.getClass().getDeclaredMethods());
-        int count = 0;
+        ArrayList<String> methodNames = new ArrayList<String>();
         for (Method m : methods) {
-            if (m.getName().equals("enqueue")) count++;
-            if (m.getName().equals("dequeue")) count++;
-            if (m.getName().equals("getSize")) count++;
+            methodNames.add(m.getName());
         }
-        assertEquals(3, count);
+        assertTrue(methodNames.contains("enqueue"));
+        assertTrue(methodNames.contains("dequeue"));
+        assertTrue(methodNames.contains("getSize"));
     }
 
     @Test

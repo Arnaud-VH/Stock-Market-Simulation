@@ -9,7 +9,6 @@ import java.util.Queue;
  */
 public class UnorderedQueue implements MessageQueue {
     private final Queue<Message> unorderedQueue;
-
     public UnorderedQueue() {
         unorderedQueue = new LinkedList<>();
     }
