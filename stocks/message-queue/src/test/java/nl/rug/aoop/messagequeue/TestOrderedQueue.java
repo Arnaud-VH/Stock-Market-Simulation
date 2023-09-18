@@ -36,6 +36,10 @@ public class TestOrderedQueue {
         Message message2 = new Message("header", "body");
         Message message3 = new Message("header", "body");
 
+        System.out.println(message1.getTimestamp());
+        System.out.println(message2.getTimestamp());
+        System.out.println(message3.getTimestamp());
+
         queue.enqueue(message3);
         queue.enqueue(message1);
         queue.enqueue(message2);
