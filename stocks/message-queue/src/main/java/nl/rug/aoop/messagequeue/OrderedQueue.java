@@ -1,13 +1,13 @@
 package nl.rug.aoop.messagequeue;
 
 import java.time.LocalDateTime;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Implementation of a message queue. Here the message queue is ordered by timestamp.
  */
 public class OrderedQueue implements MessageQueue {
-    private final TreeMap<LocalDateTime,Message> orderedQueue;
+    private final TreeMap<LocalDateTime, LinkedList<Message>> orderedQueue;
 
     public OrderedQueue () {
         orderedQueue = new TreeMap<>();
@@ -15,17 +15,40 @@ public class OrderedQueue implements MessageQueue {
 
     @Override
     public void enqueue(Message message) {
-        orderedQueue.put(message.getTimestamp(), message);
+        if (message == null) {
+            throw new NullPointerException();
+        } else {
+            LocalDateTime key = message.getTimestamp();
+            if (orderedQueue.containsKey(key)) {
+                orderedQueue.get(key).add(message);
+            } else {
+                LinkedList<Message> l = new LinkedList<>();
+                l.add(message);
+                orderedQueue.put(key, l);
+            }
+        }
     }
 
     @Override
     public Message dequeue() {
-        Message message = orderedQueue.get(orderedQueue.firstKey());
-        return message;
+        if (!orderedQueue.isEmpty()) {
+            LocalDateTime key = orderedQueue.firstKey();
+            Message message = orderedQueue.get(key).pop();
+            if (orderedQueue.get(key).isEmpty()) {
+                orderedQueue.remove(key);
+            }
+            return message;
+        } else {
+            throw new NoSuchElementException();
+        }
     }
 
     @Override
     public int getSize() {
-        return orderedQueue.size();
+        int size = 0;
+        for (LinkedList<Message> value : orderedQueue.values()) {
+            size += value.size();
+        }
+        return size;
     }
 }
