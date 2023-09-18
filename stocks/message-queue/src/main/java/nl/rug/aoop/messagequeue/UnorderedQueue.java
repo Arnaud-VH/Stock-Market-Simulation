@@ -1,6 +1,7 @@
 package nl.rug.aoop.messagequeue;
 
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.Queue;
 
 /**
@@ -15,16 +16,16 @@ public class UnorderedQueue implements MessageQueue {
 
     @Override
     public void enqueue(Message message) {
-        unorderedQueue.add(message);
+        if (message == null) {
+            throw new NullPointerException();
+        } else {
+            unorderedQueue.add(message);
+        }
     }
 
     @Override
     public Message dequeue() {
-        if (unorderedQueue.size() > 0) {
-            return unorderedQueue.remove();
-        } else {
-            return null;
-        }
+        return unorderedQueue.remove();
     }
 
     @Override

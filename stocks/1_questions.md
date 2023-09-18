@@ -7,9 +7,9 @@ Suppose you are developing a similar (if not identical) project for a company. O
 Do you agree or disagree with the proposition? Please elaborate on your reason to agree or disagree. (~50-100 words)
 
 ___
-
 **Answer**:
 
+Continuous integration comes in our assignment by continuously committing and pushing to git. 
 ___
 
 # Question 2

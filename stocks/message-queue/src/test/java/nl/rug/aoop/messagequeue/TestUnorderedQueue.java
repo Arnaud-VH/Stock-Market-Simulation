@@ -2,9 +2,11 @@ package nl.rug.aoop.messagequeue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.internal.matchers.Null;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,10 +37,14 @@ public class TestUnorderedQueue {
         assertEquals(3, count);
     }
 
+    @Test
+    void testEnqueueNull() {
+        assertThrows(NullPointerException.class, ()-> queue.enqueue(null));
+    }
 
     @Test
-    void testDequeue() {
-        assertNull(queue.dequeue());
+    void testDequeueEmptyQueue() {
+        assertThrows(NoSuchElementException.class, ()-> queue.dequeue());
     }
 
     @Test
@@ -61,6 +67,12 @@ public class TestUnorderedQueue {
         assertEquals(1, queue.getSize());
         message = queue.dequeue();
         assertEquals(0, queue.getSize());
+    }
+
+    @Test
+    void testSizeWhenNull() {
+        MessageQueue test = null;
+        assertThrows(NullPointerException.class, () -> test.getSize());
     }
 
     @Test
