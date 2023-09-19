@@ -44,6 +44,6 @@ public class TestProducer {
     @Test
     void testPutNull() {
         producer.put(null);
-        assertEquals(0,queue.getSize());
+        assertEquals(0, queue.getSize());
     }
 }
