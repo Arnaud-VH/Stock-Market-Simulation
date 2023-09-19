@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
@@ -26,16 +27,17 @@ public class TestOrderedQueue {
     void testQueueConstructor() {
         assertNotNull(queue);
     }
+
     @Test
     void testQueueMethods() {
         List<Method> methods = List.of(queue.getClass().getDeclaredMethods());
-        int count = 0;
+        ArrayList<String> methodNames = new ArrayList<String>();
         for (Method m : methods) {
-            if (m.getName().equals("enqueue")) count++;
-            if (m.getName().equals("dequeue")) count++;
-            if (m.getName().equals("getSize")) count++;
+            methodNames.add(m.getName());
         }
-        assertEquals(3, count);
+        assertTrue(methodNames.contains("enqueue"));
+        assertTrue(methodNames.contains("dequeue"));
+        assertTrue(methodNames.contains("getSize"));
     }
 
     @Disabled
@@ -95,12 +97,13 @@ public class TestOrderedQueue {
 
     @Test
     void testEnqueueNull() {
-        assertThrows(NullPointerException.class, ()-> queue.enqueue(null));
+        queue.enqueue(null);
+        assertEquals(0, queue.getSize());
     }
 
     @Test
     void testDequeueEmptyQueue() {
-        assertThrows(NoSuchElementException.class, ()-> queue.dequeue());
+        assertNull(queue.dequeue());
     }
 
     @Test

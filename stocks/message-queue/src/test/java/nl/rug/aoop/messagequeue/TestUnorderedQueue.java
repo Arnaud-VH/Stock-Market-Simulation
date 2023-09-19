@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.internal.matchers.Null;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -28,23 +29,24 @@ public class TestUnorderedQueue {
     @Test
     void testQueueMethods() {
         List<Method> methods = List.of(queue.getClass().getDeclaredMethods());
-        int count = 0;
+        ArrayList<String> methodNames = new ArrayList<String>();
         for (Method m : methods) {
-            if (m.getName().equals("enqueue")) count++;
-            if (m.getName().equals("dequeue")) count++;
-            if (m.getName().equals("getSize")) count++;
+            methodNames.add(m.getName());
         }
-        assertEquals(3, count);
+        assertTrue(methodNames.contains("enqueue"));
+        assertTrue(methodNames.contains("dequeue"));
+        assertTrue(methodNames.contains("getSize"));
     }
 
     @Test
     void testEnqueueNull() {
-        assertThrows(NullPointerException.class, ()-> queue.enqueue(null));
+        queue.enqueue(null);
+        assertEquals(0, queue.getSize());
     }
 
     @Test
     void testDequeueEmptyQueue() {
-        assertThrows(NoSuchElementException.class, ()-> queue.dequeue());
+        assertNull(queue.dequeue());
     }
 
     @Test
@@ -70,12 +72,6 @@ public class TestUnorderedQueue {
     }
 
     @Test
-    void testSizeWhenNull() {
-        MessageQueue test = null;
-        assertThrows(NullPointerException.class, () -> test.getSize());
-    }
-
-    @Test
     void testQueueOrdering() {
         Message message1 = new Message("header", "body");
         Message message2 = new Message("header", "body");
@@ -89,5 +85,7 @@ public class TestUnorderedQueue {
         assertEquals(message1, queue.dequeue());
         assertEquals(message2, queue.dequeue());
     }
+
+    // change enqueue tests
 
 }

@@ -15,8 +15,9 @@ public class Message {
 
     /**
      * Constructor for the Messages.
+     *
      * @param messageHeader The header (Title) of the message.
-     * @param messageBody The text content of the message.
+     * @param messageBody   The text content of the message.
      */
     public Message(String messageHeader, String messageBody) {
         this.header = messageHeader;
@@ -26,8 +27,9 @@ public class Message {
 
     /**
      * Constructor for messages to specify custom timestamp
-     * @param messageHeader The header (Title) of the message.
-     * @param messageBody The text content of the message.
+     *
+     * @param messageHeader    The header (Title) of the message.
+     * @param messageBody      The text content of the message.
      * @param messageTimestamp The timestamp of the message.
      */
     public Message(String messageHeader, String messageBody, LocalDateTime messageTimestamp) {
