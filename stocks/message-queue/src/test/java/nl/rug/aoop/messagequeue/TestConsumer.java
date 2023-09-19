@@ -41,5 +41,9 @@ public class TestConsumer {
         assertEquals(consumer.poll(), message1);
     }
 
+    @Test
+    void testPollEmpty() {
+        assertNull(consumer.poll());
+    }
     // it would be good to have a test for dequeue on an empty queue, however what should that result in? A null?
 }

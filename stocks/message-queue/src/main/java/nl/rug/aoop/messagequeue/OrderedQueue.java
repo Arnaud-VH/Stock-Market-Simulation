@@ -16,7 +16,7 @@ public class OrderedQueue implements MessageQueue {
     @Override
     public void enqueue(Message message) {
         if (message == null) {
-            throw new NullPointerException();
+            System.err.println("Attempting to enqueue NULL");
         } else {
             LocalDateTime key = message.getTimestamp();
             if (orderedQueue.containsKey(key)) {
@@ -39,7 +39,8 @@ public class OrderedQueue implements MessageQueue {
             }
             return message;
         } else {
-            throw new NoSuchElementException();
+            System.err.println("Attempting to dequeue an empty queue");
+            return null;
         }
     }
 

@@ -96,12 +96,13 @@ public class TestOrderedQueue {
 
     @Test
     void testEnqueueNull() {
-        assertThrows(NullPointerException.class, ()-> queue.enqueue(null));
+        queue.enqueue(null);
+        assertEquals(0,queue.getSize());
     }
 
     @Test
     void testDequeueEmptyQueue() {
-        assertThrows(NoSuchElementException.class, ()-> queue.dequeue());
+        assertNull(queue.dequeue());
     }
 
     @Test

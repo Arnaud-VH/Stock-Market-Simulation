@@ -38,6 +38,12 @@ public class TestProducer {
     void testPut() {
         Message message1 = new Message("header", "body");
         producer.put(message1);
-        assertEquals(queue.dequeue(), message1);
+        assertEquals(message1, queue.dequeue());
+    }
+
+    @Test
+    void testPutNull() {
+        producer.put(null);
+        assertEquals(0,queue.getSize());
     }
 }

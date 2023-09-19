@@ -16,7 +16,7 @@ public class UnorderedQueue implements MessageQueue {
     @Override
     public void enqueue(Message message) {
         if (message == null) {
-            throw new NullPointerException();
+            System.err.println("Attempting to enqueue a NULL");
         } else {
             unorderedQueue.add(message);
         }
@@ -24,7 +24,11 @@ public class UnorderedQueue implements MessageQueue {
 
     @Override
     public Message dequeue() {
-        return unorderedQueue.remove();
+        if (!unorderedQueue.isEmpty()) {
+            return unorderedQueue.remove();
+        }
+        System.out.println("Attempting to deque an empty queue");
+        return null;
     }
 
     @Override

@@ -40,12 +40,13 @@ public class TestUnorderedQueue {
 
     @Test
     void testEnqueueNull() {
-        assertThrows(NullPointerException.class, ()-> queue.enqueue(null));
+        queue.enqueue(null);
+        assertEquals(0, queue.getSize());
     }
 
     @Test
     void testDequeueEmptyQueue() {
-        assertThrows(NoSuchElementException.class, ()-> queue.dequeue());
+        assertNull(queue.dequeue());
     }
 
     @Test
@@ -71,12 +72,6 @@ public class TestUnorderedQueue {
     }
 
     @Test
-    void testSizeWhenNull() {
-        MessageQueue test = null;
-        assertThrows(NullPointerException.class, () -> test.getSize());
-    }
-
-    @Test
     void testQueueOrdering() {
         Message message1 = new Message("header", "body");
         Message message2 = new Message("header", "body");
@@ -90,5 +85,7 @@ public class TestUnorderedQueue {
         assertEquals(message1, queue.dequeue());
         assertEquals(message2, queue.dequeue());
     }
+
+    // change enqueue tests
 
 }
