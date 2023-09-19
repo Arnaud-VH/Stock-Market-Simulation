@@ -7,7 +7,7 @@ import java.util.*;
  * Implementation of a message queue. Here the message queue is ordered by timestamp.
  */
 public class OrderedQueue implements MessageQueue {
-    private final TreeMap<LocalDateTime, LinkedList<Message>> orderedQueue;
+    private final Map<LocalDateTime, LinkedList<Message>> orderedQueue;
 
     /**
      * The constructor for the ordered queue.
@@ -35,7 +35,16 @@ public class OrderedQueue implements MessageQueue {
     @Override
     public Message dequeue() {
         if (!orderedQueue.isEmpty()) {
-            LocalDateTime key = orderedQueue.firstKey();
+            Map.Entry<LocalDateTime,LinkedList<Message>> smallestEntry = null;
+            for (Map.Entry<LocalDateTime, LinkedList<Message>> entry : orderedQueue.entrySet()) {
+                if(null == smallestEntry) {
+                    smallestEntry = entry;
+                    break;
+                }
+            }
+
+            LocalDateTime key = smallestEntry.getKey();
+
             Message message = orderedQueue.get(key).pop();
             if (orderedQueue.get(key).isEmpty()) {
                 orderedQueue.remove(key);
