@@ -9,7 +9,6 @@ Do you agree or disagree with the proposition? Please elaborate on your reason t
 ___
 **Answer**:
 
-Continuous integration comes in our assignment by continuously committing and pushing to git. 
 ___
 
 # Question 2
@@ -22,9 +21,41 @@ How could you modify the `LinkedList` class so that the value could be any diffe
 ___
 
 **Answer**:
-
+This can be done by using a class level generic. By using a class level generic we make it so that our Linked List can be re-used for any data type instead of making new LinkedList and Node methods for all data types we want.
+Before we could only store integers in our nodes but now we can store any data type in our nodes: String, Double etc... because our generic methods are not type dependent. 
 ```java
-// write the code of the modified class here
+public class Node<T> {
+    private T value;
+    private Node<T> next;
+
+    public Node(T value) {
+        this.value = value;
+    }
+
+    public Node getNext() {
+        return next;
+    }
+}
+
+public class LinkedList<T> {
+    private Node<T> head;
+    private int size;
+    
+    public LinkedList(Node<T> head) {
+        this.head = head;
+        this.size = 1;
+    }
+    
+    void insert(T value);
+    
+    void delete(T value);
+    
+    int getSize() {
+        return size;
+    }
+}
+
+
 ```
 
 ___
@@ -36,6 +67,10 @@ How is Continuous Integration applied to (or enforced on) your assignment? (~30-
 ___
 
 **Answer**:
+Continuous Integration happens in our assignment as we systematically clean compile the project and run all the unit tests written for the program.
+By doing this we get instant feedback on the code written so that bugs can be fixed systematically without bug-infested code being pushed onto the git repository. As well, 
+by continuous integration we can find bugs in our code early and isolate these bugs, preventing them from having a big impact on the project as a whole. Lastly, by enforcing 
+continuous integration it makes collaboration the project easier, as less buggy code is shared between developers. 
 
 ___
 
