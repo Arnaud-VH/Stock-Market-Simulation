@@ -9,6 +9,9 @@ import java.util.*;
 public class OrderedQueue implements MessageQueue {
     private final TreeMap<LocalDateTime, LinkedList<Message>> orderedQueue;
 
+    /**
+     * The constructor for the ordered queue.
+     */
     public OrderedQueue() {
         orderedQueue = new TreeMap<>();
     }

@@ -26,7 +26,7 @@ public class Message {
     }
 
     /**
-     * Constructor for messages to specify custom timestamp
+     * Constructor for messages to specify custom timestamp.
      *
      * @param messageHeader    The header (Title) of the message.
      * @param messageBody      The text content of the message.

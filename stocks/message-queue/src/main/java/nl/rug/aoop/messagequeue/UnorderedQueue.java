@@ -1,7 +1,6 @@
 package nl.rug.aoop.messagequeue;
 
 import java.util.LinkedList;
-import java.util.Objects;
 import java.util.Queue;
 
 /**
@@ -10,6 +9,9 @@ import java.util.Queue;
 public class UnorderedQueue implements MessageQueue {
     private final Queue<Message> unorderedQueue;
 
+    /**
+     * Constructor for the unordered queue.
+     */
     public UnorderedQueue() {
         unorderedQueue = new LinkedList<>();
     }
