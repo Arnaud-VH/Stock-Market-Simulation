@@ -35,8 +35,6 @@ public class TestMessage {
     @Test
     void testMessageImmutable() {
         List<Field> fields = List.of(Message.class.getDeclaredFields());
-        fields.forEach(field -> {
-            assertTrue(Modifier.isFinal(field.getModifiers()), field.getName() + " is not final");
-        });
+        fields.forEach(field -> assertTrue(Modifier.isFinal(field.getModifiers()), field.getName() + " is not final"));
     }
 }
