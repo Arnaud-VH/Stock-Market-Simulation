@@ -1,6 +1,5 @@
 package nl.rug.aoop.messagequeue;
 
-import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -9,7 +8,6 @@ import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,7 +29,7 @@ public class TestOrderedQueue {
     @Test
     void testQueueMethods() {
         List<Method> methods = List.of(queue.getClass().getDeclaredMethods());
-        ArrayList<String> methodNames = new ArrayList<String>();
+        ArrayList<String> methodNames = new ArrayList<>();
         for (Method m : methods) {
             methodNames.add(m.getName());
         }
@@ -40,7 +38,7 @@ public class TestOrderedQueue {
         assertTrue(methodNames.contains("getSize"));
     }
 
-    @Disabled
+    @Disabled // disabled test because it creates same timestamps and expects messages to be sorted by time created
     @Test
     void testQueueEnqueue() {
         Message message1 = new Message("header", "body");
@@ -60,7 +58,7 @@ public class TestOrderedQueue {
         assertEquals(message3, queue.dequeue());
     }
 
-    @Test
+    @Test // alternative enqueue test with explicitly different timestamps
     void testQueueEnqueueDiffTimestamps() throws InterruptedException {
         Message message1 = new Message("header", "body");
         TimeUnit.MILLISECONDS.sleep(1);
@@ -79,8 +77,8 @@ public class TestOrderedQueue {
         assertEquals(message3, queue.dequeue());
     }
 
-    @Test
-    void testQueueEnqueueSameTimestamps() throws InterruptedException {
+    @Test // alternative enqueue test with explicitly same timestamps to test collisions
+    void testQueueEnqueueSameTimestamps() {
         LocalDateTime t = LocalDateTime.now();
         Message message1 = new Message("header", "body", t);
         Message message2 = new Message("header", "body", t);
