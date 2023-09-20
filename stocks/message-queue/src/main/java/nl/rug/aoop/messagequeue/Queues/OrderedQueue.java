@@ -1,4 +1,7 @@
-package nl.rug.aoop.messagequeue;
+package nl.rug.aoop.messagequeue.Queues;
+
+import nl.rug.aoop.messagequeue.Interfaces.MessageQueue;
+import nl.rug.aoop.messagequeue.Message;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -16,6 +19,10 @@ public class OrderedQueue implements MessageQueue {
         orderedQueue = new TreeMap<>();
     }
 
+    /**
+     * Enqueue for the orderded Queue. Uses Linear Chaining in the case of messages with the same timeStamp.
+     * @param message The message that is enqueued into the queue.
+     */
     @Override
     public void enqueue(Message message) {
         // if trying to enqueue null print error and do nothing

@@ -1,4 +1,7 @@
-package nl.rug.aoop.messagequeue;
+package nl.rug.aoop.messagequeue.Queues;
+
+import nl.rug.aoop.messagequeue.Interfaces.MessageQueue;
+import nl.rug.aoop.messagequeue.Message;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -30,7 +33,7 @@ public class UnorderedQueue implements MessageQueue {
         if (!unorderedQueue.isEmpty()) {
             return unorderedQueue.remove();
         }
-        System.out.println("Attempting to deque an empty queue");
+        System.out.println("Attempting to deque on an empty queue");
         return null;
     }
 

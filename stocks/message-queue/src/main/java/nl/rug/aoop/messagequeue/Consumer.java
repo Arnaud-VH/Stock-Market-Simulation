@@ -1,6 +1,8 @@
 package nl.rug.aoop.messagequeue;
 
 import lombok.Getter;
+import nl.rug.aoop.messagequeue.Interfaces.MQConsumer;
+import nl.rug.aoop.messagequeue.Interfaces.MessageQueue;
 
 /**
  * Consumer class that can interact with the Message Queue.

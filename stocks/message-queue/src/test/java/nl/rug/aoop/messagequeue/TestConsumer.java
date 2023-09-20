@@ -1,5 +1,6 @@
 package nl.rug.aoop.messagequeue;
 
+import nl.rug.aoop.messagequeue.Queues.OrderedQueue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -45,5 +46,4 @@ public class TestConsumer {
     void testPollEmpty() {
         assertNull(consumer.poll());
     }
-    // it would be good to have a test for dequeue on an empty queue, however what should that result in? A null?
 }

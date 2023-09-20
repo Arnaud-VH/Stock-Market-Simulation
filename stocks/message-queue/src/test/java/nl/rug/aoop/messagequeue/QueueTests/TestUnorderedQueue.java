@@ -1,13 +1,14 @@
-package nl.rug.aoop.messagequeue;
+package nl.rug.aoop.messagequeue.QueueTests;
 
+import nl.rug.aoop.messagequeue.Interfaces.MessageQueue;
+import nl.rug.aoop.messagequeue.Message;
+import nl.rug.aoop.messagequeue.Queues.UnorderedQueue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.internal.matchers.Null;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -85,7 +86,5 @@ public class TestUnorderedQueue {
         assertEquals(message1, queue.dequeue());
         assertEquals(message2, queue.dequeue());
     }
-
-    // change enqueue tests
 
 }

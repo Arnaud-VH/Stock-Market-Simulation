@@ -1,7 +1,9 @@
-package nl.rug.aoop.messagequeue;
+package nl.rug.aoop.messagequeue.QueueTests;
 
+import nl.rug.aoop.messagequeue.Interfaces.MessageQueue;
+import nl.rug.aoop.messagequeue.Message;
+import nl.rug.aoop.messagequeue.Queues.OrderedQueue;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;
@@ -36,26 +38,6 @@ public class TestOrderedQueue {
         assertTrue(methodNames.contains("enqueue"));
         assertTrue(methodNames.contains("dequeue"));
         assertTrue(methodNames.contains("getSize"));
-    }
-
-    @Disabled // disabled test because it creates same timestamps and expects messages to be sorted by time created
-    @Test
-    void testQueueEnqueue() {
-        Message message1 = new Message("header", "body");
-        Message message2 = new Message("header", "body");
-        Message message3 = new Message("header", "body");
-
-        System.out.println(message1.getTimestamp());
-        System.out.println(message2.getTimestamp());
-        System.out.println(message3.getTimestamp());
-
-        queue.enqueue(message3);
-        queue.enqueue(message1);
-        queue.enqueue(message2);
-
-        assertEquals(message1, queue.dequeue());
-        assertEquals(message2, queue.dequeue());
-        assertEquals(message3, queue.dequeue());
     }
 
     @Test // alternative enqueue test with explicitly different timestamps
