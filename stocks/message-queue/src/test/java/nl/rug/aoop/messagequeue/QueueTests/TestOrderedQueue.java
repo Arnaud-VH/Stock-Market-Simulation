@@ -42,11 +42,11 @@ public class TestOrderedQueue {
 
     @Test // alternative enqueue test with explicitly different timestamps
     void testQueueEnqueueDiffTimestamps() throws InterruptedException {
-        Message message1 = new Message("header", "body");
+        Message message1 = new Message("header", "body", LocalDateTime.now());
         TimeUnit.MILLISECONDS.sleep(1);
-        Message message2 = new Message("header", "body");
+        Message message2 = new Message("header", "body", LocalDateTime.now());
         TimeUnit.MILLISECONDS.sleep(1);
-        Message message3 = new Message("header", "body");
+        Message message3 = new Message("header", "body", LocalDateTime.now());
 
         queue.enqueue(message3);
         queue.enqueue(message1);
