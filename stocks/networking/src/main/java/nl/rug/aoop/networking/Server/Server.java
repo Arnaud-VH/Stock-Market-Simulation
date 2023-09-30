@@ -1,6 +1,8 @@
 package nl.rug.aoop.networking.Server;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import nl.rug.aoop.networking.Command.CommandHandler;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -16,19 +18,24 @@ public class Server implements Runnable{
 
     private final int port;
     private ServerSocket serverSocket;
-    private boolean running = false;
+    @Getter private boolean running = false;
+    @Getter private boolean started;
     private int id = 0;
     private ExecutorService executorService;
+    private final CommandHandler commandHandler;
 
     /**
      * Server constructor.
      * @param port The port on which the server is hosted.
+     * @param commandHandler The commandHandler which deals with the client's commands
      * @throws IOException when the socket is opened.
      */
-    public Server(int port) throws IOException {
+    public Server(int port, CommandHandler commandHandler) throws IOException {
         serverSocket = new ServerSocket(port);
         this.port = port;
         executorService = Executors.newCachedThreadPool(); //Don't want to limit outrselves
+        this.commandHandler = commandHandler;
+        started = true;
     }
 
     @Override
@@ -41,7 +48,7 @@ public class Server implements Runnable{
                 //New connection with the server
                 log.info("New connection from client");
                 //Here we handle the new client connections, with a new class.
-                ClientHandler clientHandler = new ClientHandler(socket, id);
+                ClientHandler clientHandler = new ClientHandler(socket, id, commandHandler);
                 this.executorService.submit(clientHandler); //Takes a runnable, which is the clientHandler.
                 id++; //Increment the ID everytime a new client connects.
             } catch (IOException e) {
@@ -56,10 +63,6 @@ public class Server implements Runnable{
     public void terminate() {
         running = false;
         this.executorService.shutdown(); //All clientHandler's in thread pool to shutdown
-    }
-
-    public boolean isRunning() {
-        return this.running;
     }
 
     public int getPort() {

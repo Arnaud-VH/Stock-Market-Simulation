@@ -13,12 +13,12 @@ import java.net.Socket;
  * Client class that connects with the server.
  */
 @Slf4j
-public class Client {
+public class Client implements Runnable{
     /**
      * Constant TIMEOUT.
      */
     public static final int TIMEOUT = 1000;
-    private InetSocketAddress address;
+    private final InetSocketAddress address;
     private Socket socket;
     private boolean running = false;
     private boolean connected = false;
@@ -47,18 +47,23 @@ public class Client {
         }
         connected = true;
         in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-        out = new PrintWriter(this.socket.getOutputStream());
+        out = new PrintWriter(this.socket.getOutputStream(), true);
     }
 
     /**
      * Run function that keeps connection between client and server and gets the input.
      */
+    @Override
     public void run() {
         running = true;
         //Server sends a message
         while(running) {
             try {
                 String fromServer = in.readLine();
+                if (fromServer == null) {
+                    terminate();
+                    break;
+                }
                 log.info("Server sent: " + fromServer);
                 //Get input from user and send to server
                 messageHandler.handleMessage(fromServer);
@@ -71,9 +76,28 @@ public class Client {
     }
 
     /**
+     * Sends a message to the server.
+     * @param message The message that is sent to the server.
+     */
+    public void sendMessage(String message) {
+        if (message == null || message.equalsIgnoreCase("")) {
+            throw new IllegalArgumentException("Attempting to send an invalid message");
+        }
+        out.println(message);
+    }
+
+    /**
      * Called when we close the connection. It is no longer running.
      */
     public void terminate() {
         running = false;
+    }
+
+    public boolean isConnected() {
+        return connected;
+    }
+
+    public boolean isRunning() {
+        return running;
     }
 }
