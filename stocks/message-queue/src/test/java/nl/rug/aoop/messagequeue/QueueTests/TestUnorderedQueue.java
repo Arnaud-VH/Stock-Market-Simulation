@@ -1,9 +1,13 @@
-package nl.rug.aoop.messagequeue;
+package nl.rug.aoop.messagequeue.QueueTests;
 
+import nl.rug.aoop.messagequeue.Interfaces.MessageQueue;
+import nl.rug.aoop.messagequeue.Message;
+import nl.rug.aoop.messagequeue.Queues.UnorderedQueue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,14 +30,23 @@ public class TestUnorderedQueue {
     @Test
     void testQueueMethods() {
         List<Method> methods = List.of(queue.getClass().getDeclaredMethods());
-        assertTrue(methods.contains("enqueue"));
-        assertTrue(methods.contains("dequeue"));
-        assertTrue(methods.contains("getSize"));
+        ArrayList<String> methodNames = new ArrayList<String>();
+        for (Method m : methods) {
+            methodNames.add(m.getName());
+        }
+        assertTrue(methodNames.contains("enqueue"));
+        assertTrue(methodNames.contains("dequeue"));
+        assertTrue(methodNames.contains("getSize"));
     }
 
+    @Test
+    void testEnqueueNull() {
+        queue.enqueue(null);
+        assertEquals(0, queue.getSize());
+    }
 
     @Test
-    void testDequeue() {
+    void testDequeueEmptyQueue() {
         assertNull(queue.dequeue());
     }
 
