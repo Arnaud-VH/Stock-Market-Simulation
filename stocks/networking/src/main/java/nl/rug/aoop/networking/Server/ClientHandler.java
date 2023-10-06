@@ -1,6 +1,7 @@
 package nl.rug.aoop.networking.Server;
 
 import lombok.extern.slf4j.Slf4j;
+import nl.rug.aoop.networking.Client.MessageHandler;
 import nl.rug.aoop.networking.Command.CommandHandler;
 
 import java.io.BufferedReader;
@@ -19,22 +20,22 @@ public class ClientHandler implements Runnable{
     private final PrintWriter out;
     private boolean running = false;
     private final int id;
-    private final CommandHandler commandHandler;
+    private final MessageHandler messageHandler;
 
     /**
      * Constructor for the clientHandler.
      * @param socket The socket through which communication with client and server happens.
      * @param id The ID of the client that is communicating with the server.
-     * @param commandHandler The commandHandler instance that deals with client's commands.
+     * @param messageHandler The messageHandler instance that deals with client's messages.
      * @throws IOException The exception that results from the socket input and output stream.
      */
-    public ClientHandler(Socket socket, int id, CommandHandler commandHandler) throws IOException {
+    public ClientHandler(Socket socket, int id, MessageHandler messageHandler) throws IOException {
         this.socket = socket;
         this.id = id;
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true); //Sets autoflush to true
         //This allows us to write and read from and to the socket.
-        this.commandHandler = commandHandler;
+        this.messageHandler = messageHandler;
     }
 
     @Override
@@ -56,7 +57,7 @@ public class ClientHandler implements Runnable{
                     break;
                 }
                 log.info("Received message" + fromClient);
-                commandHandler.execute(fromClient);
+                //commandHandler.execute(fromClient);
                 //commandMap.get(fromClient.trim()).execute();
                 out.println(fromClient);
                 log.info("Received from client: " + id + fromClient);

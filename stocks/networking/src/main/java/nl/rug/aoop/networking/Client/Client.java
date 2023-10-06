@@ -1,5 +1,6 @@
 package nl.rug.aoop.networking.Client;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -18,9 +19,9 @@ public class Client implements Runnable{
      * Constant TIMEOUT.
      */
     public static final int TIMEOUT = 1000;
-    private final InetSocketAddress address;
-    private Socket socket;
+    @Getter
     private boolean running = false;
+    @Getter
     private boolean connected = false;
     private BufferedReader in;
     private PrintWriter out;
@@ -33,21 +34,20 @@ public class Client implements Runnable{
      * @throws IOException Exception in case it was not able to connect to the Server Socket.
      */
     public Client(InetSocketAddress address, MessageHandler messageHandler) throws IOException {
-        this.address = address;
         this.messageHandler = messageHandler;
-        innitSocket(address);
+        initSocket(address);
     }
 
-    private void innitSocket(InetSocketAddress address) throws IOException {
-        this.socket = new Socket();
-        this.socket.connect(address, TIMEOUT);
-        if (!this.socket.isConnected()) {
+    private void initSocket(InetSocketAddress address) throws IOException {
+        Socket socket = new Socket();
+        socket.connect(address, TIMEOUT);
+        if (!socket.isConnected()) {
             log.error("Socket could not connect to port: " + address.getPort());
             throw new IOException("Socket could not connect");
         }
         connected = true;
-        in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-        out = new PrintWriter(this.socket.getOutputStream(), true);
+        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        out = new PrintWriter(socket.getOutputStream(), true);
     }
 
     /**
@@ -93,11 +93,4 @@ public class Client implements Runnable{
         running = false;
     }
 
-    public boolean isConnected() {
-        return connected;
-    }
-
-    public boolean isRunning() {
-        return running;
-    }
 }

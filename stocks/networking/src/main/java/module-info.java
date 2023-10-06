@@ -11,4 +11,6 @@ module networking {
     requires static lombok;
     requires org.slf4j;
     requires org.mockito;
+    requires messagequeue;
+    requires com.google.gson;
 }

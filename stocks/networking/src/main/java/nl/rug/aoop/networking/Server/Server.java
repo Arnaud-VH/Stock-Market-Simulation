@@ -2,6 +2,7 @@ package nl.rug.aoop.networking.Server;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import nl.rug.aoop.networking.Client.MessageHandler;
 import nl.rug.aoop.networking.Command.CommandHandler;
 
 import java.io.IOException;
@@ -21,20 +22,19 @@ public class Server implements Runnable{
     @Getter private boolean running = false;
     @Getter private boolean started;
     private int id = 0;
-    private ExecutorService executorService;
-    private final CommandHandler commandHandler;
-
+    private final ExecutorService executorService;
+    private final MessageHandler messageHandler;
     /**
      * Server constructor.
      * @param port The port on which the server is hosted.
-     * @param commandHandler The commandHandler which deals with the client's commands
+     * @param messageHandler The message handler which deals with the client's messages.
      * @throws IOException when the socket is opened.
      */
-    public Server(int port, CommandHandler commandHandler) throws IOException {
+    public Server(int port, MessageHandler messageHandler) throws IOException {
         serverSocket = new ServerSocket(port);
+        this.messageHandler = messageHandler;
         this.port = port;
-        executorService = Executors.newCachedThreadPool(); //Don't want to limit outrselves
-        this.commandHandler = commandHandler;
+        executorService = Executors.newCachedThreadPool(); //Don't want to limit ourselves
         started = true;
     }
 
@@ -48,7 +48,7 @@ public class Server implements Runnable{
                 //New connection with the server
                 log.info("New connection from client");
                 //Here we handle the new client connections, with a new class.
-                ClientHandler clientHandler = new ClientHandler(socket, id, commandHandler);
+                ClientHandler clientHandler = new ClientHandler(socket, id, messageHandler);
                 this.executorService.submit(clientHandler); //Takes a runnable, which is the clientHandler.
                 id++; //Increment the ID everytime a new client connects.
             } catch (IOException e) {

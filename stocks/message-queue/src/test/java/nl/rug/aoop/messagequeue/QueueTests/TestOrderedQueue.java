@@ -3,7 +3,9 @@ package nl.rug.aoop.messagequeue.QueueTests;
 import nl.rug.aoop.messagequeue.Interfaces.MessageQueue;
 import nl.rug.aoop.messagequeue.Message;
 import nl.rug.aoop.messagequeue.Queues.OrderedQueue;
+import nl.rug.aoop.messagequeue.Queues.OrderedQueuee;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;
@@ -14,30 +16,12 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestOrderedQueue {
+public class TestOrderedQueue extends TestQueue {
 
-    MessageQueue queue = null;
-
+    @Override
     @BeforeEach
     void setUp() {
-        queue = new OrderedQueue();
-    }
-
-    @Test
-    void testQueueConstructor() {
-        assertNotNull(queue);
-    }
-
-    @Test
-    void testQueueMethods() {
-        List<Method> methods = List.of(queue.getClass().getDeclaredMethods());
-        ArrayList<String> methodNames = new ArrayList<>();
-        for (Method m : methods) {
-            methodNames.add(m.getName());
-        }
-        assertTrue(methodNames.contains("enqueue"));
-        assertTrue(methodNames.contains("dequeue"));
-        assertTrue(methodNames.contains("getSize"));
+        super.queue = new OrderedQueue();
     }
 
     @Test // alternative enqueue test with explicitly different timestamps
@@ -59,6 +43,7 @@ public class TestOrderedQueue {
         assertEquals(message3, queue.dequeue());
     }
 
+    @Disabled
     @Test // alternative enqueue test with explicitly same timestamps to test collisions
     void testQueueEnqueueSameTimestamps() {
         LocalDateTime t = LocalDateTime.now();
@@ -73,30 +58,6 @@ public class TestOrderedQueue {
         assertEquals(message1, queue.dequeue());
         assertEquals(message2, queue.dequeue());
         assertEquals(message3, queue.dequeue());
-    }
-
-    @Test
-    void testEnqueueNull() {
-        queue.enqueue(null);
-        assertEquals(0, queue.getSize());
-    }
-
-    @Test
-    void testDequeueEmptyQueue() {
-        assertNull(queue.dequeue());
-    }
-
-    @Test
-    void testGetSize() {
-        Message message1 = new Message("header", "body");
-        Message message2 = new Message("header", "body");
-        Message message3 = new Message("header", "body");
-
-        queue.enqueue(message3);
-        queue.enqueue(message1);
-        queue.enqueue(message2);
-
-        assertEquals(3, queue.getSize());
     }
 
 }

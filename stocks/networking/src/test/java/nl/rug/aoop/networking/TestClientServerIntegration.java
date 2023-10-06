@@ -1,6 +1,7 @@
 package nl.rug.aoop.networking;
 
 import nl.rug.aoop.networking.Client.Client;
+import nl.rug.aoop.networking.Client.CommandMessageHandler;
 import nl.rug.aoop.networking.Client.MessageHandler;
 import nl.rug.aoop.networking.Command.CommandHandler;
 import nl.rug.aoop.networking.Server.Server;
@@ -17,8 +18,8 @@ public class TestClientServerIntegration {
 
     @Test
     public void testIntegration() throws IOException {
-        CommandHandler commandHandler = Mockito.mock(CommandHandler.class);
-        Server server = new Server(0, commandHandler);
+        MessageHandler commandMessageHandler = Mockito.mock(CommandMessageHandler.class);
+        Server server = new Server(0, commandMessageHandler);
         new Thread(server).start();
         await().atMost(Duration.ofSeconds(5)).until(server::isRunning);
 
@@ -30,6 +31,7 @@ public class TestClientServerIntegration {
         await().atMost(Duration.ofSeconds(5)).until(client::isRunning);
         client.sendMessage("move.left");
 
-        Mockito.verify(commandHandler).execute("move.left");
+
+        Mockito.verify(commandMessageHandler).handleMessage("move.left");
     }
 }

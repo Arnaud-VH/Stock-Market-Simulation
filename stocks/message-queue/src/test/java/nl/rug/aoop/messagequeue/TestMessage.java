@@ -37,4 +37,19 @@ public class TestMessage {
         List<Field> fields = List.of(Message.class.getDeclaredFields());
         fields.forEach(field -> assertTrue(Modifier.isFinal(field.getModifiers()), field.getName() + " is not final"));
     }
+
+    @Test
+    void testMessageJson() {
+        Message messageCopy = Message.fromJson(message.toJson());
+        assertEquals(messageCopy.getHeader(),message.getHeader());
+        assertEquals(messageCopy.getBody(), message.getBody());
+        assertEquals(messageCopy.getTimestamp(), message.getTimestamp());
+    }
+
+    @Test
+    void testNullMessageJson() {
+        String json = null;
+        Message message = Message.fromJson(json);
+        assertNull(message);
+    }
 }
