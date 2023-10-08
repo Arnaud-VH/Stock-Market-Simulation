@@ -7,13 +7,13 @@ import nl.rug.aoop.messagequeue.Message;
 import java.time.LocalDateTime;
 import java.util.*;
 
-
 /**
  * Implementation of a message queue. Here the message queue is ordered by timestamp.
  */
 @Slf4j
 public class OrderedQueuee implements MessageQueue {
     private final SortedMap<LocalDateTime, LinkedList<Message>> orderedQueue;
+
     /**
      * The constructor for the ordered queue.
      */

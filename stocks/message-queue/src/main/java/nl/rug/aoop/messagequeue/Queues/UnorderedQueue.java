@@ -7,10 +7,10 @@ import nl.rug.aoop.messagequeue.Message;
 import java.util.LinkedList;
 import java.util.Queue;
 
-@Slf4j
 /**
  * Unordered queue is a message queue where messages are enqueued based on arrival time.
  */
+@Slf4j
 public class UnorderedQueue implements MessageQueue {
     private final Queue<Message> unorderedQueue;
 

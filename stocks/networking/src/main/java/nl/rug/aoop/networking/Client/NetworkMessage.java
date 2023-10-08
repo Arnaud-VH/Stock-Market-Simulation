@@ -8,18 +8,19 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import nl.rug.aoop.messagequeue.Message;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 
+/**
+ * Message that gets sent across the network. Gets converted into a JSON String.
+ */
 @Slf4j
 @Getter
 public class NetworkMessage {
     private final String header;
     private final String body;
-    private static final Gson gson = new GsonBuilder()
-            .registerTypeAdapter(NetworkMessage.class, new NetworkMessage.jsonMessageAdapter().nullSafe())
+    private static final Gson GSON = new GsonBuilder()
+            .registerTypeAdapter(NetworkMessage.class, new JsonMessageAdapter().nullSafe())
             .create();
 
     /**
@@ -32,19 +33,28 @@ public class NetworkMessage {
         this.body = messageBody;
     }
 
+    /**
+     * Converts a Json String into a networkMessage object.
+     * @param json The Json string that will be converted.
+     * @return Returns the network Message object that is made.
+     */
     public static NetworkMessage fromJson(String json) {
         if (json == null) {
             log.error("converted null json string to message object");
             return null;
         }
-        return gson.fromJson(json, NetworkMessage.class);
+        return GSON.fromJson(json, NetworkMessage.class);
     }
 
+    /**
+     * Converts the network Message into a Json String.
+     * @return Returns a JsonString.
+     */
     public String toJson() {
-        return gson.toJson(this);
+        return GSON.toJson(this);
     }
 
-    private static final class jsonMessageAdapter extends TypeAdapter<NetworkMessage> {
+    private static final class JsonMessageAdapter extends TypeAdapter<NetworkMessage> {
         public static final String HEADER_FIELD = "Header";
         public static final String BODY_FIELD = "Body";
 
@@ -63,7 +73,6 @@ public class NetworkMessage {
             reader.beginObject();
             String header = null;
             String body = null;
-            LocalDateTime timestamp = null;
             while (reader.hasNext()) {
                 JsonToken token = reader.peek();
                 String fieldName = null;
@@ -74,8 +83,12 @@ public class NetworkMessage {
                     continue;
                 }
                 switch (fieldName) {
-                    case HEADER_FIELD -> header = reader.nextString();
-                    case BODY_FIELD -> body = reader.nextString();
+                    case HEADER_FIELD:
+                        header = reader.nextString();
+                        break;
+                    case BODY_FIELD:
+                        body = reader.nextString();
+                        break;
                 }
             }
             reader.endObject();

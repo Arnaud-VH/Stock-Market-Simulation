@@ -1,10 +1,15 @@
 package nl.rug.aoop.messagequeue.Queues;
 
-import java.util.PriorityQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 
+/**
+ * Is an OrderedQueue but with a priorityBlocking queue implementation.
+ */
 public class OrderedBlockingQueue extends OrderedQueue {
-    public OrderedBlockingQueue () {
+    /**
+     * Constructor for the OrderedBlockingQueue.
+     */
+    public OrderedBlockingQueue() {
         super(new PriorityBlockingQueue<>());
     }
 }

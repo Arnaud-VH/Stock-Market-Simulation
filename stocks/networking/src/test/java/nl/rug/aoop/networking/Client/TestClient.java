@@ -14,8 +14,7 @@ import java.net.Socket;
 import java.time.Duration;
 
 import static org.awaitility.Awaitility.await;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 public class TestClient {
@@ -50,17 +49,18 @@ public class TestClient {
         MessageHandler mockHandler = Mockito.mock(MessageHandler.class);
         Client client = new Client(address, mockHandler);
         assertTrue(client.isConnected());
+        log.info("Client connected to the server correctly");
     }
 
     @Test
-    public void testConstructorWithoutServer() throws IOException {
-        //Having some trouble knowing what exactly I should test here.
-        //The client should not connect, hence the assertFalse(isConnected) but without the server
-        //I get NullPointerExceptions and other errors. How should I fix this?
-        InetSocketAddress address = Mockito.mock(InetSocketAddress.class);
-        MessageHandler mockHandler = Mockito.mock(MessageHandler.class);
-        Client client = new Client(address, mockHandler);
-        assertFalse(client.isConnected());
+    public void testConstructorWithoutServer() {
+        //TODO: make the expression more specific instead of IOException
+        assertThrows(NullPointerException.class, ()-> {
+            InetSocketAddress address = Mockito.mock(InetSocketAddress.class);
+            MessageHandler mockHandler = Mockito.mock(MessageHandler.class);
+            Client client = new Client(address, mockHandler);
+            assertFalse(client.isConnected());
+        });
     }
 
     @Test

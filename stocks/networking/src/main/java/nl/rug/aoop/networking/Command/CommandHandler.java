@@ -11,7 +11,7 @@ import java.util.Map;
 @Slf4j
 public class CommandHandler {
     private final Map<String, Command> commandMap;
-    private static final CommandHandler commandHandler = new CommandHandler();
+    private static final CommandHandler COMMAND_HANDLER = new CommandHandler();
 
     /**
      * Constructor for the command Handler. Here we instantiate the commandMap into a hashMap.
@@ -20,7 +20,10 @@ public class CommandHandler {
         this.commandMap = new HashMap<>();
     }
 
-    public static CommandHandler getInstance() { return commandHandler; }
+    public static CommandHandler getInstance() {
+        return COMMAND_HANDLER;
+    }
+
     /**
      * Allows us to register commands into the commandMap.
      * @param command The string command, works as a key.
@@ -31,8 +34,10 @@ public class CommandHandler {
     }
 
     /**
+     /**
      * Executes the command.
      * @param commandKey the key of the command that is to be executed.
+     * @param args The arguments of the command that will be executed.
      */
     public void execute(String commandKey, Map<String, Object> args) {
         if(commandMap.containsKey(commandKey)) {

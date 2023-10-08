@@ -1,10 +1,11 @@
 package nl.rug.aoop.messagequeue;
 
-import lombok.Getter;
 import nl.rug.aoop.messagequeue.Interfaces.MQProducer;
 import nl.rug.aoop.messagequeue.Interfaces.MessageQueue;
 
-@Getter
+/**
+ * Puts messages over the network.
+ */
 public class NetworkProducer implements MQProducer {
     private final MessageQueue messageQueue;
 

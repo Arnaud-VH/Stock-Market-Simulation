@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 
 /**
  * Client class that connects with the server.
@@ -43,7 +44,7 @@ public class Client implements Runnable{
         socket.connect(address, TIMEOUT);
         if (!socket.isConnected()) {
             log.error("Socket could not connect to port: " + address.getPort());
-            throw new IOException("Socket could not connect");
+            throw new SocketTimeoutException("Could not connect to socket");
         }
         connected = true;
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -56,7 +57,6 @@ public class Client implements Runnable{
     @Override
     public void run() {
         running = true;
-        //Server sends a message
         while(running) {
             try {
                 String fromServer = in.readLine();
@@ -65,9 +65,7 @@ public class Client implements Runnable{
                     break;
                 }
                 log.info("Server sent: " + fromServer);
-                //Get input from user and send to server
                 messageHandler.handleMessage(fromServer);
-                //Handle message can be a command map (Using the command pattern), that executes the commands.
             } catch (IOException e) {
                 log.error("Could not read line from server: ", e);
             }

@@ -2,7 +2,6 @@ package nl.rug.aoop.networking.Server;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.rug.aoop.networking.Client.MessageHandler;
-import nl.rug.aoop.networking.Command.CommandHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,7 +14,7 @@ import java.net.Socket;
  */
 @Slf4j
 public class ClientHandler implements Runnable{
-    private Socket socket;
+    private final Socket socket;
     private final BufferedReader in;
     private final PrintWriter out;
     private boolean running = false;
@@ -33,32 +32,22 @@ public class ClientHandler implements Runnable{
         this.socket = socket;
         this.id = id;
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        out = new PrintWriter(socket.getOutputStream(), true); //Sets autoflush to true
-        //This allows us to write and read from and to the socket.
+        out = new PrintWriter(socket.getOutputStream(), true);
         this.messageHandler = messageHandler;
     }
 
     @Override
-    //We implement the runnable interface later.
     public void run() {
         running = true;
-        // Write the output
-        //Read the input and echo back
-        out.println("Hello, enter BYE to exit. Your ID is: " + id); //This is our PrintWriter, id from the user.
+        out.println("Hello, enter BYE to exit. Your ID is: " + id);
         while(running) {
             try {
                 String fromClient = in.readLine();
-                //Client handler ECHO's back
                 if (fromClient == null || fromClient.trim().equalsIgnoreCase("BYE")) {
-                    //Here we should use the command pattern, the word BYE is mapped to a class that executes terminate.
-                    //Client is trying to disconnect, running should be false.
                     terminate();
-                    //Need to break because otherwise we try to write to a socket we closed in terminate().
                     break;
                 }
                 log.info("Received message" + fromClient);
-                //commandHandler.execute(fromClient);
-                //commandMap.get(fromClient.trim()).execute();
                 out.println(fromClient);
                 log.info("Received from client: " + id + fromClient);
             } catch (IOException e) {

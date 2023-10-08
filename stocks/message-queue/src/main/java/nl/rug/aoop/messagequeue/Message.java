@@ -21,8 +21,8 @@ public class Message implements Comparable<Message> {
     private final String header;
     private final String body;
     private final LocalDateTime timestamp;
-    private static final Gson gson = new GsonBuilder()
-            .registerTypeAdapter(Message.class, new jsonMessageAdapter().nullSafe())
+    private static final Gson GSON = new GsonBuilder()
+            .registerTypeAdapter(Message.class, new JsonMessageAdapter().nullSafe())
             .create();
 
     /**
@@ -48,16 +48,25 @@ public class Message implements Comparable<Message> {
         this.timestamp = messageTimestamp;
     }
 
+    /**
+     * Converts a JSON string into a message object.
+     * @param json the JSON String
+     * @return Returns a Message object.
+     */
     public static Message fromJson(String json) {
         if (json == null) {
             log.error("converted null json string to message object");
             return null;
         }
-        return gson.fromJson(json, Message.class);
+        return GSON.fromJson(json, Message.class);
     }
 
+    /**
+     * Converts Message into JSON String.
+     * @return Returns JSON String.
+     */
     public String toJson() {
-        return gson.toJson(this);
+        return GSON.toJson(this);
     }
 
     @Override
@@ -65,7 +74,7 @@ public class Message implements Comparable<Message> {
         return this.timestamp.compareTo(o.timestamp);
     }
 
-    private static final class jsonMessageAdapter extends TypeAdapter<Message> {
+    private static final class JsonMessageAdapter extends TypeAdapter<Message> {
         public static final String HEADER_FIELD = "Header";
         public static final String BODY_FIELD = "Body";
         public static final String TIMESTAMP_FIELD = "Time";
@@ -98,9 +107,15 @@ public class Message implements Comparable<Message> {
                     continue;
                 }
                 switch (fieldName) {
-                    case HEADER_FIELD -> header = reader.nextString();
-                    case BODY_FIELD -> body = reader.nextString();
-                    case TIMESTAMP_FIELD -> timestamp = LocalDateTime.parse(reader.nextString());
+                    case HEADER_FIELD:
+                        header = reader.nextString();
+                        break;
+                    case BODY_FIELD:
+                        body = reader.nextString();
+                        break;
+                    case TIMESTAMP_FIELD:
+                        timestamp = LocalDateTime.parse(reader.nextString());
+                        break;
                 }
             }
             reader.endObject();

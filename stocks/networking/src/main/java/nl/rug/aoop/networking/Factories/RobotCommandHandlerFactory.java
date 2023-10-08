@@ -1,6 +1,5 @@
 package nl.rug.aoop.networking.Factories;
 
-import nl.rug.aoop.networking.Command.Command;
 import nl.rug.aoop.networking.Command.CommandHandler;
 import nl.rug.aoop.networking.Command.MoveLeft;
 import nl.rug.aoop.networking.Command.MoveRight;
