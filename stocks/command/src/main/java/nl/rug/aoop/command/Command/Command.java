@@ -1,4 +1,4 @@
-package nl.rug.aoop.networking.Command;
+package nl.rug.aoop.command.Command;
 
 import java.util.Map;
 

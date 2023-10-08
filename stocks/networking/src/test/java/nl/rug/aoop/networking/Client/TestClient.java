@@ -1,6 +1,7 @@
 package nl.rug.aoop.networking.Client;
 
 import lombok.extern.slf4j.Slf4j;
+import nl.rug.aoop.networking.Handlers.MessageHandler;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 

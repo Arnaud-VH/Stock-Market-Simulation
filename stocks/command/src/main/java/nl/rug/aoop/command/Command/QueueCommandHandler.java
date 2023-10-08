@@ -1,6 +1,7 @@
-package nl.rug.aoop.networking.Command;
+package nl.rug.aoop.command.Command;
 
 import lombok.extern.slf4j.Slf4j;
+import nl.rug.aoop.networking.Handlers.CommandHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,18 +10,18 @@ import java.util.Map;
  * Command handler deals with the commands that the client wants to execute.
  */
 @Slf4j
-public class CommandHandler {
+public class QueueCommandHandler implements CommandHandler {
     private final Map<String, Command> commandMap;
-    private static final CommandHandler COMMAND_HANDLER = new CommandHandler();
+    private static final QueueCommandHandler COMMAND_HANDLER = new QueueCommandHandler();
 
     /**
      * Constructor for the command Handler. Here we instantiate the commandMap into a hashMap.
      */
-    private CommandHandler() {
+    private QueueCommandHandler() {
         this.commandMap = new HashMap<>();
     }
 
-    public static CommandHandler getInstance() {
+    public static QueueCommandHandler getInstance() {
         return COMMAND_HANDLER;
     }
 

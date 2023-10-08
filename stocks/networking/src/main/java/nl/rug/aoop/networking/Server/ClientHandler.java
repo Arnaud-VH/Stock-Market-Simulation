@@ -1,7 +1,7 @@
 package nl.rug.aoop.networking.Server;
 
 import lombok.extern.slf4j.Slf4j;
-import nl.rug.aoop.networking.Client.MessageHandler;
+import nl.rug.aoop.networking.Handlers.MessageHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;

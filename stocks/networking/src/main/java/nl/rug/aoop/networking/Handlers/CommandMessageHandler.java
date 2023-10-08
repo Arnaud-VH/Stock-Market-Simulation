@@ -1,12 +1,13 @@
-package nl.rug.aoop.networking.Client;
+package nl.rug.aoop.networking.Handlers;
 
-import nl.rug.aoop.networking.Command.CommandHandler;
+import nl.rug.aoop.networking.NetworkMessage.NetworkMessage;
+
 import java.util.Map;
 
 /**
  * Handles incoming messages to the server.
  */
-public class CommandMessageHandler implements MessageHandler{
+public class CommandMessageHandler implements MessageHandler {
     private final CommandHandler commandHandler;
     private Map<String, Object> args;
 

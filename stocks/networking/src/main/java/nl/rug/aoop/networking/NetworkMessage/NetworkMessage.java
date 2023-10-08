@@ -1,4 +1,4 @@
-package nl.rug.aoop.networking.Client;
+package nl.rug.aoop.networking.NetworkMessage;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

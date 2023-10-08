@@ -1,4 +1,4 @@
-package nl.rug.aoop.networking.Client;
+package nl.rug.aoop.networking.Handlers;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
  * Implementation of messageHandler that is used for server to client communication of message.
  */
 @Slf4j
-public class MessageLogger implements MessageHandler{
+public class LoggerMessageHandler implements MessageHandler {
 
     /**
      * Handler method that is overridden from interface.
