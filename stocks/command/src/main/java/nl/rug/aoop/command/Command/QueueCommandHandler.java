@@ -1,7 +1,6 @@
 package nl.rug.aoop.command.Command;
 
 import lombok.extern.slf4j.Slf4j;
-import nl.rug.aoop.networking.Handlers.CommandHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +9,7 @@ import java.util.Map;
  * Command handler deals with the commands that the client wants to execute.
  */
 @Slf4j
-public class QueueCommandHandler implements CommandHandler {
+public class QueueCommandHandler {
     private final Map<String, Command> commandMap;
     private static final QueueCommandHandler COMMAND_HANDLER = new QueueCommandHandler();
 
