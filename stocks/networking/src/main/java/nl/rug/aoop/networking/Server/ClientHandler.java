@@ -47,9 +47,9 @@ public class ClientHandler implements Runnable{
                     terminate();
                     break;
                 }
-                log.info("Received message" + fromClient);
                 out.println(fromClient);
                 log.info("Received from client: " + id + fromClient);
+                messageHandler.handleMessage(fromClient);
             } catch (IOException e) {
                 log.error("Reading string from client id: " + id, e);
             }
