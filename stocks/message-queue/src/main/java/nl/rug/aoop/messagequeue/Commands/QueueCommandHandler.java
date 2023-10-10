@@ -1,6 +1,8 @@
-package nl.rug.aoop.command.Command;
+package nl.rug.aoop.messagequeue.Commands;
 
 import lombok.extern.slf4j.Slf4j;
+import nl.rug.aoop.command.Command.Command;
+import nl.rug.aoop.command.Command.CommandHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +11,7 @@ import java.util.Map;
  * Command handler deals with the commands that the client wants to execute.
  */
 @Slf4j
-public class QueueCommandHandler {
+public class QueueCommandHandler implements CommandHandler {
     private final Map<String, Command> commandMap;
     private static final QueueCommandHandler COMMAND_HANDLER = new QueueCommandHandler();
 
@@ -38,6 +40,7 @@ public class QueueCommandHandler {
     * @param commandKey the key of the command that is to be executed.
     * @param args The arguments of the command that will be executed.
     */
+    @Override
     public void execute(String commandKey, Map<String, Object> args) {
         if(commandMap.containsKey(commandKey)) {
             Command command1 = commandMap.get(commandKey);

@@ -1,7 +1,6 @@
 package nl.rug.aoop.networking.Server;
 
 import nl.rug.aoop.networking.Client.Client;
-import nl.rug.aoop.networking.Handlers.CommandMessageHandler;
 import nl.rug.aoop.networking.Handlers.MessageHandler;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

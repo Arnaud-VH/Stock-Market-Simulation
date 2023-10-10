@@ -3,4 +3,5 @@ module messagequeue {
     requires com.google.gson;
     requires org.slf4j;
     requires command;
+    requires networking;
 }

@@ -1,7 +1,6 @@
 package nl.rug.aoop.networking.Client;
 
 import lombok.extern.slf4j.Slf4j;
-import nl.rug.aoop.networking.Handlers.CommandMessageHandler;
 import nl.rug.aoop.networking.Handlers.MessageHandler;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -13,7 +12,6 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 import java.time.Duration;
 
 import static org.awaitility.Awaitility.await;
