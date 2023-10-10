@@ -20,6 +20,7 @@ public class CommandMessageHandler implements MessageHandler {
         Map<String, Object> map = new HashMap<>();
         map.put("header", msg.getHeader());
         map.put("body", msg.getBody());
-
+        // TODO figure out the interface to put in the map as described in assignment
+        commandHandler.execute(msg.getHeader(),map);
     }
 }
