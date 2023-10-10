@@ -43,6 +43,7 @@ public class Message implements Comparable<Message> {
      * @param messageTimestamp The timestamp of the message.
      */
     public Message(String messageHeader, String messageBody, LocalDateTime messageTimestamp) {
+        //TODO: I think we can make the Message a record. The second Constructor is only used in tests.
         this.header = messageHeader;
         this.body = messageBody;
         this.timestamp = messageTimestamp;

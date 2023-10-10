@@ -7,6 +7,8 @@ import nl.rug.aoop.networking.Handlers.MessageHandler;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -16,26 +18,32 @@ import java.util.concurrent.Executors;
 @Slf4j
 public class Server implements Runnable{
 
-    private final int port;
-    private final ServerSocket serverSocket;
+    private int port;
+    private ServerSocket serverSocket;
     @Getter private boolean running = false;
-    @Getter private final boolean started;
-    private int id = 0;
-    private final ExecutorService executorService;
-    private final MessageHandler messageHandler;
+    @Getter private boolean started;
+    @Getter  private Map<Integer, ClientHandler> clientHandlerMap;
+    private int id = 0; //TODO: Implement a map that keeps track of the client Handler's based on ID's
+    private ExecutorService executorService;
+    private MessageHandler messageHandler;
 
     /**
      * Server constructor.
      * @param port The port on which the server is hosted.
      * @param messageHandler The message handler which deals with the client's messages.
-     * @throws IOException when the socket is opened.
      */
-    public Server(int port, MessageHandler messageHandler) throws IOException {
-        serverSocket = new ServerSocket(port);
-        this.messageHandler = messageHandler;
-        this.port = port;
-        executorService = Executors.newCachedThreadPool();
-        started = true;
+    public Server(int port, MessageHandler messageHandler){
+        try {
+            serverSocket = new ServerSocket(port);
+            this.messageHandler = messageHandler;
+            this.port = port;
+            executorService = Executors.newCachedThreadPool();
+            clientHandlerMap = new HashMap<>();
+            started = true;
+            log.info("Server started correctly");
+        } catch(IOException e) {
+            log.error("The socket was not opened correctly", e);
+        }
     }
 
     @Override
@@ -46,6 +54,7 @@ public class Server implements Runnable{
                 Socket socket = this.serverSocket.accept();
                 log.info("New connection from client");
                 ClientHandler clientHandler = new ClientHandler(socket, id, messageHandler);
+                clientHandlerMap.put(id, clientHandler);
                 this.executorService.submit(clientHandler);
                 id++;
             } catch (IOException e) {

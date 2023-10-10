@@ -34,11 +34,10 @@ public class QueueCommandHandler {
     }
 
     /**
-     /**
-     * Executes the command.
-     * @param commandKey the key of the command that is to be executed.
-     * @param args The arguments of the command that will be executed.
-     */
+    * Executes the command.
+    * @param commandKey the key of the command that is to be executed.
+    * @param args The arguments of the command that will be executed.
+    */
     public void execute(String commandKey, Map<String, Object> args) {
         if(commandMap.containsKey(commandKey)) {
             Command command1 = commandMap.get(commandKey);

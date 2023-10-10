@@ -46,10 +46,70 @@ This code makes you angry. Briefly describe why it makes you angry and provide t
 ___
 
 **Answer**:
+This code makes me angry because the developer missed an opportunity to clean up their code, specifically their large if statement, by using a Design Pattern. The Design Pattern they could have used is the Command Pattern. 
+Here, the developer should implement the Command interface in their Car Class. The Command interface has an `execute()` method that they have to define. The second part to cleaning up their code is to map the command's names, like `steer.left`, `engine.stop`, etc.. to a Map that contains these commands. Every Command in this Map can be accessed by a Key, which is the command's name, and 
+the command can then be executed using the `execute()` method that every Command has. 
 
 Improved code:
 
 ```java
+public interface Command {
+    void execute();
+}
+```
+
+```java
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.HashMap;
+
+@Slf4j
+public class RookieImplementation {
+
+    private final Car car;
+    private Map<String, Command> commandMap;
+
+    public RookieImplementation(Car car) {
+        this.car = car;
+        commandMap = new HashMap<>();
+        commandMap.put("steer.left", new SteerLeftCommand(car));
+        commandMap.put("steer.right", new SteerRightCommand(car));
+        commandMap.put("engine.start", new EngineStartCommand(car));
+        commandMap.put("engine.stop", new EngineStopCommand(car));
+        commandMap.put("pedal.gas", new PedalGasCommand(car));
+        commandMap.put("pedal.brake" , new PedalBreakCommand(car));        
+    }
+
+    public void carEventFired(String carEvent) {
+        if (commandMap.containsKey(carEvent)) {
+            commandMap.get(carEvent).execute();
+        } else {
+            log.info("This command does not exist");
+        }
+    }
+}
+
+//Below is an example of what the Command classes should look like that implement the Command interface.
+```
+
+```java
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+public class SteerLeftCommand implements Command {
+    private final Car car;
+
+    public SteerLeftCommand(Car car) {
+        this.car = car;
+    }
+
+    @Override
+    public void execute() {
+        //The code that should be executed when the Steer Left command is called
+        car.setX(car.getX() - 10);
+        log.info("Car steered left");
+    }
+}
 ```
 ___
 

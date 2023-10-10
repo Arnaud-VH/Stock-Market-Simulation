@@ -28,8 +28,9 @@ public class TestClientServerIntegration {
         new Thread(client).start();
 
         await().atMost(Duration.ofSeconds(5)).until(client::isRunning);
-        client.sendMessage("move.left");
 
+        //TODO: Update this once the command works fully.
+        client.sendMessage("move.left");
 
         Mockito.verify(commandMessageHandler).handleMessage("move.left");
     }

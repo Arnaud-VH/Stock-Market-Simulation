@@ -1,6 +1,7 @@
 package nl.rug.aoop.networking.Client;
 
 import lombok.extern.slf4j.Slf4j;
+import nl.rug.aoop.networking.Handlers.CommandMessageHandler;
 import nl.rug.aoop.networking.Handlers.MessageHandler;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -12,6 +13,7 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.time.Duration;
 
 import static org.awaitility.Awaitility.await;
@@ -54,7 +56,7 @@ public class TestClient {
     }
 
     @Test
-    public void testConstructorWithoutServer() {
+    public void testConstructorWithoutServer(){
         //TODO: make the expression more specific instead of IOException
         assertThrows(NullPointerException.class, ()-> {
             InetSocketAddress address = Mockito.mock(InetSocketAddress.class);
@@ -65,8 +67,15 @@ public class TestClient {
     }
 
     @Test
-    public void testConstructorInvalidPort() {
-
+    public void testConstructorInvalidPort(){
+        assertThrows(IllegalArgumentException.class, ()-> {
+            ServerSocket serverSocket = new ServerSocket(680000);
+            serverPort = serverSocket.getLocalPort();
+            InetSocketAddress address = new InetSocketAddress("localhost", serverPort);
+            MessageHandler mockHandler = Mockito.mock(MessageHandler.class);
+            Client client = new Client(address, mockHandler);
+            assertFalse(client.isConnected());
+        });
     }
 
     @Test
@@ -82,24 +91,24 @@ public class TestClient {
 
     @Test
     public void testSendMessage() {
-
+        //TODO : TestSendMessage Once the messaging is done.
     }
 
     @Test
     public void testSendNullMessage() {
-
+        //TODO :TestSendNull Once the messaging is done.
     }
 
     @Test
     public void testSendEmptyMessage() {
-
+        //TODO :TestSendNull Once the messaging is done.
     }
 
     @Test
     public void testRunReadSingleMessage() throws IOException {
         startTempServer();
         InetSocketAddress address = new InetSocketAddress("localhost", serverPort);
-        MessageHandler mockHandler = Mockito.mock(MessageHandler.class);
+        MessageHandler mockHandler = Mockito.mock(CommandMessageHandler.class);
         Client client = new Client(address, mockHandler);
         new Thread(client).start();
         await().atMost(Duration.ofSeconds(1)).until(client::isRunning);
