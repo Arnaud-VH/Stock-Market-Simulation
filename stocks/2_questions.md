@@ -59,7 +59,7 @@ This code makes you angry. Briefly describe why it makes you angry and provide t
 ___
 
 **Answer**:
-This code makes me angry because the developer missed an opportunity to clean up their code, specifically their large if statement, by using a Design Pattern. The Design Pattern they could have used is the Command Pattern. 
+This code makes me angry because the developer missed an opportunity to clean up their code, specifically their large if statement, by using a Design Pattern. Their large else-if statement is not extensible and hard to read. The Design Pattern they could have used is the Command Pattern. 
 Here, the developer should implement the Command interface in their Car Class. The Command interface has an `execute()` method that they have to define. The second part to cleaning up their code is to map the command's names, like `steer.left`, `engine.stop`, etc.. to a Map that contains these commands. Every Command in this Map can be accessed by a Key, which is the command's name, and 
 the command can then be executed using the `execute()` method that every Command has. 
 
@@ -203,10 +203,29 @@ ___
 
 **Answer**:
 
-1.
+1. The other Design Pattern that is used is a Behavioural one being the Chain of Responsibility Design Pattern.
+
 
 2.
-	```java
-
-	```
+```java
+public abstract class CommandHandler() {
+    private CommandHandler nextHandler;
+    
+    public void setNextHandler(CommandHandler next) {
+        this.nextHandler = next;
+    }
+    
+    public void handle(Config config) {
+        if(canHandle(config)) {
+            execute(config);
+        } else {
+            this.nextHandler.handle(config);
+        }
+    }
+    
+    abstract boolean canHandle(Config config);
+    
+    abstract void execute(Config config);
+}
+```
 ___

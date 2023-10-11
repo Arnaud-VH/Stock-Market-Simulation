@@ -117,4 +117,45 @@ public class TestClient {
         await().atMost(Duration.ofSeconds(2)).until(() -> !client.isRunning());
         assertFalse(client.isRunning());
     }
+
+    @Test
+    public void testSendMessage() throws IOException {
+        startTempServer();
+        InetSocketAddress address = new InetSocketAddress("localhost", serverPort);
+        Client client = new Client(address, null);
+        new Thread(client).start();
+        await().atMost(Duration.ofSeconds(1)).until(client::isRunning);
+        assertTrue(client.isRunning());
+        client.sendMessage("hello");
+        assertEquals("hello", serverIn.readLine());
+    }
+
+    @Test
+    public void testSendNullMessage() throws IOException {
+        startTempServer();
+        InetSocketAddress address = new InetSocketAddress("localhost", serverPort);
+        Client client = new Client(address, null);
+        new Thread(client).start();
+        await().atMost(Duration.ofSeconds(1)).until(client::isRunning);
+        assertTrue(client.isRunning());
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            client.sendMessage(null);
+        });
+    }
+
+    @Test
+    public void testSendEmptyMessage() throws IOException {
+        startTempServer();
+        InetSocketAddress address = new InetSocketAddress("localhost", serverPort);
+        Client client = new Client(address, null);
+        new Thread(client).start();
+        await().atMost(Duration.ofSeconds(1)).until(client::isRunning);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            assertTrue(client.isRunning());
+            client.sendMessage("");
+        });
+    }
+
 }
