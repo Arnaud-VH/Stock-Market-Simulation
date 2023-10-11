@@ -3,12 +3,10 @@ package nl.rug.aoop.networking.Client;
 import lombok.extern.slf4j.Slf4j;
 import nl.rug.aoop.networking.Handlers.MessageHandler;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -57,7 +55,6 @@ public class TestClient {
 
     @Test
     public void testConstructorWithoutServer(){
-        //TODO: make the expression more specific instead of IOException
         assertThrows(NullPointerException.class, ()-> {
             InetSocketAddress address = Mockito.mock(InetSocketAddress.class);
             Client client = new Client(address, null);
@@ -103,5 +100,21 @@ public class TestClient {
         await().atMost(Duration.ofSeconds(1)).until(() -> test.get() != null);
 
         assertEquals("hello", test.get());
+    }
+
+    @Test
+    public void testTerminate() throws IOException {
+        startTempServer();
+        InetSocketAddress address = new InetSocketAddress("localhost", serverPort);
+        MessageHandler messageHandler = Mockito.mock(MessageHandler.class);
+        Client client = new Client(address, messageHandler);
+        new Thread(client).start();
+        await().atMost(Duration.ofSeconds(1)).until(client::isRunning);
+        assertTrue(client.isRunning());
+
+        String message = "Stop Connection";
+        serverOut.println(message);
+        await().atMost(Duration.ofSeconds(2)).until(() -> !client.isRunning());
+        assertFalse(client.isRunning());
     }
 }

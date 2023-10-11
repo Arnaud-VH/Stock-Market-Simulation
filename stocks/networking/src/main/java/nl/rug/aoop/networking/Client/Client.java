@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.Objects;
 
 /**
  * Client class that connects with the server.
@@ -61,7 +62,7 @@ public class Client implements Runnable{
         while(running) {
             try {
                 String fromServer = in.readLine();
-                if (fromServer == null) {
+                if (Objects.equals(fromServer, "Stop Connection")) {
                     terminate();
                     break;
                 }
