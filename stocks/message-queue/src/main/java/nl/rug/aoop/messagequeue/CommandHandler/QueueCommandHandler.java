@@ -1,5 +1,6 @@
 package nl.rug.aoop.messagequeue.CommandHandler;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.rug.aoop.command.Command.Command;
 import nl.rug.aoop.command.Command.CommandHandler;
@@ -12,6 +13,7 @@ import java.util.Map;
  */
 @Slf4j
 public class QueueCommandHandler implements CommandHandler {
+    @Getter
     private final Map<String, Command> commandMap;
     private static final QueueCommandHandler COMMAND_HANDLER = new QueueCommandHandler();
 

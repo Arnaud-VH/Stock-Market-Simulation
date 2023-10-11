@@ -45,7 +45,6 @@ public class TestClientServerIntegration {
         await().atMost(Duration.ofSeconds(2)).until(() -> messageQueue.getSize() != 0);
 
         Message message = consumer.poll();
-        log.info("header: " + message.getHeader() + "\n" + "body: " + message.getBody());
         assertEquals("Test Header", message.getHeader());
         assertEquals("Test Body", message.getBody());
     }

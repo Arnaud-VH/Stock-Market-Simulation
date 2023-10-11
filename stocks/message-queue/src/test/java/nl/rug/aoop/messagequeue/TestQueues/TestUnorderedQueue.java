@@ -1,4 +1,4 @@
-package nl.rug.aoop.messagequeue.QueueTests;
+package nl.rug.aoop.messagequeue.TestQueues;
 
 import nl.rug.aoop.messagequeue.Queues.Message;
 import nl.rug.aoop.messagequeue.Queues.UnorderedQueue;

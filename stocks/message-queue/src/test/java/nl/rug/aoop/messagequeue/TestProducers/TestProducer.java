@@ -1,4 +1,4 @@
-package nl.rug.aoop.messagequeue;
+package nl.rug.aoop.messagequeue.TestProducers;
 
 import nl.rug.aoop.messagequeue.Producers.Producer;
 import nl.rug.aoop.messagequeue.Queues.Message;
