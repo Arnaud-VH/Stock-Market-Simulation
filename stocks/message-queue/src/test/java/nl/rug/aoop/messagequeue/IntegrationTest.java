@@ -1,4 +1,4 @@
-package nl.rug.aoop.messagequeue.NetworkingTests;
+package nl.rug.aoop.messagequeue;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.rug.aoop.messagequeue.CommandHandler.QueueCommandHandlerFactory;
@@ -22,7 +22,7 @@ import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
-public class TestClientServerIntegration {
+public class IntegrationTest {
 
     @Test
     public void testIntegration() throws IOException {
@@ -47,6 +47,11 @@ public class TestClientServerIntegration {
         Message message = consumer.poll();
         assertEquals("Test Header", message.getHeader());
         assertEquals("Test Body", message.getBody());
+    }
+
+    @Test
+    public void testNullIntegration() throws IOException {
+        // TODO integration test when sending null
     }
 
 }

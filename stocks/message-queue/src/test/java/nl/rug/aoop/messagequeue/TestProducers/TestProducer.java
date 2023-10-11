@@ -13,8 +13,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestProducer {
-    OrderedQueue queue = null;
-    Producer producer = null;
+    private OrderedQueue queue = null;
+    private Producer producer = null;
 
     @BeforeEach
     void setUp() {
