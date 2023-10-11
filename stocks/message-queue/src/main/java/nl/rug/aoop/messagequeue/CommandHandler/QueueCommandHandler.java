@@ -1,4 +1,4 @@
-package nl.rug.aoop.messagequeue.Commands;
+package nl.rug.aoop.messagequeue.CommandHandler;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.rug.aoop.command.Command.Command;
@@ -16,7 +16,7 @@ public class QueueCommandHandler implements CommandHandler {
     private static final QueueCommandHandler COMMAND_HANDLER = new QueueCommandHandler();
 
     /**
-     * Constructor for the command Handler. Here we instantiate the commandMap into a hashMap.
+     * Constructor for the command Handler. Here we instantiate the commandMap to a hashMap.
      */
     private QueueCommandHandler() {
         this.commandMap = new HashMap<>();

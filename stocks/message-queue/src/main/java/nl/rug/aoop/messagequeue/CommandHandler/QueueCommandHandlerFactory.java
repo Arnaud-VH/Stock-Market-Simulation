@@ -1,9 +1,7 @@
-package nl.rug.aoop.messagequeue.Commands.Factories;
+package nl.rug.aoop.messagequeue.CommandHandler;
 
-import nl.rug.aoop.command.Command.AbstractCommandHandlerFactory;
-import nl.rug.aoop.messagequeue.Commands.MqPutCommand;
-import nl.rug.aoop.messagequeue.Commands.QueueCommandHandler;
-import nl.rug.aoop.messagequeue.Interfaces.MessageQueue;
+import nl.rug.aoop.messagequeue.CommandHandler.Commands.MqPutCommand;
+import nl.rug.aoop.messagequeue.Queues.MessageQueue;
 
 /**
  * Class that creates the QueueCommands using the Factory Design Pattern.

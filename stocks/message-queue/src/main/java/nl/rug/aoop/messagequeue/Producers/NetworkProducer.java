@@ -1,6 +1,6 @@
-package nl.rug.aoop.messagequeue;
+package nl.rug.aoop.messagequeue.Producers;
 
-import nl.rug.aoop.messagequeue.Interfaces.MQProducer;
+import nl.rug.aoop.messagequeue.Queues.Message;
 import nl.rug.aoop.networking.Client.Client;
 import nl.rug.aoop.networking.NetworkMessage.NetworkMessage;
 

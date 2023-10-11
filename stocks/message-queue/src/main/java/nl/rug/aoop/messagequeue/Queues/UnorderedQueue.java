@@ -1,8 +1,6 @@
 package nl.rug.aoop.messagequeue.Queues;
 
 import lombok.extern.slf4j.Slf4j;
-import nl.rug.aoop.messagequeue.Interfaces.MessageQueue;
-import nl.rug.aoop.messagequeue.Message;
 
 import java.util.LinkedList;
 import java.util.Queue;

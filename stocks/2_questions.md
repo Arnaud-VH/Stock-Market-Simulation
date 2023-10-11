@@ -8,6 +8,19 @@ In the assignment, you had to create a `MessageHandler` interface. Please answer
 ___
 
 **Answer**:
+
+The `MessageHandler` interface enables us to utilize polymorphism, and reference any implementation for a `MessageHandler`, in the networking module. 
+
+It also enables us to write implementations for a `MessageHandler` outside of the networking module, without needing to create a dependency on said module.
+
+--
+
+By removing the `MessageHandler` it becomes harder to ensure decoupling. 
+
+If we immediately pass a command handler into the client, it would mean we need to make the client expect a command handler. Which limits its flexibility. Hence why decoupling is useful.
+
+Additionally without a middle man it can be hard/impossible to make two preexisting modules to work together. In the context where we 
+
 ___
 
 # Question 2
@@ -176,6 +189,7 @@ class Processor {
 > **Colleague**: "Yeah. But look again. There is more; she uses another pattern on top of it. I wonder how it works."
 
 1. What is this other pattern? What advantage does it provide to the solution? (~50-100 words)
+
 
 2. You know the code for `CommandHandler` has to be a simple abstract class in this case, probably containing four methods:
 - `CommandHandler setNext(CommandHandler next)` (implemented in `CommandHandler`),

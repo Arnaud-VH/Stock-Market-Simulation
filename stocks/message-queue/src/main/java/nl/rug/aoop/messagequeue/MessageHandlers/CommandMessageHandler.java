@@ -1,6 +1,7 @@
-package nl.rug.aoop.messagequeue;
+package nl.rug.aoop.messagequeue.MessageHandlers;
 
 import nl.rug.aoop.command.Command.CommandHandler;
+import nl.rug.aoop.messagequeue.Queues.Message;
 import nl.rug.aoop.networking.Handlers.MessageHandler;
 
 import java.util.HashMap;

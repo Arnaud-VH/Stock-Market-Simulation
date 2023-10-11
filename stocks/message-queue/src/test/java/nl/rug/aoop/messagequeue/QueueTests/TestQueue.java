@@ -1,8 +1,7 @@
 package nl.rug.aoop.messagequeue.QueueTests;
 
-import nl.rug.aoop.messagequeue.Interfaces.MessageQueue;
-import nl.rug.aoop.messagequeue.Message;
-import nl.rug.aoop.messagequeue.Queues.UnorderedQueue;
+import nl.rug.aoop.messagequeue.Queues.MessageQueue;
+import nl.rug.aoop.messagequeue.Queues.Message;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

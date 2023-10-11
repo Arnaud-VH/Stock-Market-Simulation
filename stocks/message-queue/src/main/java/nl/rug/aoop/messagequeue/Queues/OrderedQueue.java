@@ -1,8 +1,6 @@
 package nl.rug.aoop.messagequeue.Queues;
 
 import lombok.extern.slf4j.Slf4j;
-import nl.rug.aoop.messagequeue.Interfaces.MessageQueue;
-import nl.rug.aoop.messagequeue.Message;
 
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -40,7 +38,7 @@ public class OrderedQueue implements MessageQueue {
     public void enqueue(Message message) {
         if (message == null) {
             log.error("Attempting to enqueue NULL");
-        } else { // else enqueue
+        } else {
             queue.add(message);
         }
     }

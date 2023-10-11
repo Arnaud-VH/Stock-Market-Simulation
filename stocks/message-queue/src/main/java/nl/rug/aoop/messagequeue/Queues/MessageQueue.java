@@ -1,6 +1,6 @@
-package nl.rug.aoop.messagequeue.Interfaces;
+package nl.rug.aoop.messagequeue.Queues;
 
-import nl.rug.aoop.messagequeue.Message;
+import nl.rug.aoop.messagequeue.Queues.Message;
 
 /**
  * Interface that provides the functionality for the message queues.

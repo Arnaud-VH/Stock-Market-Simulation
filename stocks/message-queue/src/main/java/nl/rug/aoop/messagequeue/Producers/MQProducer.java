@@ -1,6 +1,6 @@
-package nl.rug.aoop.messagequeue.Interfaces;
+package nl.rug.aoop.messagequeue.Producers;
 
-import nl.rug.aoop.messagequeue.Message;
+import nl.rug.aoop.messagequeue.Queues.Message;
 
 /**
  * Models the behaviour of a Producer with a Message Queue.

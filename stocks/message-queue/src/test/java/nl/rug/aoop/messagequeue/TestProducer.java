@@ -1,6 +1,8 @@
 package nl.rug.aoop.messagequeue;
 
-import nl.rug.aoop.messagequeue.Queues.OrderedQueuee;
+import nl.rug.aoop.messagequeue.Producers.Producer;
+import nl.rug.aoop.messagequeue.Queues.Message;
+import nl.rug.aoop.messagequeue.Queues.OrderedQueue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,12 +13,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestProducer {
-    OrderedQueuee queue = null;
+    OrderedQueue queue = null;
     Producer producer = null;
 
     @BeforeEach
     void setUp() {
-        this.queue = new OrderedQueuee();
+        this.queue = new OrderedQueue();
         this.producer = new Producer(queue);
     }
 

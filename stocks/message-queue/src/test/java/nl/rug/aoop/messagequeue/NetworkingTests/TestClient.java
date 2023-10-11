@@ -1,7 +1,6 @@
 package nl.rug.aoop.messagequeue.NetworkingTests;
 
 import lombok.extern.slf4j.Slf4j;
-import nl.rug.aoop.messagequeue.LogMessageHandler;
 import nl.rug.aoop.networking.Client.Client;
 import org.junit.jupiter.api.Test;
 

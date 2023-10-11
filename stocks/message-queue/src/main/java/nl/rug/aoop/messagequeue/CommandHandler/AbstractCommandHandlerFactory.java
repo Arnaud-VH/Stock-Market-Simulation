@@ -1,4 +1,6 @@
-package nl.rug.aoop.command.Command;
+package nl.rug.aoop.messagequeue.CommandHandler;
+
+import nl.rug.aoop.command.Command.CommandHandler;
 
 /**
  * Interface to implement the factory design pattern. Allows us to create commands.

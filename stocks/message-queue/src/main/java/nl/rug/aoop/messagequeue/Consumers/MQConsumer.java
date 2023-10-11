@@ -1,6 +1,6 @@
-package nl.rug.aoop.messagequeue.Interfaces;
+package nl.rug.aoop.messagequeue.Consumers;
 
-import nl.rug.aoop.messagequeue.Message;
+import nl.rug.aoop.messagequeue.Queues.Message;
 
 /**
  * Interface that models the behaviour of a Consumer on a message queue.

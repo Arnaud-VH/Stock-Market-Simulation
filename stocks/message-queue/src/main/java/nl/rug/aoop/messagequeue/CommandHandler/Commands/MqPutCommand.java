@@ -1,8 +1,8 @@
-package nl.rug.aoop.messagequeue.Commands;
+package nl.rug.aoop.messagequeue.CommandHandler.Commands;
 
 import nl.rug.aoop.command.Command.Command;
-import nl.rug.aoop.messagequeue.Interfaces.MessageQueue;
-import nl.rug.aoop.messagequeue.Message;
+import nl.rug.aoop.messagequeue.Queues.MessageQueue;
+import nl.rug.aoop.messagequeue.Queues.Message;
 
 import java.util.Map;
 

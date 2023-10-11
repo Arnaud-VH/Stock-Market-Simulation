@@ -1,8 +1,8 @@
-package nl.rug.aoop.messagequeue;
+package nl.rug.aoop.messagequeue.Producers;
 
 import lombok.Getter;
-import nl.rug.aoop.messagequeue.Interfaces.MQProducer;
-import nl.rug.aoop.messagequeue.Interfaces.MessageQueue;
+import nl.rug.aoop.messagequeue.Queues.MessageQueue;
+import nl.rug.aoop.messagequeue.Queues.Message;
 
 /**
  * Producer class that creates messages that are put int the message queue.

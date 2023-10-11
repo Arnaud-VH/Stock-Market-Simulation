@@ -1,8 +1,13 @@
 package nl.rug.aoop.messagequeue;
 import lombok.extern.slf4j.Slf4j;
-import nl.rug.aoop.messagequeue.Commands.Factories.QueueCommandHandlerFactory;
-import nl.rug.aoop.messagequeue.Interfaces.MQProducer;
-import nl.rug.aoop.messagequeue.Interfaces.MessageQueue;
+import nl.rug.aoop.messagequeue.CommandHandler.QueueCommandHandlerFactory;
+import nl.rug.aoop.messagequeue.Consumers.Consumer;
+import nl.rug.aoop.messagequeue.Producers.MQProducer;
+import nl.rug.aoop.messagequeue.Queues.MessageQueue;
+import nl.rug.aoop.messagequeue.MessageHandlers.CommandMessageHandler;
+import nl.rug.aoop.messagequeue.MessageHandlers.LogMessageHandler;
+import nl.rug.aoop.messagequeue.Producers.NetworkProducer;
+import nl.rug.aoop.messagequeue.Queues.Message;
 import nl.rug.aoop.messagequeue.Queues.OrderedBlockingQueue;
 import nl.rug.aoop.networking.Client.Client;
 import nl.rug.aoop.networking.Server.Server;
