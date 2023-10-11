@@ -11,9 +11,15 @@ import java.util.Map;
  */
 public class MqPutCommand implements Command {
     private final MessageQueue queue;
-    public MqPutCommand (MessageQueue queue) {
+
+    /**
+     * The constructor for the MQPut command.
+     * @param queue The Queue on which the command will be performed.
+     */
+    public MqPutCommand(MessageQueue queue) {
         this.queue = queue;
     }
+
     @Override
     public void execute(Map<String, Object> params) {
         Message msg = Message.fromJson((String) params.get("body"));

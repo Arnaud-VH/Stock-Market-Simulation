@@ -5,11 +5,18 @@ import nl.rug.aoop.messagequeue.Commands.MqPutCommand;
 import nl.rug.aoop.messagequeue.Commands.QueueCommandHandler;
 import nl.rug.aoop.messagequeue.Interfaces.MessageQueue;
 
+/**
+ * Class that creates the QueueCommands using the Factory Design Pattern.
+ */
 public class QueueCommandHandlerFactory implements AbstractCommandHandlerFactory {
 
     private MessageQueue queue;
-    //Constructor for the Factory pattern brings the Queue into here, so that the MqPutCommand knows what Queue to use.
-    public QueueCommandHandlerFactory (MessageQueue queue) {
+
+    /**
+     * The constructor for the Queue command handler factory.
+     * @param queue The queue on which the queue commands will be executed.
+     */
+    public QueueCommandHandlerFactory(MessageQueue queue) {
         this.queue = queue;
     }
 

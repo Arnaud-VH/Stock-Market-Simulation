@@ -16,24 +16,21 @@ public class TestServer {
 
     @Test
     public void testConstructor(){
-        MessageHandler mockHandler = Mockito.mock(CommandMessageHandler.class);
-        Server server = new Server(0, mockHandler);
+        Server server = new Server(0, null);
         assertTrue(server.isStarted());
     }
 
     @Test
     public void testConstructorInvalidPort(){
         assertThrows(IllegalArgumentException.class, () -> {
-            MessageHandler mockHandler = Mockito.mock(CommandMessageHandler.class);
-            Server server = new Server(680000, mockHandler);
+            Server server = new Server(680000, null);
             assertFalse(server.isStarted());
         });
     }
 
     @Test
     public void testServerRun(){
-        MessageHandler mockHandler = Mockito.mock(CommandMessageHandler.class);
-        Server server = new Server(0, mockHandler);
+        Server server = new Server(0, null);
         new Thread(server).start();
         await().atMost(Duration.ofSeconds(1)).until(server::isRunning);
         assertTrue(server.isRunning());
@@ -41,15 +38,14 @@ public class TestServer {
 
     @Test
     public void testServerClientConnects() throws IOException {
-        MessageHandler mockCommandHandler = Mockito.mock(CommandMessageHandler.class);
-        Server server = new Server(0, mockCommandHandler);
+        MessageHandler mockHandler = Mockito.mock(MessageHandler.class);
+        Server server = new Server(0, mockHandler);
         new Thread(server).start();
         await().atMost(Duration.ofSeconds(1)).until(server::isRunning);
         InetSocketAddress address = new InetSocketAddress("localhost", server.getPort());
-        MessageHandler mockMessageHandler = Mockito.mock(MessageHandler.class);
-        Client client = new Client(address, mockMessageHandler);
+        Client client = new Client(address, mockHandler);
         new Thread(client).start();
-        await().atMost(Duration.ofSeconds(1)).until(server::isRunning);
+        await().atMost(Duration.ofSeconds(1)).until(client::isRunning);
         assertEquals(1, server.getClientHandlerMap().size());
     }
 

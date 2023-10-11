@@ -1,7 +1,6 @@
 package nl.rug.aoop.messagequeue;
 
 import nl.rug.aoop.messagequeue.Interfaces.MQProducer;
-import nl.rug.aoop.messagequeue.Interfaces.MessageQueue;
 import nl.rug.aoop.networking.Client.Client;
 import nl.rug.aoop.networking.NetworkMessage.NetworkMessage;
 
@@ -12,8 +11,8 @@ public class NetworkProducer implements MQProducer {
     private final Client client;
 
     /**
-     * Constructor for the NetworkProducer.
-     * @param messageQueue The message queue that the network producer can put messages in.
+     * Constructor for the network producer.
+     * @param client The client that is the producer over the network.
      */
     public NetworkProducer(Client client) {
         this.client = client;

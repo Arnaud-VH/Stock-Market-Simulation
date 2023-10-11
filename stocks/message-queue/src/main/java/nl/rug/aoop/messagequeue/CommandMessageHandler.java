@@ -6,10 +6,18 @@ import nl.rug.aoop.networking.Handlers.MessageHandler;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Class that handles messages by converting them into Json's and executes them from the Command Handler.
+ */
 public class CommandMessageHandler implements MessageHandler {
 
     private final CommandHandler commandHandler;
     private Map<String, Object> args;
+
+    /**
+     * Constructor for the CommandMessageHandler.
+     * @param commandHandler The commandHandler that will execute the converted Json Message.
+     */
     public CommandMessageHandler(CommandHandler commandHandler) {
         this.commandHandler = commandHandler;
     }
