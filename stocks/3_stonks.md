@@ -4,11 +4,11 @@ After a long wait, we have finally arrived at the epic finale of the ACU (AOOP C
 
 ## Deadlines
 
-For this assignment there are three deadlines:
+For this assignment, there are three deadlines:
 
 - **Intermediate deadline**
 
-  This is an optional deadline and provides you with an extra opportunity to get feedback on your code. If you want to make use of this deadline, create an issue for this (**so not a pull request**). Be sure to tag your TA and indicate whether you want a demo as well and whether you would like a code review. Also, indicate specifically what you would like feedback on. Again, this deadline is optional, but you are highly recommended to make use of it due to the complexity of the assignment. Try to complete as much as possible before this deadline.
+  If you create a pull request, we expect you to show up for the corresponding demo and this will be your opportunity to get some feedback on your progress. Indicate whether you want a demo as well and whether you would like a code review. Also, indicate specifically what you would like feedback on. Again, this deadline is optional, but you are highly recommended to make use of it due to the complexity of the assignment. Try to complete as much as possible before this deadline. Your pull request doesn't need to pass the checks, since your pull request will be closed afterwards.
 
 - **Soft Deadline**
 
@@ -24,15 +24,15 @@ Throughout this assignment, we use both the terms "stocks" and "shares". A stock
 
 Traders can trade shares by sending buy or sell orders to the exchange. The exchange keeps track of all the buy and sell orders (the bids and asks).
 
-In the real world, there are many order types, but for this assignment, the order type you will be implementing are limit orders. An order contains information about which stock to buy, how many shares, and - in the case of limit orders - at what price. The role of the price in a limit order depends on whether it is a buy or a sell order:
+In the real world, there are many order types, but for this assignment, the order types you will be implementing are limit orders. An order contains information about which stock to buy, how many shares, and - in the case of limit orders - at what price. The role of the price in a limit order depends on whether it is a buy or a sell order:
 
  - For buy orders, the price in a limit order denotes the maximum share price the trader wishes to buy their shares at.
  - For sell orders, the price in a limit order denotes the minimum share price a trader wishes to sell their shares for.
 
 When a new order comes in, it will first try to match it against existing orders. For sell orders, this means finding the buy order with the highest price (provided that this price is higher than the limit price). For buy orders, this means finding the sell order with the lowest price (provided that this price is lower than the limit price). The exchange will keep trying to do this until the order is resolved. When no matching orders can be found (anymore), the buy/sell order should be added to the bids/asks.
-Each time an order is (partially) resolved, the transaction is added to the transaction history of the trader that placed the order. A transaction contains information on how many of which stock was traded for how much.
+Each time an order is (partially) resolved, the transaction is added to the transaction history of the trader who placed the order. A transaction contains information on how many of which stock was traded for how much.
 
-The price of a stock is updated whenever a sell order for that stock (partially) resolves. The price is then updated to the price that was paid at the latest transaction. As an example, suppose we have a sell order in our asks for 10 shares at \$208. This means the seller is prepared to sell the stock for a minimum of \$208. When a new buy order comes with a limit price of \$204, the order cannot be matched, since the buyer is only prepared to pay at most \$204. As such, this buy order is added to the bids. When another buy order comes in for 10 shares with a price limit of \$209, it will be matched with the existing sell order for the price of the sell order. This means the order will be resolved for \$208 dollars and the price of the stock is updated to \$208 (since this is the price of the latest transaction). Similarly, if a sell order for \$202 would come in, it would be matched against the buy order of \$204, and the price of the stock is updated to \$204.
+The price of a stock is updated whenever a sell order for that stock (partially) resolves. The price is then updated to the price that was paid at the latest transaction. As an example, suppose we have a sell order in our asks for 10 shares at \$208. This means the seller is prepared to sell the stock for a minimum of \$208. When a new buy order comes with a limit price of \$204, the order cannot be matched, since the buyer is only prepared to pay at most \$204. As such, this buy order is added to the bids. When another buy order comes in for 10 shares with a price limit of \$209, it will be matched with the existing sell order for the price of the sell order. This means the order will be resolved for \$208 dollars and the price of the stock will be updated to \$208 (since this is the price of the latest transaction). Similarly, if a sell order for \$202 would come in, it would be matched against the buy order of \$204, and the price of the stock is updated to \$204.
 
 While you only need to worry about limit orders, you should design your program in such a way that adding support for more order types is relatively easy.
 
