@@ -20,6 +20,7 @@
         <module>networking</module>
         <module>stock-market-ui</module>
         <module>util</module>
+        <module>market</module>
     </modules>
 
     <build>
