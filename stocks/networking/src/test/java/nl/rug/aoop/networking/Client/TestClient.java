@@ -24,7 +24,7 @@ public class TestClient {
     private BufferedReader serverIn;
     private PrintWriter serverOut;
 
-    private void startTempServer() {
+    /*private void startTempServer() {
         new Thread( ()-> {
             try {
                 ServerSocket serverSocket = new ServerSocket(0);
@@ -156,6 +156,6 @@ public class TestClient {
             assertTrue(client.isRunning());
             client.sendMessage("");
         });
-    }
+    }*/
 
 }

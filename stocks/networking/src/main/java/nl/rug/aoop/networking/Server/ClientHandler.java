@@ -1,7 +1,9 @@
 package nl.rug.aoop.networking.Server;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.rug.aoop.networking.Handlers.MessageHandler;
+import nl.rug.aoop.networking.NetworkMessage.NetworkMessage;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,7 +19,8 @@ public class ClientHandler implements Runnable{
     private final Socket socket;
     private final BufferedReader in;
     private final PrintWriter out;
-    private boolean running = false;
+    @Getter private volatile boolean running = false;
+    private volatile boolean terminate = false;
     private final int id;
     private final MessageHandler messageHandler;
 
@@ -39,32 +42,32 @@ public class ClientHandler implements Runnable{
     @Override
     public void run() {
         running = true;
-        out.println("Hello, enter BYE to exit. Your ID is: " + id);
-        while(running) {
+        log.info("Client '" + id + "' is being handled");
+        out.println(new NetworkMessage("client_id",Integer.toString(id)).toJson());  // send client's id to client
+        while(!terminate) {
             try {
                 String fromClient = in.readLine();
-                if (fromClient == null || fromClient.trim().equalsIgnoreCase("BYE")) {
+                if (fromClient == null) {  // force close connection if client sends null. Connections should be closed through server
+                    log.info("Terminating clientHandler '" + id + "' because client sent null");
                     terminate();
                     break;
                 }
-                out.println(fromClient);
-                log.info("Received from client: " + id + fromClient);
+                out.println(new NetworkMessage("echo",fromClient).toJson());  // echo client message
                 messageHandler.handleMessage(fromClient);
             } catch (IOException e) {
-                log.error("Reading string from client id: " + id, e);
+                log.error("Error reading message from client '" + id + "': ", e);
             }
         }
+        running = false;
+        log.info("Client '" + id + "' disconnected");
     }
 
     /**
      * Terminates the connection over the socket.
      */
     public void terminate() {
-        running = false;
-        try {
-            this.socket.close();
-        } catch (IOException e) {
-            log.error("Could not close the socket", e);
-        }
+        terminate = true;
+        try { in.close(); } catch (IOException e) { log.error("Could not close the BufferedReader", e); }  // ensuring run() doesnt stop when reading input
+        try { this.socket.close(); } catch (IOException e) { log.error("Could not close the socket", e); }
     }
 }

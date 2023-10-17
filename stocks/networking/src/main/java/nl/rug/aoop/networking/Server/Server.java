@@ -7,6 +7,7 @@ import nl.rug.aoop.networking.Handlers.MessageHandler;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -18,14 +19,14 @@ import java.util.concurrent.Executors;
 @Slf4j
 public class Server implements Runnable{
 
-    private int port;
     private ServerSocket serverSocket;
-    @Getter private boolean running = false;
-    @Getter private boolean started;
-    @Getter  private Map<Integer, ClientHandler> clientHandlerMap;
-    private int id = 0; //TODO: Implement a map that keeps track of the client Handler's based on ID's
+    @Getter private final Map<Integer, ClientHandler> clientHandlers = new HashMap<>();
+    private final MessageHandler messageHandler;
     private ExecutorService executorService;
-    private MessageHandler messageHandler;
+
+    private volatile boolean terminate = false;  // volatile keyword enables this field to propagate correctly across threads
+    @Getter private volatile boolean running = false;
+    private int id = 0;
 
     /**
      * Server constructor.
@@ -33,42 +34,50 @@ public class Server implements Runnable{
      * @param messageHandler The message handler which deals with the client's messages.
      */
     public Server(int port, MessageHandler messageHandler){
+        this.messageHandler = messageHandler;
         try {
             serverSocket = new ServerSocket(port);
-            this.messageHandler = messageHandler;
-            this.port = port;
             executorService = Executors.newCachedThreadPool();
-            clientHandlerMap = new HashMap<>();
-            started = true;
-            log.info("Server started correctly");
         } catch(IOException e) {
-            log.error("The socket was not opened correctly", e);
+            log.error("The socket was not opened correctly: ", e);
         }
     }
 
     @Override
     public void run() {
         running = true;
-        while (running) {
+        log.info("Server running");
+        while (!terminate) {
             try {
                 Socket socket = this.serverSocket.accept();
-                log.info("New connection from client");
+                log.info("Server accepted new connection");
                 ClientHandler clientHandler = new ClientHandler(socket, id, messageHandler);
-                clientHandlerMap.put(id, clientHandler);
+                clientHandlers.put(id, clientHandler);
                 this.executorService.submit(clientHandler);
                 id++;
+            } catch (SocketException e) {
+                if (!terminate) {  // if terminate socket has been closed so exception is expected (not an error)
+                    log.error("Socket error: ", e);
+                }
             } catch (IOException e) {
-                log.error("Socket error: ", e);
+                log.error("Error when running server: ",e);
             }
         }
+        executorService.shutdown();
+        running = false;
+        log.info("Server terminated");
     }
 
     /**
      * Terminates and stops the threads that are running.
      */
     public void terminate() {
-        running = false;
-        this.executorService.shutdown();
+        this.terminate = true;
+        try {
+            serverSocket.close();   // closing the serverSocket ensures the server doesn't get stuck trying to accept a new connection when terminating
+        } catch (IOException e) {
+            log.error("failed to close server socket: ", e);
+        }
     }
 
     public int getPort() {

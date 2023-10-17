@@ -23,34 +23,36 @@ public class Client implements Runnable{
      */
     public static final int TIMEOUT = 1000;
     @Getter
-    private boolean running = false;
-    @Getter
-    private boolean connected = false;
+    private volatile boolean running = false;
+    private volatile Boolean terminate = false;
     private BufferedReader in;
     private PrintWriter out;
     private final MessageHandler messageHandler;
+    private final InetSocketAddress address;
+    private Socket socket;
 
     /**
      * Constructor for the client that connects to the server.
      * @param address Address for hostName and port number.
      * @param messageHandler Handles the communication between client to server.
-     * @throws IOException Exception in case it was not able to connect to the Server Socket.
      */
-    public Client(InetSocketAddress address, MessageHandler messageHandler) throws IOException {
+    public Client(InetSocketAddress address, MessageHandler messageHandler) {
         this.messageHandler = messageHandler;
-        initSocket(address);
+        this.address = address;
     }
 
-    private void initSocket(InetSocketAddress address) throws IOException {
-        Socket socket = new Socket();
-        socket.connect(address, TIMEOUT);
-        if (!socket.isConnected()) {
-            log.error("Socket could not connect to port: " + address.getPort());
-            throw new SocketTimeoutException("Could not connect to socket");
+    private void initSocket(InetSocketAddress address) {
+        this.socket = new Socket();
+        try {
+            socket.connect(address, TIMEOUT);
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = new PrintWriter(socket.getOutputStream(), true);
+            log.info("Connected to server");
+        } catch (SocketTimeoutException e) {
+            log.error("Connection timed out: ", e);
+        } catch (IOException e) {
+            log.error("Couldn't connect: ", e);
         }
-        connected = true;
-        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        out = new PrintWriter(socket.getOutputStream(), true);
     }
 
     /**
@@ -58,21 +60,22 @@ public class Client implements Runnable{
      */
     @Override
     public void run() {
-        running = true;
-        while(running) {
+        initSocket(address);
+        while(!terminate) {
+            if(!socket.isConnected()) {
+                log.info("Connection to server lost");
+                break;
+            }
+            running = true;
             try {
                 String fromServer = in.readLine();
-                if (Objects.equals(fromServer, "Stop Connection")) {
-                    terminate();
-                    break;
-                }
-                log.info("Server sent: " + fromServer);
                 messageHandler.handleMessage(fromServer);
             } catch (IOException e) {
                 log.error("Could not read line from server: ", e);
             }
         }
-
+        running = false;
+        log.info("Client terminated");
     }
 
     /**
@@ -80,9 +83,6 @@ public class Client implements Runnable{
      * @param message The message that is sent to the server.
      */
     public void sendMessage(String message) {
-        if (message == null || message.equalsIgnoreCase("")) {
-            throw new IllegalArgumentException("Attempting to send an invalid message");
-        }
         out.println(message);
     }
 
@@ -90,7 +90,12 @@ public class Client implements Runnable{
      * Called when we close the connection. It is no longer running.
      */
     public void terminate() {
-        running = false;
+        try {
+            in.close();
+        } catch (IOException e) {
+            log.error("Unable to close BufferedReader: ", e);
+        }
+        terminate = true;
     }
 
 }
