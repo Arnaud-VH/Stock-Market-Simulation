@@ -47,7 +47,7 @@ public class ClientHandler implements Runnable{
         while(!terminate) {
             try {
                 String fromClient = in.readLine();
-                if (fromClient == null) {  // force close connection if client sends null. Connections should be closed through server
+                if (fromClient == null) {  // force close connection if client sends null.
                     log.info("Terminating clientHandler '" + id + "' because client sent null");
                     break;
                 }
@@ -61,6 +61,10 @@ public class ClientHandler implements Runnable{
         log.info("Client '" + id + "' disconnected");
     }
 
+    /**
+     * The ClientHandler sends a message to the client.
+     * @param message The message that is sent to the client.
+     */
     public void sendMessage(String message) {
         out.println(message);
     }
@@ -77,6 +81,4 @@ public class ClientHandler implements Runnable{
         }
         this.terminate = true;
     }
-
-
 }

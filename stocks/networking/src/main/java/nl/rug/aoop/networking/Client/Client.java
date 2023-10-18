@@ -11,7 +11,6 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.util.Objects;
 
 /**
  * Client class that connects with the server.
@@ -61,7 +60,10 @@ public class Client implements Runnable{
      */
     @Override
     public void run() {
-        if(!isConnected()) { log.info("Client not connected"); terminate = true; }
+        if(!isConnected()) {
+            log.info("Client not connected");
+            terminate = true;
+        }
         while(!terminate) {
             if(!isConnected()) {
                 log.info("Connection to server lost");

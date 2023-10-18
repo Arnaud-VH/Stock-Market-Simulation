@@ -62,6 +62,7 @@ public class TestClientHandler {
 
     @Test
     public void testConstructor() throws IOException {
+        setup();
         ClientHandler clientHandler = new ClientHandler(mockSocket,0,mockHandler);
         assertNotNull(clientHandler);
     }

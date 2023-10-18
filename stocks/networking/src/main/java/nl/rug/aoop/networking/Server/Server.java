@@ -24,7 +24,7 @@ public class Server implements Runnable{
     private final MessageHandler messageHandler;
     private ExecutorService executorService;
 
-    private volatile boolean terminate = false;  // volatile keyword enables this field to propagate correctly across threads
+    private volatile boolean terminate = false;
     @Getter private volatile boolean running = false;
     private int id = 0;
 
@@ -68,6 +68,11 @@ public class Server implements Runnable{
         log.info("Server terminated");
     }
 
+    /**
+     * Sends a message from the server to the client by calling the appropriate clientHandler.
+     * @param id The ID of the client to which the server sends the message.
+     * @param message The message that is being sent.
+     */
     public void sendMessage(int id, String message) {
         try {
             getClientHandlers().get(id).sendMessage(message);
@@ -84,9 +89,10 @@ public class Server implements Runnable{
     public void terminate() {
         this.terminate = true;
         try {
-            serverSocket.close();   // closing the serverSocket ensures the server doesn't get stuck trying to accept a new connection when terminating
+            serverSocket.close();   // closing the serverSocket ensures the server doesn't get stuck trying to accept a
+            // new connection when terminating
         } catch (IOException e) {
-            log.error("failed to close server socket: ", e);
+            log.error("Failed to close server socket: ", e);
         }
     }
 

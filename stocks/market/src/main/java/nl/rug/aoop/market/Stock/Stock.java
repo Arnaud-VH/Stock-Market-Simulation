@@ -1,7 +1,6 @@
 package nl.rug.aoop.market.Stock;
 
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * The class representing a Stock that can be bought and sold by traders.
@@ -28,9 +27,18 @@ public class Stock {
         this.outstandingShares = outstandingShares;
         this.marketCap = price*outstandingShares;
     }
+
+    /**
+     * Updates the market cap of the stock.
+     */
     private void updateMarketCap() {
         this.marketCap = price*outstandingShares;
     }
+
+    /**
+     * Sets the price of the stock and updates the market cap accordingly.
+     * @param price The new price of the stock.
+     */
     public void setPrice(int price) {
         this.price = price;
         updateMarketCap();
