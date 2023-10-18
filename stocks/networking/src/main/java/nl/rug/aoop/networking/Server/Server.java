@@ -68,6 +68,16 @@ public class Server implements Runnable{
         log.info("Server terminated");
     }
 
+    public void sendMessage(int id, String message) {
+        try {
+            getClientHandlers().get(id).sendMessage(message);
+        } catch (NullPointerException e) {
+            log.error("Couldn't send message because client '" + id + "' doesn't exist", e);
+        } catch (ClassCastException e) {
+            log.error("Couldn't send message because id is of wrong type: ", e);
+        }
+    }
+
     /**
      * Terminates and stops the threads that are running.
      */

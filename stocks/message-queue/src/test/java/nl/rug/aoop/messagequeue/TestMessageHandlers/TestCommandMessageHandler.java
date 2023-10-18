@@ -2,6 +2,7 @@ package nl.rug.aoop.messagequeue.TestMessageHandlers;
 
 import nl.rug.aoop.command.Command.CommandHandler;
 import nl.rug.aoop.messagequeue.MessageHandlers.CommandMessageHandler;
+import nl.rug.aoop.messagequeue.Queues.Message;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,9 @@ import org.mockito.Mockito;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -29,5 +32,16 @@ public class TestCommandMessageHandler {
         }
         assertTrue(methodNames.contains("handleMessage"));
     }
-    // TODO: find the execute test lolsies was either misplaced or lost to git
+
+    @Test
+    void testExecute() {
+        CommandHandler mockHandler = Mockito.mock(CommandHandler.class);
+        this.messageHandler = new CommandMessageHandler(mockHandler);
+        Message msg = new Message("header","body");
+        Map<String, Object> map = new HashMap<>();
+        map.put("header",msg.getHeader());
+        map.put("body",msg.getBody());
+        messageHandler.handleMessage(msg.toJson());
+        Mockito.verify(mockHandler).execute("header",map);
+    }
 }

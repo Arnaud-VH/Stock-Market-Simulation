@@ -39,6 +39,7 @@ public class Client implements Runnable{
     public Client(InetSocketAddress address, MessageHandler messageHandler) {
         this.messageHandler = messageHandler;
         this.address = address;
+        initSocket(address);
     }
 
     private void initSocket(InetSocketAddress address) {
@@ -49,9 +50,9 @@ public class Client implements Runnable{
             out = new PrintWriter(socket.getOutputStream(), true);
             log.info("Connected to server");
         } catch (SocketTimeoutException e) {
-            log.error("Connection timed out: ", e);
+            log.error("Connection to server timed out: ", e);
         } catch (IOException e) {
-            log.error("Couldn't connect: ", e);
+            log.error("Couldn't connect to server: ", e);
         }
     }
 
@@ -60,9 +61,9 @@ public class Client implements Runnable{
      */
     @Override
     public void run() {
-        initSocket(address);
+        if(!isConnected()) { log.info("Client not connected"); terminate = true; }
         while(!terminate) {
-            if(!socket.isConnected()) {
+            if(!isConnected()) {
                 log.info("Connection to server lost");
                 break;
             }
@@ -71,11 +72,13 @@ public class Client implements Runnable{
                 String fromServer = in.readLine();
                 messageHandler.handleMessage(fromServer);
             } catch (IOException e) {
-                log.error("Could not read line from server: ", e);
+                if (!terminate) {
+                    log.error("Could not read line from server: ", e);
+                }
             }
         }
-        running = false;
         log.info("Client terminated");
+        running = false;
     }
 
     /**
@@ -91,11 +94,15 @@ public class Client implements Runnable{
      */
     public void terminate() {
         try {
-            in.close();
+            socket.close();
         } catch (IOException e) {
             log.error("Unable to close BufferedReader: ", e);
         }
         terminate = true;
+    }
+
+    public Boolean isConnected() {
+        return socket.isConnected();
     }
 
 }

@@ -4,7 +4,9 @@ import nl.rug.aoop.networking.Handlers.MessageHandler;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.time.Duration;
@@ -39,6 +41,18 @@ public class TestServer {
     }
 
     @Test
+    public void testServerTermination() {
+        MessageHandler mockHandler = Mockito.mock(MessageHandler.class);
+        Server server = new Server(0, mockHandler);
+        Thread thread = new Thread(server);
+        thread.start();
+        await().atMost(Duration.ofSeconds(1)).until(server::isRunning);
+        server.terminate();
+        await().atMost(Duration.ofSeconds(1)).until(() -> !thread.isAlive());
+        assertTrue(!server.isRunning() && !thread.isAlive());
+    }
+
+    @Test
     public void testServerClientConnects() throws IOException {
         MessageHandler mockHandler = Mockito.mock(MessageHandler.class);
         Server server = new Server(0, mockHandler);
@@ -53,15 +67,40 @@ public class TestServer {
     }
 
     @Test
-    public void testServerTermination() {
+    public void sendMessageValidID() throws IOException {
         MessageHandler mockHandler = Mockito.mock(MessageHandler.class);
         Server server = new Server(0, mockHandler);
-        Thread thread = new Thread(server);
-        thread.start();
+        new Thread(server).start();
         await().atMost(Duration.ofSeconds(1)).until(server::isRunning);
-        server.terminate();
-        await().atMost(Duration.ofSeconds(1)).until(server::isRunning, Predicate.isEqual(false));
-        assertFalse(server.isRunning() && thread.isAlive());
+
+        InetSocketAddress address = new InetSocketAddress("localhost", server.getPort());
+        Socket socket = new Socket();
+        socket.connect(address,1000);
+        await().atMost(Duration.ofSeconds(1)).until(socket::isConnected);
+
+        BufferedReader fromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        fromServer.readLine(); // consume id
+        server.sendMessage(0,"hello world");
+        assertEquals("hello world", fromServer.readLine());
+    }
+
+    @Test
+    public void sendMessageInvalidID() throws IOException {
+        MessageHandler mockHandler = Mockito.mock(MessageHandler.class);
+        Server server = new Server(0, mockHandler);
+        new Thread(server).start();
+        await().atMost(Duration.ofSeconds(1)).until(server::isRunning);
+
+        InetSocketAddress address = new InetSocketAddress("localhost", server.getPort());
+        Socket socket = new Socket();
+        socket.connect(address,1000);
+        await().atMost(Duration.ofSeconds(1)).until(socket::isConnected);
+
+        BufferedReader fromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        fromServer.readLine(); // consume id
+        server.sendMessage(5,"invalid");
+        server.sendMessage(0,"valid");
+        assertEquals("valid", fromServer.readLine());
     }
 
 }

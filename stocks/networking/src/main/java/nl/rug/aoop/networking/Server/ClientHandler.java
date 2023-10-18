@@ -49,7 +49,6 @@ public class ClientHandler implements Runnable{
                 String fromClient = in.readLine();
                 if (fromClient == null) {  // force close connection if client sends null. Connections should be closed through server
                     log.info("Terminating clientHandler '" + id + "' because client sent null");
-                    terminate();
                     break;
                 }
                 out.println(new NetworkMessage("echo",fromClient).toJson());  // echo client message
@@ -62,12 +61,22 @@ public class ClientHandler implements Runnable{
         log.info("Client '" + id + "' disconnected");
     }
 
+    public void sendMessage(String message) {
+        out.println(message);
+    }
+
     /**
      * Terminates the connection over the socket.
      */
     public void terminate() {
-        terminate = true;
-        try { in.close(); } catch (IOException e) { log.error("Could not close the BufferedReader", e); }  // ensuring run() doesnt stop when reading input
-        try { this.socket.close(); } catch (IOException e) { log.error("Could not close the socket", e); }
+        log.info("Attempting to terminate clientHandler");
+        try {
+            socket.close();
+        } catch (IOException e) {
+            log.error("Could not close the socket", e);
+        }
+        this.terminate = true;
     }
+
+
 }
