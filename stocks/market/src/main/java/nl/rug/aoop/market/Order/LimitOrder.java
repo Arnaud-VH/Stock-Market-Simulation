@@ -1,10 +1,13 @@
 package nl.rug.aoop.market.Order;
 
+import lombok.Getter;
+
 /**
  * Type of order which buys or sells at a given price.
  */
+@Getter
 public class LimitOrder extends Order{
-    private int price;
+    private final int price;
 
     /**
      * Constructor for the Limit order.

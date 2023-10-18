@@ -6,12 +6,13 @@ import lombok.Setter;
 /**
  * The class representing a Stock that can be bought and sold by traders.
  */
+@Getter
 public class Stock {
-    @Getter private final String symbol;
-    @Getter @Setter private int price;
-    @Getter private final String name;
-    @Getter private int outstandingShares;
-    @Getter private int marketCap;
+    private final String symbol;
+    private int price;
+    private final String name;
+    private final int outstandingShares;
+    private int marketCap;
 
     /**
      * The constructor for a Stock.
@@ -26,5 +27,12 @@ public class Stock {
         this.name = name;
         this.outstandingShares = outstandingShares;
         this.marketCap = price*outstandingShares;
+    }
+    private void updateMarketCap() {
+        this.marketCap = price*outstandingShares;
+    }
+    public void setPrice(int price) {
+        this.price = price;
+        updateMarketCap();
     }
 }

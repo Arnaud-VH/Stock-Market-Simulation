@@ -8,11 +8,12 @@ import java.util.Map;
 /**
  * The class representing a trader that buys and sells stocks.
  */
+@Getter
 public class Trader {
-    @Getter private final int id;
-    @Getter private final String name;
-    @Getter @Setter private int funds;
-    @Getter @Setter private Map<String,Integer> ownedStocks;
+    private final String id;
+    private final String name;
+    @Setter private int funds;
+    @Setter private Map<String,Integer> ownedStocks;
 
     /**
      * Constructor for the trader.
@@ -21,7 +22,7 @@ public class Trader {
      * @param funds The amount of funds the trader has.
      * @param ownedStocks The stocks that the trader owns By symbol and amount.
      */
-    public Trader(int id, String name, int funds, Map<String, Integer> ownedStocks) {
+    public Trader(String id, String name, int funds, Map<String, Integer> ownedStocks) {
         this.id = id;
         this.name = name;
         this.funds = funds;

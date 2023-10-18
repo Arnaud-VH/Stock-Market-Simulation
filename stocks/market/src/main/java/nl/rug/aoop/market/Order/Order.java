@@ -1,8 +1,11 @@
 package nl.rug.aoop.market.Order;
 
+import lombok.Getter;
+
 /**
  * Abstract class depicting the features of an order.
  */
+@Getter
 public abstract class Order {
     private final String traderID;
     private final String stockSymbol;
