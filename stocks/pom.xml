@@ -16,6 +16,8 @@
 
     <modules>
         <module>message-queue</module>
+        <module>command</module>
+        <module>networking</module>
     </modules>
 
     <build>

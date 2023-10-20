@@ -1,7 +1,6 @@
 package nl.rug.aoop.messagequeue.Queues;
 
-import nl.rug.aoop.messagequeue.Interfaces.MessageQueue;
-import nl.rug.aoop.messagequeue.Message;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -9,6 +8,7 @@ import java.util.Queue;
 /**
  * Unordered queue is a message queue where messages are enqueued based on arrival time.
  */
+@Slf4j
 public class UnorderedQueue implements MessageQueue {
     private final Queue<Message> unorderedQueue;
 
@@ -22,7 +22,7 @@ public class UnorderedQueue implements MessageQueue {
     @Override
     public void enqueue(Message message) {
         if (message == null) {
-            System.err.println("Attempting to enqueue a NULL");
+            log.error("Attempting to enqueue a NULL");
         } else {
             unorderedQueue.add(message);
         }
@@ -33,7 +33,7 @@ public class UnorderedQueue implements MessageQueue {
         if (!unorderedQueue.isEmpty()) {
             return unorderedQueue.remove();
         }
-        System.out.println("Attempting to deque on an empty queue");
+        log.error("Attempting to deque on an empty queue");
         return null;
     }
 

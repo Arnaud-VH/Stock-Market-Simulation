@@ -1,75 +1,59 @@
 package nl.rug.aoop.messagequeue.Queues;
 
-import nl.rug.aoop.messagequeue.Interfaces.MessageQueue;
-import nl.rug.aoop.messagequeue.Message;
+import lombok.extern.slf4j.Slf4j;
 
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 /**
- * Implementation of a message queue. Here the message queue is ordered by timestamp.
+ * Ordered Queue gives design of a messageQueue where messages are ordered based on timeStamp.
  */
+@Slf4j
 public class OrderedQueue implements MessageQueue {
-    private final SortedMap<LocalDateTime, LinkedList<Message>> orderedQueue;
+    /**
+     * Ordinary Queue that is passed down to subclasses.
+     */
+    protected final Queue<Message> queue;
 
     /**
-     * The constructor for the ordered queue.
+     * Class constructor.
      */
     public OrderedQueue() {
-        orderedQueue = new TreeMap<>();
+        this.queue = new PriorityQueue<>();
     }
 
     /**
-     * Enqueue for the orderded Queue. Uses Linear Chaining in the case of messages with the same timeStamp.
+     * Constructor that passes down to subclasses.
+     * @param queue The queue implementation that is used in the subclass.
+     */
+    protected OrderedQueue(Queue<Message> queue) {
+        this.queue = queue;
+    }
+
+    /**
+     * Enqueue's a message into the class's queue.
      * @param message The message that is enqueued into the queue.
      */
     @Override
     public void enqueue(Message message) {
-        // if trying to enqueue null print error and do nothing
         if (message == null) {
-            System.err.println("Attempting to enqueue NULL");
-        } else { // else enqueue
-            LocalDateTime key = message.getTimestamp();
-            // if list already exists (we have a key collision) add message to list
-            if (orderedQueue.containsKey(key)) {
-                orderedQueue.get(key).add(message);
-            } else { // else create list and add to map
-                LinkedList<Message> l = new LinkedList<>();
-                l.add(message);
-                orderedQueue.put(key, l);
-            }
+            log.error("Attempting to enqueue NULL");
+        } else {
+            queue.add(message);
         }
     }
 
-    /**
-     * Dequeues item from sorted queue. Uses linear probing.
-     * @return null if queue is empty, else head of queue.
-     */
     @Override
     public Message dequeue() {
-        // if queue not empty dequeue
-        if (!orderedQueue.isEmpty()) {
-            LocalDateTime key = orderedQueue.firstKey();
-            // each key is a list for linear probing
-            Message message = orderedQueue.get(key).pop();
-            // if pop was last element in the list, remove the list
-            if (orderedQueue.get(key).isEmpty()) {
-                orderedQueue.remove(key);
-            }
-            return message;
-        } else { // else print error and return null
-            System.err.println("Attempting to dequeue an empty queue");
+        if (queue.isEmpty()) {
+            log.error("Attempting to dequeue an empty queue");
             return null;
         }
+        return queue.poll();
     }
 
     @Override
     public int getSize() {
-        int size = 0;
-        // for all lists in the map check size and add up
-        for (LinkedList<Message> value : orderedQueue.values()) {
-            size += value.size();
-        }
-        return size;
+        return queue.size();
     }
 }
