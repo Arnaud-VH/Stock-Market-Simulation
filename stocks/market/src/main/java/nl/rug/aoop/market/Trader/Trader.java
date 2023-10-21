@@ -40,8 +40,12 @@ public class Trader {
      * @param amount Amount of shares to add
      */
     public void addShares(Stock stock, int amount) {
-        int currentAmount = this.ownedStocks.get(stock);
-        this.ownedStocks.put(stock,currentAmount + amount);
+        if (this.ownedStocks.containsKey(stock)) {
+            int currentAmount = this.ownedStocks.get(stock);
+            this.ownedStocks.put(stock,currentAmount + amount);
+        } else {
+            this.ownedStocks.put(stock, amount);
+        }
     }
 
     /**
@@ -51,7 +55,11 @@ public class Trader {
      */
     public void removeShares(Stock stock, int amount) {
         int currentAmount = this.ownedStocks.get(stock);
-        this.ownedStocks.put(stock,currentAmount - amount);
+        if (currentAmount - amount <= 0) {
+            this.ownedStocks.remove(stock);
+        } else {
+            this.ownedStocks.put(stock,currentAmount - amount);
+        }
     }
 
     /**

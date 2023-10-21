@@ -70,7 +70,7 @@ public class TestExchange {
         Mockito.verify(mockTraderArnaud).addShares(mockStock1, 20);
         Mockito.verify(mockTraderArnaud).removeFunds(50*20);
         Mockito.verify(mockTraderClement).addFunds(50*20);
-        Mockito.verify(mockTraderClement).removeShares(mockStock1, 20);.
+        Mockito.verify(mockTraderClement).removeShares(mockStock1, 20);
     }
 }
 
