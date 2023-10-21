@@ -21,6 +21,7 @@
         <module>stock-market-ui</module>
         <module>util</module>
         <module>market</module>
+        <module>trader-application</module>
     </modules>
 
     <build>

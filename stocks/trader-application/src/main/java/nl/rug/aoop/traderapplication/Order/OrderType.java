@@ -1,4 +1,4 @@
-package nl.rug.aoop.market.Order;
+package nl.rug.aoop.traderapplication.Order;
 
 /**
  * An ENUM that describes the types of orders there are.

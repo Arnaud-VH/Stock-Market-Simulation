@@ -1,4 +1,4 @@
-package nl.rug.aoop.market.Order;
+package nl.rug.aoop.traderapplication.Order;
 
 import lombok.Getter;
 
