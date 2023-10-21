@@ -117,7 +117,7 @@ public class Exchange {
      * @param price The price at which it was sold.
      */
     private void resolveBid(Bid bid, int price){ // TODO update stock price
-        // TODO check if trader has funds
+        // TODO check if bidder has enough stocks
         bids.get(bid.getStock()).remove(bid);
         Transaction transaction = new Transaction(bid.getStock(),price,bid.getShares());
         bid.getTrader().getTransactionHistory().add(transaction);

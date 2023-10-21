@@ -58,17 +58,19 @@ public class TestExchange {
         Mockito.verify(mockTraderClement).removeShares(mockStock1, 100);
     }
 
-    /*@Test
+    @Test
     public void UnequalAmountsTrade() {
         Ask ask = new Ask (mockTraderArnaud,mockStock1, 20, 50);
         exchange.placeAsk(ask);
         Bid bid = new Bid(mockTraderClement,mockStock1, 100, 50);
         exchange.placeBid(bid);
         assertFalse(exchange.getAsks().get(mockStock1).contains(ask));
+        assertTrue(exchange.getBids().get(mockStock1).contains(bid));
+        assertTrue(bid.getShares() == 80 && bid.getPrice() == 50);
         Mockito.verify(mockTraderArnaud).addShares(mockStock1, 20);
         Mockito.verify(mockTraderArnaud).removeFunds(50*20);
         Mockito.verify(mockTraderClement).addFunds(50*20);
-        Mockito.verify(mockTraderClement).removeShares(mockStock1, 20);
-    }*/
+        Mockito.verify(mockTraderClement).removeShares(mockStock1, 20);.
+    }
 }
 
