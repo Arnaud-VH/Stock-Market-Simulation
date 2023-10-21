@@ -11,7 +11,7 @@ public class MarketOrder extends Order{
      * @param stockSymbol The stock on which the order is placed.
      * @param amount The amount of stocks the order is for.
      */
-    public MarketOrder(String traderID, String stockSymbol,  int amount) {
+    public MarketOrder(String traderID, String stockSymbol, int amount) {
         super(traderID, stockSymbol, amount);
         this.orderType = OrderType.MARKET_ORDER;
     }

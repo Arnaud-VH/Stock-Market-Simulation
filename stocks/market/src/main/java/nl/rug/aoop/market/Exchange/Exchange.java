@@ -1,6 +1,7 @@
 package nl.rug.aoop.market.Exchange;
 
 import lombok.Getter;
+import nl.rug.aoop.market.Order.LimitOrder;
 import nl.rug.aoop.market.Order.Order;
 import nl.rug.aoop.market.Stock.Stock;
 import nl.rug.aoop.market.Trader.Trader;
@@ -62,8 +63,8 @@ public class Exchange {
      * Executes the buy order.
      * @param order The order, of specific type, that needs to be executed.
      */
-    public void executeBuyOrder(Order order) {
-        // TODO try to resolve buy order with command pattern
+    public void executeBuyOrder(LimitOrder order) {
+        //TODO write the logic for resolving a buy order.
         asks.add(order); // if it cannot be resolved add to asks
     }
 
@@ -71,8 +72,8 @@ public class Exchange {
      * Executes the sell order.
      * @param order The order, of specific type, that needs to be executed.
      */
-    public void executeSellOrder(Order order) {
-        // TODO try to resolve sell order with command pattern
+    public void executeSellOrder(LimitOrder order) {
+        // TODO write the logic for resolving sell order
         bids.add(order); // if it cannot be resolved add to bids
     }
 }

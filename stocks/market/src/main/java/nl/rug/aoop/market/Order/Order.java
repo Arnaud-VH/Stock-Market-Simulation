@@ -10,6 +10,7 @@ public abstract class Order {
     private final String traderID;
     private final String stockSymbol;
     private final int stockAmount;
+
     /**
      * The type of order that it is, ENUM.
      */
