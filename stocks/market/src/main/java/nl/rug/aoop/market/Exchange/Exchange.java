@@ -97,16 +97,18 @@ public class Exchange {
      * @param bid The bid to be traded.
      */
     private void resolveTrade(Ask ask, Bid bid){
-        if (!validTrade(ask, bid)) { return; }
+        if (!validTrade(ask, bid)) {
+            return;
+        }
         if (ask.getShares() == bid.getShares()) {
-                resolveBid(bid, ask.getPrice());
-                resolveAsk(ask);
+            resolveBid(bid, ask.getPrice());
+            resolveAsk(ask);
         } else if (ask.getShares() < bid.getShares()) {
-                resolveAsk(ask);
-                resolvePartialBid(bid,ask.getShares(),ask.getPrice());
+            resolveAsk(ask);
+            resolvePartialBid(bid,ask.getShares(),ask.getPrice());
         } else {
-                resolveBid(bid,ask.getPrice());
-                resolvePartialAsk(ask,bid.getShares());
+            resolveBid(bid,ask.getPrice());
+            resolvePartialAsk(ask,bid.getShares());
         }
     }
 
@@ -120,8 +122,12 @@ public class Exchange {
         //TODO test this with edge cases and see if it verifies
         boolean validSeller = bid.getTrader().getShares(bid.getStock()) >= bid.getShares();
         boolean validBuyer = ask.getTrader().getFunds() >= (ask.getPrice()*ask.getShares());
-        if (!validSeller) { this.bids.get(bid.getStock()).remove(bid); }
-        if (!validBuyer) { this.asks.get(ask.getStock()).remove(ask); }
+        if (!validSeller) {
+            this.bids.get(bid.getStock()).remove(bid);
+        }
+        if (!validBuyer) {
+            this.asks.get(ask.getStock()).remove(ask);
+        }
         return (validSeller && validBuyer);
     }
 
@@ -159,7 +165,7 @@ public class Exchange {
      * @param shares Amount of shares to trade
      * @param price Price at which is being traded
      */
-    private void resolvePartialBid (Bid bid, int shares, int price) {
+    private void resolvePartialBid(Bid bid, int shares, int price) {
         Transaction transaction = new Transaction(bid.getStock(), price, shares);
         bid.getTrader().getTransactionHistory().add(transaction);
         bid.getTrader().addFunds(shares*price);
@@ -173,7 +179,7 @@ public class Exchange {
      * @param ask Ask to partially resolve
      * @param shares Amount of shares to trade
      */
-    private void resolvePartialAsk (Ask ask, int shares) {
+    private void resolvePartialAsk(Ask ask, int shares) {
         Transaction transaction = new Transaction(ask.getStock(), ask.getPrice(), shares);
         ask.getTrader().getTransactionHistory().add(transaction);
         ask.getTrader().removeFunds(shares*ask.getPrice());
