@@ -26,13 +26,21 @@ public class TestExchange {
     @BeforeEach
     public void setup() {
         this.mockTraderArnaud = Mockito.mock(Trader.class);
+        Mockito.when(mockTraderArnaud.getId()).thenReturn("T-RN0");
         Mockito.when(mockTraderArnaud.getFunds()).thenReturn(10000);
+        Mockito.when(mockTraderArnaud.getShares(Mockito.any(Stock.class))).thenReturn(100);
+
         this.mockTraderClement = Mockito.mock(Trader.class);
+        Mockito.when(mockTraderClement.getId()).thenReturn("T-CLMN7");
         Mockito.when(mockTraderClement.getFunds()).thenReturn(50000); // logically mock trader clement is wealthier
+        Mockito.when(mockTraderClement.getShares(Mockito.any(Stock.class))).thenReturn(100);
+
+
         this.mockStock1 = Mockito.mock(Stock.class);
-        Mockito.when(mockStock1.getName()).thenReturn("mockStock1");
+        Mockito.when(mockStock1.getSymbol()).thenReturn("MS1");
+
         this.mockStock2 = Mockito.mock(Stock.class);
-        Mockito.when(mockStock2.getName()).thenReturn("mockStock2");
+        Mockito.when(mockStock2.getSymbol()).thenReturn("MS2");
 
         this.exchange = new Exchange(new ArrayList<>(Arrays.asList(mockStock1,mockStock2)),
                 new ArrayList<>(Arrays.asList(mockTraderArnaud,mockTraderClement)));
@@ -60,9 +68,9 @@ public class TestExchange {
 
     @Test
     public void UnequalAmountsTrade() {
-        Ask ask = new Ask (mockTraderArnaud,mockStock1, 20, 50);
+        Ask ask = new Ask (mockTraderArnaud, mockStock1, 20, 50);
         exchange.placeAsk(ask);
-        Bid bid = new Bid(mockTraderClement,mockStock1, 100, 50);
+        Bid bid = new Bid(mockTraderClement, mockStock1, 100, 50);
         exchange.placeBid(bid);
         assertFalse(exchange.getAsks().get(mockStock1).contains(ask));
         assertTrue(exchange.getBids().get(mockStock1).contains(bid));
@@ -71,6 +79,42 @@ public class TestExchange {
         Mockito.verify(mockTraderArnaud).removeFunds(50*20);
         Mockito.verify(mockTraderClement).addFunds(50*20);
         Mockito.verify(mockTraderClement).removeShares(mockStock1, 20);
+    }
+
+    // TODO test trade when prices are not equal
+    @Test
+    public void InvalidAsk() {
+        Ask ask = new Ask (mockTraderArnaud, mockStock1, 50, 1000);
+        exchange.placeAsk(ask);
+        Bid bid = new Bid (mockTraderClement, mockStock1, 50, 1000);
+        exchange.placeBid(bid);
+        assertTrue(exchange.getAsks(mockStock1).isEmpty());
+        assertEquals(50, bid.getShares());
+        assertTrue(exchange.getBids(mockStock1).contains(bid));
+    }
+
+    @Test
+    public void InvalidBid() {
+        Ask ask = new Ask (mockTraderArnaud, mockStock1, 500, 1);
+        exchange.placeAsk(ask);
+        Bid bid = new Bid (mockTraderClement, mockStock1, 500, 1);
+        exchange.placeBid(bid);
+        assertTrue(exchange.getBids(mockStock1).isEmpty());
+        assertEquals(500, ask.getShares());
+        assertTrue(exchange.getAsks(mockStock1).contains(ask));
+    }
+
+    @Test
+    public void testDifferentPricesTrade() {
+        Ask ask = new Ask (mockTraderArnaud,mockStock1, 100, 50);
+        exchange.placeAsk(ask);
+        Bid bid = new Bid(mockTraderClement,mockStock1, 100, 40);
+        exchange.placeBid(bid);
+        assertFalse(exchange.getAsks().get(mockStock1).contains(ask));
+        Mockito.verify(mockTraderArnaud).addShares(mockStock1, 100);
+        Mockito.verify(mockTraderArnaud).removeFunds(50*100);
+        Mockito.verify(mockTraderClement).addFunds(50*100);
+        Mockito.verify(mockTraderClement).removeShares(mockStock1, 100);
     }
 }
 

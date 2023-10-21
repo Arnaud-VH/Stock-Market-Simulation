@@ -22,6 +22,7 @@
         <module>util</module>
         <module>market</module>
         <module>trader-application</module>
+        <module>network-market</module>
     </modules>
 
     <build>

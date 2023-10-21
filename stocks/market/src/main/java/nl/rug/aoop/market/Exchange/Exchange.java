@@ -12,7 +12,7 @@ import java.util.*;
 
 
 /**
- * Exchange is the class that manages the execution of orders.
+ * Exchange is the class that represents the exchange.
  */
 @Slf4j
 @Getter
@@ -65,14 +65,21 @@ public class Exchange {
      * @param bid The bid that needs to be place.
      */
     public void placeBid(Bid bid) {
-        SortedSet<Ask> relevantAsks = asks.get(bid.getStock());
+        log.info("Trader " + bid.getTrader().getId() + " is placing a bid for " + bid.getShares()
+                + " shares of " + bid.getStock().getSymbol());
+        if (!validBid(bid)) {
+            log.info("Bid cancelled because trader " + bid.getTrader().getId() + " bid " +
+                    bid.getShares() + " shares but only owns " + bid.getTrader().getShares(bid.getStock()));
+            return;
+        }
+        SortedSet<Ask> relevantAsks = getAsks(bid.getStock());
         if (!relevantAsks.isEmpty()) {
             Ask highestAsk = relevantAsks.first();
             if (highestAsk.getPrice() >= bid.getPrice()) {
                 resolveTrade(highestAsk, bid);
             }
         }
-        bids.get(bid.getStock()).add(bid);
+        getBids(bid.getStock()).add(bid);
     }
 
     /**
@@ -80,8 +87,13 @@ public class Exchange {
      * @param ask The ask to be placed.
      */
     public void placeAsk(Ask ask) {
-        SortedSet<Bid> relevantBids = bids.get(ask.getStock());
-        log.info(Boolean.toString(relevantBids.isEmpty()));
+        log.info("Trader " + ask.getTrader().getId() + " is placing an ask for " + ask.getShares()
+                + " shares of " + ask.getStock().getSymbol());
+        if (!validAsk(ask)) {
+            log.info("Ask not placed because trader " + ask.getTrader().getId() + " has insufficient funds");
+            return;
+        }
+        SortedSet<Bid> relevantBids = getBids(ask.getStock());
         if (!relevantBids.isEmpty()) {
             Bid lowestBid = relevantBids.last();
             if (lowestBid.getPrice() <= ask.getPrice()) {
@@ -120,15 +132,26 @@ public class Exchange {
      */
     private boolean validTrade(Ask ask, Bid bid) {
         //TODO test this with edge cases and see if it verifies
-        boolean validSeller = bid.getTrader().getShares(bid.getStock()) >= bid.getShares();
-        boolean validBuyer = ask.getTrader().getFunds() >= (ask.getPrice()*ask.getShares());
-        if (!validSeller) {
-            this.bids.get(bid.getStock()).remove(bid);
+        boolean validBid = validBid(bid);
+        boolean validAsk = validAsk(ask);
+        if (!validBid) {
+            getBids(bid.getStock()).remove(bid);
+            log.info("Bid cancelled because trader " + bid.getTrader().getId() + " bid " +
+                    bid.getShares() + " shares but only owns " + bid.getTrader().getShares(bid.getStock()));
         }
-        if (!validBuyer) {
-            this.asks.get(ask.getStock()).remove(ask);
+        if (!validAsk) {
+            getAsks(ask.getStock()).remove(ask);
+            log.info("Ask cancelled because trader " + ask.getTrader().getId() + " has insufficient funds");
         }
-        return (validSeller && validBuyer);
+        return (validBid && validAsk);
+    }
+
+    private boolean validAsk(Ask ask) {
+        return ask.getTrader().getFunds() >= (ask.getPrice()*ask.getShares());
+    }
+
+    private boolean validBid(Bid bid) {
+        return bid.getTrader().getShares(bid.getStock()) >= bid.getShares();
     }
 
     /**
@@ -139,11 +162,14 @@ public class Exchange {
 
     private void resolveBid(Bid bid, int price){
         // TODO update stock price
-        bids.get(bid.getStock()).remove(bid);
+        getBids(bid.getStock()).remove(bid);
         Transaction transaction = new Transaction(bid.getStock(),price,bid.getShares());
         bid.getTrader().getTransactionHistory().add(transaction);
         bid.getTrader().addFunds(price*bid.getShares());
         bid.getTrader().removeShares(bid.getStock(),bid.getShares());
+        log.info("Trader " + bid.getTrader().getId() + " sold " + bid.getShares()
+            + " shares of " + bid.getStock().getSymbol() + " for a total of " +
+                price * bid.getShares() + "currency");
     }
 
     /**
@@ -152,11 +178,14 @@ public class Exchange {
      */
     private void resolveAsk(Ask ask){
         // TODO update stock price
-        asks.get(ask.getStock()).remove(ask);
+        getAsks(ask.getStock()).remove(ask);
         Transaction transaction = new Transaction(ask.getStock(),ask.getPrice(),ask.getShares());
         ask.getTrader().getTransactionHistory().add(transaction);
         ask.getTrader().removeFunds(ask.getPrice()*ask.getShares());
         ask.getTrader().addShares(ask.getStock(),ask.getShares());
+        log.info("Trader " + ask.getTrader().getId() + " bought " + ask.getShares()
+                + " shares of " + ask.getStock().getSymbol() + " for a total of " +
+                ask.getPrice() * ask.getShares() + "currency");
     }
 
     /**
@@ -171,6 +200,9 @@ public class Exchange {
         bid.getTrader().addFunds(shares*price);
         bid.getTrader().removeShares(bid.getStock(),shares);
         bid.setShares(bid.getShares()-shares);
+        log.info("Trader " + bid.getTrader().getId() + " sold " + shares
+                + " shares of " + bid.getStock().getSymbol() + " for a total of " +
+                price * shares + "currency");
         placeBid(bid);
     }
 
@@ -185,6 +217,27 @@ public class Exchange {
         ask.getTrader().removeFunds(shares*ask.getPrice());
         ask.getTrader().addShares(ask.getStock(),shares);
         ask.setShares(ask.getShares()-shares);
+        log.info("Trader " + ask.getTrader().getId() + " bought " + shares
+                + " shares of " + ask.getStock().getSymbol() + " for a total of " +
+                ask.getPrice() * shares + "currency");
         placeAsk(ask);
+    }
+
+    /**
+     * Gets bids of certain stock.
+     * @param stock Stock to get bids for
+     * @return Sorted set of bids
+     */
+    public SortedSet<Bid> getBids(Stock stock) {
+        return bids.get(stock);
+    }
+
+    /**
+     * Gets asks of certain stock.
+     * @param stock Stock to get asks for
+     * @return Sorted set of asks
+     */
+    public SortedSet<Ask> getAsks(Stock stock) {
+        return asks.get(stock);
     }
 }
