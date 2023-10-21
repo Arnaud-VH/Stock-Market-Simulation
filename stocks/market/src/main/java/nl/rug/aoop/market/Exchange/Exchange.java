@@ -97,18 +97,53 @@ public class Exchange {
      * @param bid The bid to be traded.
      */
     private void resolveTrade(Ask ask, Bid bid){
-        if (ask.getShares() == bid.getShares()) {
-            resolveBid(bid, ask.getPrice());
-            resolveAsk(ask);
-        } else if (ask.getShares() < bid.getShares()) {
-            resolveAsk(ask);
-            bid.setShares(bid.getShares() - ask.getShares());
-            placeBid(bid);
+        if (validateTraders(ask, bid)) {
+            if (ask.getShares() == bid.getShares()) {
+                resolveBid(bid, ask.getPrice());
+                resolveAsk(ask);
+            } else if (ask.getShares() < bid.getShares()) {
+                resolveAsk(ask);
+                bid.setShares(bid.getShares() - ask.getShares());
+                placeBid(bid);
+            } else {
+                resolveBid(bid,ask.getPrice());
+                ask.setShares(ask.getShares()-bid.getShares());
+                placeAsk(ask);
+            }
         } else {
-            resolveBid(bid,ask.getPrice());
-            ask.setShares(ask.getShares()-bid.getShares());
-            placeAsk(ask);
+            log.info("Could not resolve trade between");
         }
+    }
+
+    /**
+     * Checks if the traders are eligible to trade wrt their portfolio.
+     * @param ask The ask that is trying to be resolved.
+     * @param bid The big that is trying to be resolved.
+     * @return True if traders are valid, false if traders cannot trade.
+     */
+    private boolean validateTraders(Ask ask, Bid bid) {
+        Trader seller = bid.getTrader();
+        Trader buyer =  ask.getTrader();
+        //TODO test this with edge cases and see if it verifies
+
+        if (seller.getOwnedStocks().containsKey(ask.getStock())) {
+            if (seller.getOwnedStocks().get(ask.getStock()) < ask.getShares()) {
+                log.info("Seller: " + seller.getId() + " is trying to sell more shares than they own of the stock: " + ask.getStock());
+                this.asks.remove(ask);
+                return false;
+            }
+        } else {
+            log.info("Seller: " + seller.getId() + " does not own stock: " + ask.getStock());
+            this.asks.remove(ask);
+            return false;
+        }
+
+        if (buyer.getFunds() < bid.getPrice()) {
+            log.info("Buyer does not have enough funds to purchase a share");
+            this.bids.remove(bid);
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -116,8 +151,9 @@ public class Exchange {
      * @param bid the bid to resolve.
      * @param price The price at which it was sold.
      */
-    private void resolveBid(Bid bid, int price){ // TODO update stock price
-        // TODO check if trader has funds
+    private void resolveBid(Bid bid, int price){
+        // TODO update stock price
+        // TODO partial Bids
         bids.get(bid.getStock()).remove(bid);
         Transaction transaction = new Transaction(bid.getStock(),price,bid.getShares());
         bid.getTrader().getTransactionHistory().add(transaction);
@@ -129,8 +165,9 @@ public class Exchange {
      * Resolves an ask when it has been fully traded and creates a corresponding transaction.
      * @param ask the bid to resolve.
      */
-    private void resolveAsk(Ask ask){ // TODO update stock price
-        // TODO check if trader has funds
+    private void resolveAsk(Ask ask){
+        // TODO update stock price
+        // TODO Partial Ask
         asks.get(ask.getStock()).remove(ask);
         Transaction transaction = new Transaction(ask.getStock(),ask.getPrice(),ask.getShares());
         ask.getTrader().getTransactionHistory().add(transaction);
