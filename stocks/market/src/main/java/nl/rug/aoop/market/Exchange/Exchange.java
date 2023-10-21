@@ -97,21 +97,16 @@ public class Exchange {
      * @param bid The bid to be traded.
      */
     private void resolveTrade(Ask ask, Bid bid){
-        if (validateTraders(ask, bid)) {
-            if (ask.getShares() == bid.getShares()) {
+        if (!validTrade(ask, bid)) { return; }
+        if (ask.getShares() == bid.getShares()) {
                 resolveBid(bid, ask.getPrice());
                 resolveAsk(ask);
-            } else if (ask.getShares() < bid.getShares()) {
+        } else if (ask.getShares() < bid.getShares()) {
                 resolveAsk(ask);
-                bid.setShares(bid.getShares() - ask.getShares());
-                placeBid(bid);
-            } else {
-                resolveBid(bid,ask.getPrice());
-                ask.setShares(ask.getShares()-bid.getShares());
-                placeAsk(ask);
-            }
+                resolvePartialBid(bid,ask.getShares(),ask.getPrice());
         } else {
-            log.info("Could not resolve trade between");
+                resolveBid(bid,ask.getPrice());
+                resolvePartialAsk(ask,bid.getShares());
         }
     }
 
@@ -121,29 +116,13 @@ public class Exchange {
      * @param bid The big that is trying to be resolved.
      * @return True if traders are valid, false if traders cannot trade.
      */
-    private boolean validateTraders(Ask ask, Bid bid) {
-        Trader seller = bid.getTrader();
-        Trader buyer =  ask.getTrader();
+    private boolean validTrade(Ask ask, Bid bid) {
         //TODO test this with edge cases and see if it verifies
-
-        if (seller.getOwnedStocks().containsKey(ask.getStock())) {
-            if (seller.getOwnedStocks().get(ask.getStock()) < ask.getShares()) {
-                log.info("Seller: " + seller.getId() + " is trying to sell more shares than they own of the stock: " + ask.getStock());
-                this.asks.remove(ask);
-                return false;
-            }
-        } else {
-            log.info("Seller: " + seller.getId() + " does not own stock: " + ask.getStock());
-            this.asks.remove(ask);
-            return false;
-        }
-
-        if (buyer.getFunds() < bid.getPrice()) {
-            log.info("Buyer does not have enough funds to purchase a share");
-            this.bids.remove(bid);
-            return false;
-        }
-        return true;
+        boolean validSeller = bid.getTrader().getShares(bid.getStock()) >= bid.getShares();
+        boolean validBuyer = ask.getTrader().getFunds() >= (ask.getPrice()*ask.getShares());
+        if (!validSeller) { this.bids.get(bid.getStock()).remove(bid); }
+        if (!validBuyer) { this.asks.get(ask.getStock()).remove(ask); }
+        return (validSeller && validBuyer);
     }
 
     /**
@@ -154,7 +133,6 @@ public class Exchange {
 
     private void resolveBid(Bid bid, int price){
         // TODO update stock price
-        // TODO partial Bids
         bids.get(bid.getStock()).remove(bid);
         Transaction transaction = new Transaction(bid.getStock(),price,bid.getShares());
         bid.getTrader().getTransactionHistory().add(transaction);
@@ -168,11 +146,39 @@ public class Exchange {
      */
     private void resolveAsk(Ask ask){
         // TODO update stock price
-        // TODO Partial Ask
         asks.get(ask.getStock()).remove(ask);
         Transaction transaction = new Transaction(ask.getStock(),ask.getPrice(),ask.getShares());
         ask.getTrader().getTransactionHistory().add(transaction);
         ask.getTrader().removeFunds(ask.getPrice()*ask.getShares());
         ask.getTrader().addShares(ask.getStock(),ask.getShares());
+    }
+
+    /**
+     * Resolves and updates a bid that has partially been traded and creates a corresponding transaction.
+     * @param bid Bid to partially resolve
+     * @param shares Amount of shares to trade
+     * @param price Price at which is being traded
+     */
+    private void resolvePartialBid (Bid bid, int shares, int price) {
+        Transaction transaction = new Transaction(bid.getStock(), price, shares);
+        bid.getTrader().getTransactionHistory().add(transaction);
+        bid.getTrader().addFunds(shares*price);
+        bid.getTrader().removeShares(bid.getStock(),shares);
+        bid.setShares(bid.getShares()-shares);
+        placeBid(bid);
+    }
+
+    /**
+     * Resolves and updates an ask that has partially been traded and creates a corresponding transaction.
+     * @param ask Ask to partially resolve
+     * @param shares Amount of shares to trade
+     */
+    private void resolvePartialAsk (Ask ask, int shares) {
+        Transaction transaction = new Transaction(ask.getStock(), ask.getPrice(), shares);
+        ask.getTrader().getTransactionHistory().add(transaction);
+        ask.getTrader().removeFunds(shares*ask.getPrice());
+        ask.getTrader().addShares(ask.getStock(),shares);
+        ask.setShares(ask.getShares()-shares);
+        placeAsk(ask);
     }
 }

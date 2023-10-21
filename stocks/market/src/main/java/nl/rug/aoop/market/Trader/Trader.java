@@ -78,4 +78,17 @@ public class Trader {
         this.funds = this.funds - amount;
     }
 
+    /**
+     * Method that returns the amount of shares of a stock the trader has.
+     * @param stock Stock to get amount of shares of
+     * @return Amount of shares owned by trader
+     */
+
+    public int getShares(Stock stock) {
+        if (this.ownedStocks.containsKey(stock)) {
+            return this.getOwnedStocks().get(stock);
+        }
+        return 0;
+    }
+
 }
