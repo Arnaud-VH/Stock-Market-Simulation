@@ -1,4 +1,5 @@
-import commandHandler.ExchangeCommandHandlerFactory;
+import nl.rug.aoop.messagequeue.CommandHandler.QueueCommandHandlerFactory;
+import serverExchange.commandHandler.ExchangeCommandHandler.ExchangeCommandHandlerFactory;
 import lombok.extern.slf4j.Slf4j;
 import nl.rug.aoop.command.Command.CommandHandler;
 import nl.rug.aoop.market.Exchange.Exchange;
@@ -14,8 +15,8 @@ import java.util.List;
 
 /**
  * ExchangeServer is an exchange that has network capabilities.
- * When it's network capabilities are running it works by spawning 3
- * threads (server, messageHandler, clientNotifier) that receive messages from clients, handle
+ * When it's network capabilities are running it works by spawning 3.
+ * threads (server, messageHandler, clientNotifier) that receive messages from clients, handle.
  * said messages to update an exchange and update clients on latest exchange information.
  * When it's network capabilities are not running it behaves like a regular exchange.
  */
@@ -30,10 +31,11 @@ public class ExchangeServer extends Exchange {
 
     /**
      * Constructor for ExchangeServer.
-     * @param stocks Stocks to add to the exchange
+     * @param stocks Stocks to add to the exchange.
      */
     public ExchangeServer(List<Stock> stocks) {
         super(stocks);
+        new QueueCommandHandlerFactory(messageQueue).createCommandHandler();
         server = new Server(getPort(), new CommandMessageHandler(QueueCommandHandler.getInstance()));
     }
 
@@ -49,7 +51,7 @@ public class ExchangeServer extends Exchange {
     }
 
     /**
-     * Method to terminate ExchangeServer - terminates the 3 threads
+     * Method to terminate ExchangeServer - terminates the 3 threads.
      */
     public void terminate() {
         server.terminate();
@@ -63,15 +65,15 @@ public class ExchangeServer extends Exchange {
     private int getPort() {
         try {
             return Integer.parseInt(System.getenv("MESSAGE_QUEUE_PORT"));
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
             log.info("could not find environment variable for port: ", e);
             return PORT;
         }
     }
 
     /**
-     * Returns if ExchangeServer (3 threads) is running
-     * @return Whether ExchangeServer is running
+     * Returns if ExchangeServer (3 threads) is running.
+     * @return Whether ExchangeServer is running.
      */
     public boolean isRunning() {
         return (server.isRunning() && messageHandler.isRunning());

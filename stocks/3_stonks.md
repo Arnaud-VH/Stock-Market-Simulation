@@ -72,7 +72,7 @@ We will start with the application that is responsible for the stock exchange it
 	- If you did not manage to fully finish the previous assignment and do not have time to finish it, you can implement the assignment without the message queue. This will come with a penalty, but it should allow you to finish the assignment.
 	- You are allowed to assume that the message queue will always run "locally" in the `Stock Application` (although it would be nice if you cannot manage to not make this assumption). This means that you can use your simple consumer implementation from the first assignment.
 - All incoming stock orders are assumed to arrive via a message queue.
-- The `Stock Application` should continously poll the message queue.
+- The `Stock Application` should continuously poll the message queue.
 - The `Stock Application` should have support for executing the following orders:
 	- Buy limit orders
 	- Sell limit orders
@@ -95,8 +95,8 @@ We will start with the application that is responsible for the stock exchange it
 	```
 	If the environment variable does not exist, you can fall back on a pre-determined (hard-coded) port.
 	> You don't need to actively do anything with the environment variables yet; just make sure your code supports them.
-- The `Stock Application` should initialise the existing stocks from the provided `stocks.yaml` file. You are free to move the file anywhere or change its format (or add more data), as long as the data somehow ends up in your application.
-- The `Stock Application` should initialize a number of traders from the provided `trader.yaml` file (provided in the `2022_Assignments` repository or create your own). You are free to move the file anywhere or change its format (or add more data), as long as the data somehow ends up in your application.
+- The `Stock Application` should initialize the existing stocks from the provided `stocks.yaml` file. You are free to move the file anywhere or change its format (or add more data), as long as the data somehow ends up in your application.
+- The `Stock Application` should initialize a number of traders from the provided `trader.yaml` file (provided in the `2023_Assignments` repository or create your own). You are free to move the file anywhere or change its format (or add more data), as long as the data somehow ends up in your application.
 
 ### Notes on loading from YAML
 

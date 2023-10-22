@@ -29,6 +29,7 @@ public class Exchange {
     public Exchange(List<Stock> stocks) {
         this.stocks = stocks;
         for (Stock stock : this.stocks) {
+            log.info("Creating bids and asks for stock " + stock.getSymbol());
             bids.put(stock,new TreeSet<Bid>());
             asks.put(stock,new TreeSet<Ask>());
         }
@@ -100,7 +101,7 @@ public class Exchange {
                 resolveTrade(ask, lowestBid);
             }
         }
-        asks.get(ask.getStock()).add(ask);
+        getAsks(ask.getStock()).add(ask);
     }
 
     /**

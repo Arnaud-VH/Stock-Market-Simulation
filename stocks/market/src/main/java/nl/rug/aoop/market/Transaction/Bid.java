@@ -5,11 +5,15 @@ import lombok.Setter;
 import nl.rug.aoop.market.Stock.Stock;
 import nl.rug.aoop.market.Trader.Trader;
 
+import java.io.*;
+
 /**
  * The class representing a bid that can be completed on the exchange.
  */
 @Getter
-public class Bid implements Comparable<Bid> {
+public class Bid implements Comparable<Bid>, Serializable {
+    @Serial
+    private static final long serialVersionUID = 4L;
     private final Trader trader;
     private final Stock stock;
     private final int price;

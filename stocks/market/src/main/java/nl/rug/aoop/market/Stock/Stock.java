@@ -2,11 +2,16 @@ package nl.rug.aoop.market.Stock;
 
 import lombok.Getter;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * The class representing a Stock that can be bought and sold by traders.
  */
 @Getter
-public class Stock {
+public class Stock implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 2L;
     private final String symbol;
     private int price;
     private final String name;
@@ -42,5 +47,22 @@ public class Stock {
     public void setPrice(int price) {
         this.price = price;
         updateMarketCap();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Stock)) {
+            return false;
+        }
+        Stock stock = (Stock)o;
+        return stock.getSymbol().equals(this.getSymbol());
+    }
+
+    @Override
+    public int hashCode() {
+        return symbol.hashCode();
     }
 }

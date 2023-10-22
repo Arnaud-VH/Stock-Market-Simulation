@@ -1,17 +1,17 @@
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import lombok.extern.slf4j.Slf4j;
 import nl.rug.aoop.market.Stock.Stock;
 import nl.rug.aoop.market.Trader.Trader;
-import nl.rug.aoop.market.Transaction.Bid;
-import nl.rug.aoop.messagequeue.Producers.NetworkProducer;
+import nl.rug.aoop.market.Transaction.Ask;
 import nl.rug.aoop.messagequeue.Queues.Message;
 import nl.rug.aoop.networking.NetworkMessage.NetworkMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import serverExchange.commandHandler.MarketSerializer;
 
 import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,18 +21,23 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 public class TestExchangeServer {
     private ExchangeServer exchangeServer;
+    private Stock stock1;
+    private Stock stock2;
+    private List<Stock> stocks;
     @BeforeEach
     public void setup() {
-        Stock mockStock1 = new Stock("MS1",50,"MockStock1", 1000);
-        Stock mockStock2 = new Stock("MS2",60,"MockStock2", 1000);
-        List<Stock> stocks = new ArrayList<>();
-        stocks.add(mockStock1);
-        stocks.add(mockStock2);
+        stock1 = new Stock("MS1",50,"MockStock1", 1000);
+        stock2 = new Stock("MS2",60,"MockStock2", 1000);
+        stocks = new ArrayList<>();
+        stocks.add(stock1);
+        stocks.add(stock2);
         exchangeServer = new ExchangeServer(stocks);
     }
 
@@ -86,26 +91,32 @@ public class TestExchangeServer {
     }
 
     @Test
-    public void placeBidOverNetwork() throws IOException {
+    public void placeBidOverNetwork() throws IOException, InterruptedException {
+        exchangeServer.start();
         InetSocketAddress address = new InetSocketAddress("localhost",6400);
         Socket socket =  new Socket();
         socket.connect(address, 1000);
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
+        Map<Stock,Integer> arnaudsPortefolio = new HashMap<>();
+
+
+        arnaudsPortefolio.put(stock1,10);
+        arnaudsPortefolio.put(stock2,10);
+        Trader traderArnaud = new Trader("T-RN0","TraderArnaud",10000,arnaudsPortefolio);
+
         Trader mockTraderArnaud = Mockito.mock(Trader.class);
         Mockito.when(mockTraderArnaud.getId()).thenReturn("T-RN0");
         Mockito.when(mockTraderArnaud.getFunds()).thenReturn(10000);
         Mockito.when(mockTraderArnaud.getShares(Mockito.any(Stock.class))).thenReturn(100);
 
-        Stock mockStock1 = Mockito.mock(Stock.class);
-        Mockito.when(mockStock1.getSymbol()).thenReturn("MS1");
 
-        GsonBuilder builder = new GsonBuilder();
-        builder.setPrettyPrinting();
-        Gson gson = builder.create();
-        String msg = new Message("PlaceBid",new Bid(mockTraderArnaud,mockStock1, 50,100).toString()).toJson();
-        new Bid(mockTraderArnaud,mockStock1, 50,100).toString();
-        String ntwMsg = new NetworkMessage("MQPut","HEHEHEA").toJson();
+        Ask ask = new Ask(traderArnaud, stock1, 50,100);
+        String msg = new Message("PlaceAsk", MarketSerializer.toString(ask)).toJson();
+        String ntwMsg = new NetworkMessage("MQPut",msg).toJson();
+        out.println(ntwMsg);
+
+        await().atMost(Duration.ofSeconds(1)).until(() -> !exchangeServer.getAsks(ask.getStock()).isEmpty());
     }
 }
