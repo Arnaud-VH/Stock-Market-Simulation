@@ -7,20 +7,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Class that handles incoming MQ Messages for the ExchangeServer
+ * Class that handles incoming MQ Messages for the ExchangeServer.
  */
 public class ExchangeMessageHandler implements Runnable {
     private final Consumer consumer;
     private final CommandHandler commandHandler;
     private volatile boolean terminate = false;
     @Getter private volatile boolean running = false;
-    public ExchangeMessageHandler (Consumer consumer, CommandHandler commandHandler) {
+
+    /**
+     * The constructor for the Exchange Message Handler.
+     * @param consumer The consumer that is receiving the commands and messages.
+     * @param commandHandler The command handler that handles the commands for the consumer.
+     */
+    public ExchangeMessageHandler(Consumer consumer, CommandHandler commandHandler) {
         this.consumer = consumer;
         this.commandHandler = commandHandler;
     }
 
     /**
-     * Continuously polls MQ and handles messages
+     * Continuously polls MQ and handles messages.
      */
     @Override
     public void run() {
@@ -39,8 +45,8 @@ public class ExchangeMessageHandler implements Runnable {
 
     /**
      * Polls MQ until it contains a message in which case it gets returned.
-     * Special behaviour when Class gets terminated in which case it can return a null
-     * @return Message to be handeled
+     * Special behaviour when Class gets terminated in which case it can return a null.
+     * @return Message to be handeled.
      */
     private Message getClientCommand() {
         Message polled = consumer.poll();
