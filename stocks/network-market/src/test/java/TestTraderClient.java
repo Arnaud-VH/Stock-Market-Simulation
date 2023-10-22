@@ -1,4 +1,4 @@
-import TraderClient.TraderClient;
+import networkMarket.TraderClient.TraderClient;
 import lombok.extern.slf4j.Slf4j;
 import nl.rug.aoop.market.Stock.Stock;
 import org.junit.jupiter.api.BeforeEach;

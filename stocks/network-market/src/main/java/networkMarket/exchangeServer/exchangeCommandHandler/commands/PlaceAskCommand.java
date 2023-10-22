@@ -1,4 +1,4 @@
-package serverExchange.commandHandler.commands;
+package networkMarket.exchangeServer.exchangeCommandHandler.commands;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.rug.aoop.command.Command.Command;
@@ -8,7 +8,7 @@ import nl.rug.aoop.market.Transaction.Ask;
 import java.io.IOException;
 import java.util.Map;
 
-import serverExchange.commandHandler.MarketSerializer;
+import networkMarket.MarketSerializer;
 
 /**
  * Command that places an ask into the exchange.

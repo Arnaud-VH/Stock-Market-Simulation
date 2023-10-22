@@ -1,4 +1,4 @@
-package TraderClient;
+package networkMarket.TraderClient;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.rug.aoop.market.Stock.Stock;

@@ -1,8 +1,8 @@
-package networkmarket;
+package networkMarket.exchangeServer;
 
-import networkmarket.ExchangeMessageHandler;
+import networkMarket.exchangeServer.exchangeCommandHandler.ExchangeCommandHandlerFactory;
+import networkMarket.exchangeServer.exchangeMessageHandler.ExchangeMessageHandler;
 import nl.rug.aoop.messagequeue.CommandHandler.QueueCommandHandlerFactory;
-import serverExchange.commandHandler.ExchangeCommandHandler.ExchangeCommandHandlerFactory;
 import lombok.extern.slf4j.Slf4j;
 import nl.rug.aoop.command.Command.CommandHandler;
 import nl.rug.aoop.market.Exchange.Exchange;

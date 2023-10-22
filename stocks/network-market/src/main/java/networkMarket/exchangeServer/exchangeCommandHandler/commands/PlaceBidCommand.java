@@ -1,10 +1,10 @@
-package serverExchange.commandHandler.commands;
+package networkMarket.exchangeServer.exchangeCommandHandler.commands;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.rug.aoop.command.Command.Command;
 import nl.rug.aoop.market.Exchange.Exchange;
 import nl.rug.aoop.market.Transaction.Bid;
-import serverExchange.commandHandler.MarketSerializer;
+import networkMarket.MarketSerializer;
 
 import java.io.IOException;
 import java.util.Map;

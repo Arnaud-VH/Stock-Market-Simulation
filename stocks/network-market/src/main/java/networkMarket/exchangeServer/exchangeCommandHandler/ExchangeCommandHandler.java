@@ -1,4 +1,4 @@
-package serverExchange.commandHandler.ExchangeCommandHandler;
+package networkMarket.exchangeServer.exchangeCommandHandler;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.rug.aoop.command.Command.Command;
