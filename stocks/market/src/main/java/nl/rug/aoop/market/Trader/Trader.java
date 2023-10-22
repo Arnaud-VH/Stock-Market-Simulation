@@ -75,7 +75,7 @@ public class Trader {
      * @param amount Amount of funds to remove
      */
     public void removeFunds(int amount) {
-        this.funds = this.funds - amount;
+        this.funds = Math.max(this.funds - amount, 0);
     }
 
     /**

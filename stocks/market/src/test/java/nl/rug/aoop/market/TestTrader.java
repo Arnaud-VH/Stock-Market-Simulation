@@ -24,6 +24,13 @@ public class TestTrader {
     }
 
     @Test
+    public void testConstructor() {
+        assertNotNull(trader1.getId());
+        assertNotNull(trader1.getOwnedStocks());
+        assertNotNull(trader1.getName());
+    }
+
+    @Test
     public void testRemoveShares() {
         trader1.removeShares(mockStock1, 5);
         assertEquals(5, trader1.getShares(mockStock1));
@@ -47,6 +54,18 @@ public class TestTrader {
         trader1.addShares(mockStock2, 10);
         assertEquals(2, trader1.getOwnedStocks().size());
         assertEquals(10, trader1.getShares(mockStock2));
+    }
+
+    @Test
+    public void testRemoveFunds() {
+        trader1.removeFunds(10);
+        assertEquals(90, trader1.getFunds());
+    }
+
+    @Test
+    public void testAddFunds() {
+        trader1.addFunds(10);
+        assertEquals(110, trader1.getFunds());
     }
 
 }

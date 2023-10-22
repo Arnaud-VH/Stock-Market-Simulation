@@ -21,6 +21,7 @@ import java.util.List;
  */
 @Slf4j
 public class ExchangeServer extends Exchange {
+    private static final int PORT = 6400;
     private final Server server;
     private final MessageQueue messageQueue = new OrderedBlockingQueue();
     private final Consumer consumer = new Consumer(messageQueue);
@@ -64,7 +65,7 @@ public class ExchangeServer extends Exchange {
             return Integer.parseInt(System.getenv("MESSAGE_QUEUE_PORT"));
         } catch (Exception e) {
             log.info("could not find environment variable for port: ", e);
-            return 69;
+            return PORT;
         }
     }
 

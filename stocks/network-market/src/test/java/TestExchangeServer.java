@@ -1,9 +1,24 @@
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.extern.slf4j.Slf4j;
 import nl.rug.aoop.market.Stock.Stock;
+import nl.rug.aoop.market.Trader.Trader;
+import nl.rug.aoop.market.Transaction.Bid;
+import nl.rug.aoop.messagequeue.Producers.NetworkProducer;
+import nl.rug.aoop.messagequeue.Queues.Message;
+import nl.rug.aoop.networking.NetworkMessage.NetworkMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
 import static org.awaitility.Awaitility.await;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,5 +83,29 @@ public class TestExchangeServer {
         exchangeServer.terminate();
         await().atMost(Duration.ofSeconds(1)).until(() -> !exchangeServer.isRunning());
         log.info(String.valueOf(Thread.getAllStackTraces().size()));
+    }
+
+    @Test
+    public void placeBidOverNetwork() throws IOException {
+        InetSocketAddress address = new InetSocketAddress("localhost",6400);
+        Socket socket =  new Socket();
+        socket.connect(address, 1000);
+        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+
+        Trader mockTraderArnaud = Mockito.mock(Trader.class);
+        Mockito.when(mockTraderArnaud.getId()).thenReturn("T-RN0");
+        Mockito.when(mockTraderArnaud.getFunds()).thenReturn(10000);
+        Mockito.when(mockTraderArnaud.getShares(Mockito.any(Stock.class))).thenReturn(100);
+
+        Stock mockStock1 = Mockito.mock(Stock.class);
+        Mockito.when(mockStock1.getSymbol()).thenReturn("MS1");
+
+        GsonBuilder builder = new GsonBuilder();
+        builder.setPrettyPrinting();
+        Gson gson = builder.create();
+        String msg = new Message("PlaceBid",new Bid(mockTraderArnaud,mockStock1, 50,100).toString()).toJson();
+        new Bid(mockTraderArnaud,mockStock1, 50,100).toString();
+        String ntwMsg = new NetworkMessage("MQPut","HEHEHEA").toJson();
     }
 }

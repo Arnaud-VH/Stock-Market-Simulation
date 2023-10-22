@@ -1,5 +1,6 @@
 package nl.rug.aoop.market.Transaction;
 
+import lombok.Getter;
 import nl.rug.aoop.market.Stock.Stock;
 
 /**
@@ -8,4 +9,9 @@ import nl.rug.aoop.market.Stock.Stock;
  * @param stockPrice The price at which the stock was traded.
  * @param stock The stock that was traded.
  */
-public record Transaction(Stock stock, int stockPrice, int amount){}
+public record Transaction(@Getter Stock stock, @Getter int stockPrice, @Getter int amount){
+    public Transaction {
+        stock.setPrice(stockPrice);
+    }
+
+}
