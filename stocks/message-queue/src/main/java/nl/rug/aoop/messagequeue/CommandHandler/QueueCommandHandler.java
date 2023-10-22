@@ -45,9 +45,9 @@ public class QueueCommandHandler implements CommandHandler {
     @Override
     public void execute(String commandKey, Map<String, Object> args) {
         if(commandMap.containsKey(commandKey)) {
+            log.info("Executing command: " + commandKey);
             Command command1 = commandMap.get(commandKey);
             command1.execute(args);
-            log.info("Command has been executed: " + commandKey);
         } else {
             log.info("Client asked for command that does not exist: " + commandKey);
         }

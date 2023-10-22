@@ -1,4 +1,5 @@
-import commandHandler.ExchangeCommandHandlerFactory;
+import nl.rug.aoop.messagequeue.CommandHandler.QueueCommandHandlerFactory;
+import serverExchange.commandHandler.ExchangeCommandHandlerFactory;
 import lombok.extern.slf4j.Slf4j;
 import nl.rug.aoop.command.Command.CommandHandler;
 import nl.rug.aoop.market.Exchange.Exchange;
@@ -34,6 +35,7 @@ public class ExchangeServer extends Exchange {
      */
     public ExchangeServer(List<Stock> stocks) {
         super(stocks);
+        new QueueCommandHandlerFactory(messageQueue).createCommandHandler();
         server = new Server(getPort(), new CommandMessageHandler(QueueCommandHandler.getInstance()));
     }
 

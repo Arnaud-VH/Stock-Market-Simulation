@@ -1,7 +1,7 @@
-package commandHandler;
+package serverExchange.commandHandler;
 
-import commandHandler.commands.PlaceAskCommand;
-import commandHandler.commands.PlaceBidCommand;
+import serverExchange.commandHandler.commands.PlaceAskCommand;
+import serverExchange.commandHandler.commands.PlaceBidCommand;
 import nl.rug.aoop.market.Exchange.Exchange;
 import nl.rug.aoop.messagequeue.CommandHandler.AbstractCommandHandlerFactory;
 import nl.rug.aoop.messagequeue.CommandHandler.QueueCommandHandler;

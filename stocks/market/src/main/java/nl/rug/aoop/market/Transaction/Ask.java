@@ -5,11 +5,16 @@ import lombok.Setter;
 import nl.rug.aoop.market.Stock.Stock;
 import nl.rug.aoop.market.Trader.Trader;
 
+import java.io.*;
+import java.util.Base64;
+
 /**
  * The class representing an Ask that can be completed on an exchange.
  */
 @Getter
-public class Ask implements Comparable<Ask> {
+public class Ask implements Comparable<Ask>, Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private final Trader trader;
     private final Stock stock;
     private final int price;

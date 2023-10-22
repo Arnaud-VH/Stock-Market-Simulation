@@ -5,6 +5,8 @@ import lombok.Setter;
 import nl.rug.aoop.market.Stock.Stock;
 import nl.rug.aoop.market.Transaction.Transaction;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +15,9 @@ import java.util.Map;
  * The class representing a trader that buys and sells stocks.
  */
 @Getter
-public class Trader {
+public class Trader implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 3L;
     private final String id;
     private final String name;
     private final List<Transaction> transactionHistory = new ArrayList<>();
@@ -83,12 +87,28 @@ public class Trader {
      * @param stock Stock to get amount of shares of
      * @return Amount of shares owned by trader
      */
-
     public int getShares(Stock stock) {
         if (this.ownedStocks.containsKey(stock)) {
             return this.getOwnedStocks().get(stock);
         }
         return 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Trader)) {
+            return false;
+        }
+        Trader trader = (Trader)o;
+        return trader.getId().equals(this.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 
 }
