@@ -2,7 +2,7 @@ package networkmarket;
 
 import networkmarket.ExchangeMessageHandler;
 import nl.rug.aoop.messagequeue.CommandHandler.QueueCommandHandlerFactory;
-import serverExchange.commandHandler.ExchangeCommandHandlerFactory;
+import serverExchange.commandHandler.ExchangeCommandHandler.ExchangeCommandHandlerFactory;
 import lombok.extern.slf4j.Slf4j;
 import nl.rug.aoop.command.Command.CommandHandler;
 import nl.rug.aoop.market.Exchange.Exchange;
@@ -17,9 +17,9 @@ import nl.rug.aoop.networking.Server.Server;
 import java.util.List;
 
 /**
- * networkmarket.ExchangeServer is an exchange that has network capabilities.
- * When it's network capabilities are running it works by spawning 3
- * threads (server, messageHandler, clientNotifier) that receive messages from clients, handle
+ * ExchangeServer is an exchange that has network capabilities.
+ * When it's network capabilities are running it works by spawning 3.
+ * threads (server, messageHandler, clientNotifier) that receive messages from clients, handle.
  * said messages to update an exchange and update clients on latest exchange information.
  * When it's network capabilities are not running it behaves like a regular exchange.
  */
@@ -33,8 +33,8 @@ public class ExchangeServer extends Exchange {
     private final ExchangeMessageHandler messageHandler = new ExchangeMessageHandler(consumer, commandHandler);
 
     /**
-     * Constructor for networkmarket.ExchangeServer.
-     * @param stocks Stocks to add to the exchange
+     * Constructor for ExchangeServer.
+     * @param stocks Stocks to add to the exchange.
      */
     public ExchangeServer(List<Stock> stocks) {
         super(stocks);
@@ -43,7 +43,7 @@ public class ExchangeServer extends Exchange {
     }
 
     /**
-     * Method to start networkmarket.ExchangeServer - spawns the 3 threads.
+     * Method to start ExchangeServer - spawns the 3 threads.
      */
     public void start() {
         Thread serverThread = new Thread(server); // server handles incoming networkMessages and puts them in MQ
@@ -54,7 +54,7 @@ public class ExchangeServer extends Exchange {
     }
 
     /**
-     * Method to terminate networkmarket.ExchangeServer - terminates the 3 threads
+     * Method to terminate ExchangeServer - terminates the 3 threads.
      */
     public void terminate() {
         server.terminate();
@@ -68,15 +68,15 @@ public class ExchangeServer extends Exchange {
     private int getPort() {
         try {
             return Integer.parseInt(System.getenv("MESSAGE_QUEUE_PORT"));
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
             log.info("could not find environment variable for port: ", e);
             return PORT;
         }
     }
 
     /**
-     * Returns if networkmarket.ExchangeServer (3 threads) is running
-     * @return Whether networkmarket.ExchangeServer is running
+     * Returns if ExchangeServer (3 threads) is running.
+     * @return Whether ExchangeServer is running.
      */
     public boolean isRunning() {
         return (server.isRunning() && messageHandler.isRunning());

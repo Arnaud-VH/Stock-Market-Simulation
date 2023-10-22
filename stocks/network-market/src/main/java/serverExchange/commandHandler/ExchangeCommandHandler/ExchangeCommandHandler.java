@@ -1,4 +1,4 @@
-package serverExchange.commandHandler;
+package serverExchange.commandHandler.ExchangeCommandHandler;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.rug.aoop.command.Command.Command;
@@ -7,6 +7,9 @@ import nl.rug.aoop.command.Command.CommandHandler;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Command Handler for the exchange commands.
+ */
 @Slf4j
 public class ExchangeCommandHandler implements CommandHandler {
 

@@ -11,12 +11,13 @@ public class MarketSerializer {
      * Deserializes string to specified object type.
      * @param s String to deserialize
      * @param type Class of object to deserialize to
-     * @return Object of type 'type'.
      * @param <T> Class of object to deserialize to
+     * @return Object of type 'type'.
      * @throws IOException If IOException is thrown when deserializing
      * @throws ClassNotFoundException If ClassNotFoundException is thrown when deserializing
      */
-    public static <T extends Serializable> T fromString(String s, Class<T> type) throws IOException, ClassNotFoundException {
+    public static <T extends Serializable> T fromString(String s, Class<T> type) throws IOException,
+            ClassNotFoundException {
         byte[] Byte_Data = Base64.getDecoder().decode(s);
         ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(Byte_Data));
         Object o = objectInputStream.readObject();

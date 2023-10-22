@@ -1,4 +1,4 @@
-package serverExchange.commandHandler;
+package serverExchange.commandHandler.ExchangeCommandHandler;
 
 import serverExchange.commandHandler.commands.PlaceAskCommand;
 import serverExchange.commandHandler.commands.PlaceBidCommand;
@@ -6,6 +6,9 @@ import nl.rug.aoop.market.Exchange.Exchange;
 import nl.rug.aoop.messagequeue.CommandHandler.AbstractCommandHandlerFactory;
 import nl.rug.aoop.messagequeue.CommandHandler.QueueCommandHandler;
 
+/**
+ * Factory that creates the commands for the Exchange.
+ */
 public class ExchangeCommandHandlerFactory implements AbstractCommandHandlerFactory {
     private Exchange exchange;
 

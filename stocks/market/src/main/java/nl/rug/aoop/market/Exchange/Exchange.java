@@ -66,8 +66,8 @@ public class Exchange {
      * @param bid The bid that needs to be place.
      */
     public void placeBid(Bid bid) {
-        log.info("Trader " + bid.getTrader().getId() + " is placing a bid for " + bid.getShares()
-                + " shares of " + bid.getStock().getSymbol());
+        log.info("Trader:" + bid.getTrader().getId() + " is placing a bid for " + bid.getShares()
+                + " shares of:" + bid.getStock().getSymbol());
         if (!validBid(bid)) {
             log.info("Bid cancelled because trader " + bid.getTrader().getId() + " bid " +
                     bid.getShares() + " shares but only owns " + bid.getTrader().getShares(bid.getStock()));
@@ -88,8 +88,8 @@ public class Exchange {
      * @param ask The ask to be placed.
      */
     public void placeAsk(Ask ask) {
-        log.info("Trader " + ask.getTrader().getId() + " is placing an ask for " + ask.getShares()
-                + " shares of " + ask.getStock().getSymbol());
+        log.info("Trader:" + ask.getTrader().getId() + " is placing an ask for " + ask.getShares()
+                + " shares of:" + ask.getStock().getSymbol());
         if (!validAsk(ask)) {
             log.info("Ask not placed because trader " + ask.getTrader().getId() + " has insufficient funds");
             return;
@@ -170,7 +170,7 @@ public class Exchange {
         bid.getTrader().removeShares(bid.getStock(),bid.getShares());
         log.info("Trader " + bid.getTrader().getId() + " sold " + bid.getShares()
             + " shares of " + bid.getStock().getSymbol() + " for a total of " +
-                price * bid.getShares() + "currency");
+                price * bid.getShares() + "$ currency");
     }
 
     /**
@@ -186,7 +186,7 @@ public class Exchange {
         ask.getTrader().addShares(ask.getStock(),ask.getShares());
         log.info("Trader " + ask.getTrader().getId() + " bought " + ask.getShares()
                 + " shares of " + ask.getStock().getSymbol() + " for a total of " +
-                ask.getPrice() * ask.getShares() + "currency");
+                ask.getPrice() * ask.getShares() + "$ currency");
     }
 
     /**
@@ -203,7 +203,7 @@ public class Exchange {
         bid.setShares(bid.getShares()-shares);
         log.info("Trader " + bid.getTrader().getId() + " sold " + shares
                 + " shares of " + bid.getStock().getSymbol() + " for a total of " +
-                price * shares + "currency");
+                price * shares + "$ currency");
         placeBid(bid);
     }
 
@@ -220,7 +220,7 @@ public class Exchange {
         ask.setShares(ask.getShares()-shares);
         log.info("Trader " + ask.getTrader().getId() + " bought " + shares
                 + " shares of " + ask.getStock().getSymbol() + " for a total of " +
-                ask.getPrice() * shares + "currency");
+                ask.getPrice() * shares + "$ currency");
         placeAsk(ask);
     }
 

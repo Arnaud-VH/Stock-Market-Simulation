@@ -6,7 +6,6 @@ import nl.rug.aoop.market.Stock.Stock;
 import nl.rug.aoop.market.Trader.Trader;
 
 import java.io.*;
-import java.util.Base64;
 
 /**
  * The class representing a bid that can be completed on the exchange.
