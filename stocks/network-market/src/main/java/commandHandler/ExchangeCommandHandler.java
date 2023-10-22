@@ -1,6 +1,5 @@
-package nl.rug.aoop.messagequeue.CommandHandler;
+package commandHandler;
 
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import nl.rug.aoop.command.Command.Command;
 import nl.rug.aoop.command.Command.CommandHandler;
@@ -8,23 +7,20 @@ import nl.rug.aoop.command.Command.CommandHandler;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Command handler deals with the commands that the client wants to execute.
- */
-@Getter
 @Slf4j
-public class QueueCommandHandler implements CommandHandler {
+public class ExchangeCommandHandler implements CommandHandler {
+
     private final Map<String, Command> commandMap;
-    private static final QueueCommandHandler COMMAND_HANDLER = new QueueCommandHandler();
+    private static final ExchangeCommandHandler COMMAND_HANDLER = new ExchangeCommandHandler();
 
     /**
      * Constructor for the command Handler. Here we instantiate the commandMap to a hashMap.
      */
-    private QueueCommandHandler() {
+    private ExchangeCommandHandler() {
         this.commandMap = new HashMap<>();
     }
 
-    public static QueueCommandHandler getInstance() {
+    public static ExchangeCommandHandler getInstance() {
         return COMMAND_HANDLER;
     }
 
@@ -38,18 +34,19 @@ public class QueueCommandHandler implements CommandHandler {
     }
 
     /**
-    * Executes the command.
-    * @param commandKey the key of the command that is to be executed.
-    * @param args The arguments of the command that will be executed.
-    */
+     * Executes the command.
+     * @param commandKey the key of the command that is to be executed.
+     * @param args The arguments of the command that will be executed.
+     */
     @Override
     public void execute(String commandKey, Map<String, Object> args) {
-        if(commandMap.containsKey(commandKey)) {
-            Command command1 = commandMap.get(commandKey);
-            command1.execute(args);
-            log.info("Command has been executed: " + commandKey);
-        } else {
-            log.info("Client asked for command that does not exist: " + commandKey);
+        try {
+            log.info("Attempting to execute command " + commandKey + ".");
+            commandMap.get(commandKey).execute(args);
+        } catch (ClassCastException e) {
+            log.info("Inappropriate command key type: ", e);
+        } catch (NullPointerException e) {
+            log.info("Invalid command: ", e);
         }
     }
 }

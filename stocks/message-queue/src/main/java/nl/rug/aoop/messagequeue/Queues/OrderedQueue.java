@@ -46,7 +46,6 @@ public class OrderedQueue implements MessageQueue {
     @Override
     public Message dequeue() {
         if (queue.isEmpty()) {
-            log.error("Attempting to dequeue an empty queue");
             return null;
         }
         return queue.poll();
