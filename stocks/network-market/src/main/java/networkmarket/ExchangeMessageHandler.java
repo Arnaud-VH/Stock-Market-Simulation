@@ -1,3 +1,5 @@
+package networkmarket;
+
 import lombok.Getter;
 import nl.rug.aoop.command.Command.CommandHandler;
 import nl.rug.aoop.messagequeue.Consumers.Consumer;
@@ -7,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Class that handles incoming MQ Messages for the ExchangeServer
+ * Class that handles incoming MQ Messages for the networkmarket.ExchangeServer
  */
 public class ExchangeMessageHandler implements Runnable {
     private final Consumer consumer;

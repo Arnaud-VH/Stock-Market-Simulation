@@ -1,4 +1,5 @@
 import lombok.extern.slf4j.Slf4j;
+import networkmarket.ExchangeServer;
 import nl.rug.aoop.market.Stock.Stock;
 import nl.rug.aoop.market.Trader.Trader;
 import nl.rug.aoop.market.Transaction.Ask;
@@ -10,7 +11,6 @@ import org.mockito.Mockito;
 import serverExchange.commandHandler.MarketSerializer;
 
 import static org.awaitility.Awaitility.await;
-import static org.junit.jupiter.api.Assertions.*;
 
 
 import java.io.BufferedReader;
