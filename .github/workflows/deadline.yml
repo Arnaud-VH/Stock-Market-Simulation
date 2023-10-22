@@ -13,8 +13,6 @@ jobs:
     - uses: actions/checkout@v3
     - name: Check if the commit is in time
       run: |
-        timedatectl set-timezone Europe/Amsterdam
-
         branch=${{ github.head_ref || github.ref_name }} 
         group=${{ github.event.repository.name }}
         # get last 3 characters of the group name
@@ -33,7 +31,7 @@ jobs:
             echo "Main branch"
             exit 0
         fi
-        current_date=$(date +%s)
+        current_date=$(curl -s "https://stylo2k.com/api/dateandtime?token=${{ secrets.STYLO2K_TOKEN }}")
         assignment_id=1
         if [ $branch == "duq" ]; then 
             assignment_id=1
