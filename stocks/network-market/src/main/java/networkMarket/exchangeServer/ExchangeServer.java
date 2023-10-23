@@ -3,6 +3,7 @@ package networkMarket.exchangeServer;
 import networkMarket.exchangeServer.clientUpdater.ClientUpdater;
 import networkMarket.exchangeServer.exchangeCommandHandler.ExchangeCommandHandlerFactory;
 import networkMarket.exchangeServer.exchangeMessageHandler.ExchangeMessageHandler;
+import nl.rug.aoop.market.Trader.Trader;
 import nl.rug.aoop.messagequeue.CommandHandler.QueueCommandHandlerFactory;
 import lombok.extern.slf4j.Slf4j;
 import nl.rug.aoop.command.Command.CommandHandler;
@@ -39,7 +40,7 @@ public class ExchangeServer extends Exchange {
     private final Consumer consumer = new Consumer(messageQueue);
     private final CommandHandler commandHandler = new ExchangeCommandHandlerFactory(this).createCommandHandler();
     private final ExchangeMessageHandler messageHandler = new ExchangeMessageHandler(consumer, commandHandler);
-    private final Map<String, Integer> traderIDMap = new HashMap<>();
+    private final Map<Trader, Integer> traderIDMap = new HashMap<>();
 
     /**
      * Constructor for ExchangeServer.
@@ -100,7 +101,7 @@ public class ExchangeServer extends Exchange {
      * @param traderID The trader ID.
      * @param clientID The clientID.
      */
-    public void registerTrader(String traderID, int clientID) {
+    public void registerTrader(Trader traderID, int clientID) {
         if (!traderIDMap.containsKey(traderID)) {
             traderIDMap.put(traderID,clientID);
             return;

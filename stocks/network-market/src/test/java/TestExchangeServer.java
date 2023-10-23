@@ -88,6 +88,7 @@ public class TestExchangeServer {
     public void testStartServer() {
         exchangeServer.start();
         await().atMost(Duration.ofSeconds(1)).until(exchangeServer::isRunning);
+        exchangeServer.terminate();
     }
 
     @Test
@@ -117,6 +118,7 @@ public class TestExchangeServer {
         await().atMost(Duration.ofSeconds(1)).until(() -> !exchangeServer.getAsks(ask.getStock()).isEmpty());
         assertEquals(exchangeServer.getAsks(ask.getStock()).first().getPrice(),ask.getPrice());
         assertEquals(exchangeServer.getAsks(ask.getStock()).first().getShares(),ask.getShares());
+        exchangeServer.terminate();
     }
 
     @Test
@@ -132,6 +134,7 @@ public class TestExchangeServer {
         await().atMost(Duration.ofSeconds(1)).until(() -> !exchangeServer.getBids(bid.getStock()).isEmpty());
         assertEquals(exchangeServer.getBids(bid.getStock()).first().getPrice(),bid.getPrice());
         assertEquals(exchangeServer.getBids(bid.getStock()).first().getShares(),bid.getShares());
+        exchangeServer.terminate();
     }
 
     @Test
@@ -162,5 +165,6 @@ public class TestExchangeServer {
         ArrayList list = MarketSerializer.fromString(inString, ArrayList.class);
         assertEquals(list.get(0),exchangeServer.getStocks());
         assertEquals(list.get(1),exchangeServer.getTraders());
+        exchangeServer.terminate();
     }
 }
