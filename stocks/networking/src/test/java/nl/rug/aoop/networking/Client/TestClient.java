@@ -71,9 +71,9 @@ public class TestClient {
 
     @Test
     public void testConstructorNoServer() {
-            InetSocketAddress address = new InetSocketAddress("10.255.255.1",0);  // hostname is not routable so connection to server can't be made
-            Client client = new Client(address, null);
-            assertFalse(client.isConnected());
+        InetSocketAddress address = new InetSocketAddress("10.255.255.1",0);  // hostname is not routable so connection to server can't be made
+        Client client = new Client(address, null);
+        assertFalse(client.isConnected());
     }
 
     @Test

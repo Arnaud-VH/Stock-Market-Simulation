@@ -17,7 +17,6 @@ import nl.rug.aoop.networking.Server.Server;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -96,6 +95,11 @@ public class ExchangeServer extends Exchange {
         return (server.isRunning() && messageHandler.isRunning());
     }
 
+    /**
+     * Registers the trader.
+     * @param traderID The trader ID.
+     * @param clientID The clientID.
+     */
     public void registerTrader(String traderID, int clientID) {
         if (!traderIDMap.containsKey(traderID)) {
             traderIDMap.put(traderID,clientID);
