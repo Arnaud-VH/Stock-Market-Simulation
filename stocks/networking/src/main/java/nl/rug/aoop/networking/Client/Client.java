@@ -11,6 +11,8 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Client class that connects with the server.
@@ -29,6 +31,7 @@ public class Client implements Runnable{
     private final MessageHandler messageHandler;
     private final InetSocketAddress address;
     private Socket socket;
+    @Getter private volatile int id;
 
     /**
      * Constructor for the client that connects to the server.
@@ -53,6 +56,18 @@ public class Client implements Runnable{
         } catch (IOException e) {
             log.error("Couldn't connect to server: ", e);
         }
+
+        Thread thread = new Thread(() -> {
+            try {
+                id = Integer.parseInt(in.readLine());
+            } catch (IOException e) {
+                log.error("Unable to read client id: ", e);
+            }
+        });
+        thread.start();
+        Timer timer = new Timer();
+        TimeOutTask timeoutTask = new TimeOutTask(thread, timer);
+        timer.schedule(timeoutTask,1500);
     }
 
     /**
@@ -107,4 +122,24 @@ public class Client implements Runnable{
         return socket.isConnected();
     }
 
+    /**
+     * Util class to be able to abort reading from the server after timeout.
+     */
+    private class TimeOutTask extends TimerTask {
+        private final Thread thread;
+        private final Timer timer;
+
+        TimeOutTask(Thread thread, Timer timer) {
+            this.thread = thread;
+            this.timer = timer;
+        }
+
+        @Override
+        public void run() {
+            if(thread != null && thread.isAlive()) {
+                thread.interrupt();
+                timer.cancel();
+            }
+        }
+    }
 }

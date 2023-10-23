@@ -98,7 +98,9 @@ public class TestClient {
         await().atMost(Duration.ofSeconds(1)).until(client::isRunning);
         assertTrue(client.isConnected());
         assertTrue(client.isRunning());
-        String message = "hello";
+        String message = String.valueOf(5);
+        serverOut.println(message); // send fake id
+        message = "hello";
         serverOut.println(message);
         Mockito.verify(mockHandler).handleMessage("hello");
         client.terminate();

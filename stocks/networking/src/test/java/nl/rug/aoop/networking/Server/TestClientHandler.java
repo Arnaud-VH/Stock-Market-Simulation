@@ -99,7 +99,7 @@ public class TestClientHandler {
     public void testID() throws IOException {
         startClientHandler();
 
-        String expectedString = new NetworkMessage("client_id","0").toJson();
+        String expectedString = "0";
         assertEquals(expectedString, msgFromClientHandler.readLine());
         clientHandler.terminate();
     }

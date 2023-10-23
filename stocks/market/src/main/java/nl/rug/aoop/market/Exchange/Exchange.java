@@ -162,7 +162,6 @@ public class Exchange {
      */
 
     private void resolveBid(Bid bid, int price){
-        // TODO update stock price
         getBids(bid.getStock()).remove(bid);
         Transaction transaction = new Transaction(bid.getStock(),price,bid.getShares());
         bid.getTrader().getTransactionHistory().add(transaction);
@@ -178,7 +177,6 @@ public class Exchange {
      * @param ask the bid to resolve.
      */
     private void resolveAsk(Ask ask){
-        // TODO update stock price
         getAsks(ask.getStock()).remove(ask);
         Transaction transaction = new Transaction(ask.getStock(),ask.getPrice(),ask.getShares());
         ask.getTrader().getTransactionHistory().add(transaction);

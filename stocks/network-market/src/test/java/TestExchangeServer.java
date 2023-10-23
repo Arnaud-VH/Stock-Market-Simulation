@@ -32,6 +32,7 @@ public class TestExchangeServer {
     private PrintWriter out;
     private Trader traderArnaud;
     private volatile String inString = null;
+    Socket socketToClose;
     @BeforeEach
     public void setupExchange() {
         // we use real stocks and traders because Mockito mocks are not serializable
@@ -78,10 +79,10 @@ public class TestExchangeServer {
      */
     private void setupTempClient() throws IOException {
         InetSocketAddress address = new InetSocketAddress("localhost",6400);
-        Socket socket =  new Socket();
-        socket.connect(address, 1000);
-        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        out = new PrintWriter(socket.getOutputStream(), true);
+        socketToClose =  new Socket();
+        socketToClose.connect(address, 1000);
+        in = new BufferedReader(new InputStreamReader(socketToClose.getInputStream()));
+        out = new PrintWriter(socketToClose.getOutputStream(), true);
     }
 
     @Test
@@ -117,6 +118,7 @@ public class TestExchangeServer {
         await().atMost(Duration.ofSeconds(1)).until(() -> !exchangeServer.getAsks(ask.getStock()).isEmpty());
         assertEquals(exchangeServer.getAsks(ask.getStock()).first().getPrice(),ask.getPrice());
         assertEquals(exchangeServer.getAsks(ask.getStock()).first().getShares(),ask.getShares());
+        socketToClose.close();
     }
 
     @Test
@@ -132,6 +134,7 @@ public class TestExchangeServer {
         await().atMost(Duration.ofSeconds(1)).until(() -> !exchangeServer.getBids(bid.getStock()).isEmpty());
         assertEquals(exchangeServer.getBids(bid.getStock()).first().getPrice(),bid.getPrice());
         assertEquals(exchangeServer.getBids(bid.getStock()).first().getShares(),bid.getShares());
+        socketToClose.close();
     }
 
     @Test
@@ -162,5 +165,6 @@ public class TestExchangeServer {
         ArrayList list = MarketSerializer.fromString(inString, ArrayList.class);
         assertEquals(list.get(0),exchangeServer.getStocks());
         assertEquals(list.get(1),exchangeServer.getTraders());
+        socketToClose.close();
     }
 }
