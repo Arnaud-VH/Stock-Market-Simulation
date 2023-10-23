@@ -17,8 +17,8 @@ import java.util.*;
 @Slf4j
 @Getter
 public class Exchange {
-    private final List<Stock> stocks;
-    private List<Trader> traders = new ArrayList<>();
+    private final ArrayList<Stock> stocks;
+    private ArrayList<Trader> traders = new ArrayList<>();
     private final Map<Stock, SortedSet<Bid>> bids = new HashMap<>();
     private final Map<Stock, SortedSet<Ask>> asks = new HashMap<>();
 
@@ -26,7 +26,7 @@ public class Exchange {
      * Constructor for the Exchange with only stocks.
      * @param stocks Map of the stocks that should be registered in the exchange.
      */
-    public Exchange(List<Stock> stocks) {
+    public Exchange(ArrayList<Stock> stocks) {
         this.stocks = stocks;
         for (Stock stock : this.stocks) {
             log.info("Creating bids and asks for stock " + stock.getSymbol());
@@ -40,7 +40,7 @@ public class Exchange {
      * @param stocks The stocks that should be registered in the exchange.
      * @param traders The traders that are acting on the exchange.
      */
-    public Exchange(List<Stock> stocks, List<Trader> traders) {
+    public Exchange(ArrayList<Stock> stocks, ArrayList<Trader> traders) {
         this(stocks);
         this.traders = traders;
     }

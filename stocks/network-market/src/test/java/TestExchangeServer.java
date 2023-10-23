@@ -3,26 +3,23 @@ import networkMarket.exchangeServer.ExchangeServer;
 import nl.rug.aoop.market.Stock.Stock;
 import nl.rug.aoop.market.Trader.Trader;
 import nl.rug.aoop.market.Transaction.Ask;
+import nl.rug.aoop.market.Transaction.Bid;
 import nl.rug.aoop.messagequeue.Queues.Message;
 import nl.rug.aoop.networking.NetworkMessage.NetworkMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import networkMarket.MarketSerializer;
 
 import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.*;
 
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -30,14 +27,23 @@ public class TestExchangeServer {
     private ExchangeServer exchangeServer;
     private Stock stock1;
     private Stock stock2;
-    private List<Stock> stocks;
+    private ArrayList<Stock> stocks;
+    private BufferedReader in;
+    private PrintWriter out;
+    private Trader traderArnaud;
+    private volatile String inString = null;
     @BeforeEach
-    public void setup() {
+    public void setupExchange() {
+        // we use real stocks and traders because Mockito mocks are not serializable
         stock1 = new Stock("MS1",50,"MockStock1", 1000);
         stock2 = new Stock("MS2",60,"MockStock2", 1000);
         stocks = new ArrayList<>();
         stocks.add(stock1);
         stocks.add(stock2);
+        Map<Stock,Integer> arnaudsPortfolio = new HashMap<>();
+        arnaudsPortfolio.put(stock1,100);
+        arnaudsPortfolio.put(stock2,10);
+        traderArnaud = new Trader("T-RN0","TraderArnaud",10000,arnaudsPortfolio);
         exchangeServer = new ExchangeServer(stocks);
     }
 
@@ -70,6 +76,14 @@ public class TestExchangeServer {
      * Yours sincerely,
      * Clement
      */
+    private void setupTempClient() throws IOException {
+        InetSocketAddress address = new InetSocketAddress("localhost",6400);
+        Socket socket =  new Socket();
+        socket.connect(address, 1000);
+        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        out = new PrintWriter(socket.getOutputStream(), true);
+    }
+
     @Test
     public void testStartServer() {
         exchangeServer.start();
@@ -91,26 +105,9 @@ public class TestExchangeServer {
     }
 
     @Test
-    public void placeBidOverNetwork() throws IOException, InterruptedException {
+    public void placeAskOverNetwork() throws IOException, InterruptedException {
         exchangeServer.start();
-        InetSocketAddress address = new InetSocketAddress("localhost",6400);
-        Socket socket =  new Socket();
-        socket.connect(address, 1000);
-        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-
-        Map<Stock,Integer> arnaudsPortefolio = new HashMap<>();
-
-
-        arnaudsPortefolio.put(stock1,10);
-        arnaudsPortefolio.put(stock2,10);
-        Trader traderArnaud = new Trader("T-RN0","TraderArnaud",10000,arnaudsPortefolio);
-
-        Trader mockTraderArnaud = Mockito.mock(Trader.class);
-        Mockito.when(mockTraderArnaud.getId()).thenReturn("T-RN0");
-        Mockito.when(mockTraderArnaud.getFunds()).thenReturn(10000);
-        Mockito.when(mockTraderArnaud.getShares(Mockito.any(Stock.class))).thenReturn(100);
-
+        setupTempClient();
 
         Ask ask = new Ask(traderArnaud, stock1, 50,100);
         String msg = new Message("PlaceAsk", MarketSerializer.toString(ask)).toJson();
@@ -118,5 +115,52 @@ public class TestExchangeServer {
         out.println(ntwMsg);
 
         await().atMost(Duration.ofSeconds(1)).until(() -> !exchangeServer.getAsks(ask.getStock()).isEmpty());
+        assertEquals(exchangeServer.getAsks(ask.getStock()).first().getPrice(),ask.getPrice());
+        assertEquals(exchangeServer.getAsks(ask.getStock()).first().getShares(),ask.getShares());
+    }
+
+    @Test
+    public void placeBidOverNetwork() throws IOException, InterruptedException {
+        exchangeServer.start();
+        setupTempClient();
+
+        Bid bid = new Bid(traderArnaud, stock1, 10,100);
+        String msg = new Message("PlaceBid", MarketSerializer.toString(bid)).toJson();
+        String ntwMsg = new NetworkMessage("MQPut",msg).toJson();
+        out.println(ntwMsg);
+
+        await().atMost(Duration.ofSeconds(1)).until(() -> !exchangeServer.getBids(bid.getStock()).isEmpty());
+        assertEquals(exchangeServer.getBids(bid.getStock()).first().getPrice(),bid.getPrice());
+        assertEquals(exchangeServer.getBids(bid.getStock()).first().getShares(),bid.getShares());
+    }
+
+    @Test
+    public void clientUpdated() throws IOException, ClassNotFoundException {
+        exchangeServer.start();
+        setupTempClient();
+
+        // second message so we skip the server sending us our id
+        Runnable runnable = () -> {
+            int count = 0;
+            String s = null;
+            while (count != 2) {
+                try {
+                    s = in.readLine();
+                    count++;
+                } catch (IOException e) {
+                    log.error("Exception when reading line: ", e);
+                }
+            }
+            inString = s;
+        };
+
+        Thread thread = new Thread(runnable);
+        thread.start();
+
+        await().atMost(Duration.ofSeconds(3)).until(() -> inString != null);
+
+        ArrayList list = MarketSerializer.fromString(inString, ArrayList.class);
+        assertEquals(list.get(0),exchangeServer.getStocks());
+        assertEquals(list.get(1),exchangeServer.getTraders());
     }
 }

@@ -43,6 +43,7 @@ public class ClientHandler implements Runnable{
     public void run() {
         running = true;
         log.info("Client '" + id + "' is being handled");
+        log.info("Sending client_id to client ", + id);
         out.println(new NetworkMessage("client_id",Integer.toString(id)).toJson());  // send client's id to client
         while(!terminate) {
             try {

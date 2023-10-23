@@ -20,7 +20,7 @@ public class Trader implements Serializable {
     private static final long serialVersionUID = 3L;
     private final String id;
     private final String name;
-    private final List<Transaction> transactionHistory = new ArrayList<>();
+    private final ArrayList<Transaction> transactionHistory = new ArrayList<>();
     @Setter private int funds;
     @Setter private Map<Stock,Integer> ownedStocks;
 

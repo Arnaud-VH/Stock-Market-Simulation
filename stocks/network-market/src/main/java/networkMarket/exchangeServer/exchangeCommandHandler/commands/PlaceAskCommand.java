@@ -30,10 +30,8 @@ public class PlaceAskCommand implements Command {
         try {
             Ask ask = MarketSerializer.fromString((String)params.get("body"),Ask.class);
             exchange.placeAsk(ask);
-        } catch (ClassNotFoundException e) {
-            log.error("Unable to execute client place ask command: ", e);
-        } catch (IOException e) {
-            log.error("Unable to execute client place ask command: ", e);
+        } catch (ClassNotFoundException | IOException e) {
+            log.error("Unable to execute client place ask command, failed to deserialize Ask: ", e);
         }
     }
 }

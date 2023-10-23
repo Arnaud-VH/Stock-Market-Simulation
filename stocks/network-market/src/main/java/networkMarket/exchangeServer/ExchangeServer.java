@@ -1,5 +1,6 @@
 package networkMarket.exchangeServer;
 
+import networkMarket.exchangeServer.clientUpdater.ClientUpdater;
 import networkMarket.exchangeServer.exchangeCommandHandler.ExchangeCommandHandlerFactory;
 import networkMarket.exchangeServer.exchangeMessageHandler.ExchangeMessageHandler;
 import nl.rug.aoop.messagequeue.CommandHandler.QueueCommandHandlerFactory;
@@ -14,7 +15,14 @@ import nl.rug.aoop.messagequeue.Queues.MessageQueue;
 import nl.rug.aoop.messagequeue.Queues.OrderedBlockingQueue;
 import nl.rug.aoop.networking.Server.Server;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * ExchangeServer is an exchange that has network capabilities.
@@ -27,16 +35,18 @@ import java.util.List;
 public class ExchangeServer extends Exchange {
     private static final int PORT = 6400;
     private final Server server;
+    private ScheduledFuture<?> notifier;
     private final MessageQueue messageQueue = new OrderedBlockingQueue();
     private final Consumer consumer = new Consumer(messageQueue);
     private final CommandHandler commandHandler = new ExchangeCommandHandlerFactory(this).createCommandHandler();
     private final ExchangeMessageHandler messageHandler = new ExchangeMessageHandler(consumer, commandHandler);
+    private final Map<String, Integer> traderIDMap = new HashMap<>();
 
     /**
      * Constructor for ExchangeServer.
      * @param stocks Stocks to add to the exchange.
      */
-    public ExchangeServer(List<Stock> stocks) {
+    public ExchangeServer(ArrayList<Stock> stocks) {
         super(stocks);
         new QueueCommandHandlerFactory(messageQueue).createCommandHandler();
         server = new Server(getPort(), new CommandMessageHandler(QueueCommandHandler.getInstance()));
@@ -51,6 +61,9 @@ public class ExchangeServer extends Exchange {
 
         Thread messageHandlerThread = new Thread(messageHandler); // handles Messages in MQ (exchange add on)
         messageHandlerThread.start();
+
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        notifier = executor.scheduleAtFixedRate(new ClientUpdater(this,server), 0, 2, TimeUnit.SECONDS);
     }
 
     /**
@@ -59,6 +72,7 @@ public class ExchangeServer extends Exchange {
     public void terminate() {
         server.terminate();
         messageHandler.terminate();
+        notifier.cancel(false);
     }
 
     /**
@@ -68,8 +82,8 @@ public class ExchangeServer extends Exchange {
     private int getPort() {
         try {
             return Integer.parseInt(System.getenv("MESSAGE_QUEUE_PORT"));
-        } catch (NullPointerException e) {
-            log.info("could not find environment variable for port: ", e);
+        } catch (NullPointerException | NumberFormatException e) {
+            log.error("Could not find environment variable for port. Using default port " + PORT);
             return PORT;
         }
     }
@@ -80,6 +94,14 @@ public class ExchangeServer extends Exchange {
      */
     public boolean isRunning() {
         return (server.isRunning() && messageHandler.isRunning());
+    }
+
+    public void registerTrader(String traderID, int clientID) {
+        if (!traderIDMap.containsKey(traderID)) {
+            traderIDMap.put(traderID,clientID);
+            return;
+        }
+        log.info("Trader " + traderID + " already registered");
     }
 
     // TODO client updater

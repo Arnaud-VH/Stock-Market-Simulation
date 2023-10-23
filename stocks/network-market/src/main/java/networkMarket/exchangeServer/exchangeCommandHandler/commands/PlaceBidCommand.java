@@ -29,10 +29,8 @@ public class PlaceBidCommand implements Command {
         try {
             Bid bid = MarketSerializer.fromString((String)params.get("body"),Bid.class);
             exchange.placeBid(bid);
-        } catch (ClassNotFoundException e) {
-            log.error("Unable to execute client place bid command. Class not found exception: ", e);
-        } catch (IOException e) {
-            log.error("Unable to execute client place bid command. IO Exception when loading object: ", e);
+        } catch (ClassNotFoundException | IOException e) {
+            log.error("Unable to execute client place bid command, failed to deserialize Bid ", e);
         }
     }
 }
