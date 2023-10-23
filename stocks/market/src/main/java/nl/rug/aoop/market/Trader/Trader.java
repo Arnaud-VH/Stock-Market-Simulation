@@ -20,7 +20,7 @@ public class Trader implements Serializable {
     private final String id;
     private final String name;
     private final ArrayList<Transaction> transactionHistory = new ArrayList<>();
-    @Setter private int funds;
+    @Setter private volatile int funds;
     @Setter private Map<Stock,Integer> ownedStocks;
 
     /**
@@ -92,6 +92,7 @@ public class Trader implements Serializable {
         }
         return 0;
     }
+
 
     @Override
     public boolean equals(Object o) {

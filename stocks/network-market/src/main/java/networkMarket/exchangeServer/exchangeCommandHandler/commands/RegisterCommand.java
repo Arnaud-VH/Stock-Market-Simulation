@@ -10,10 +10,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * Commands that registers a traderClient with the server.
+ */
 @Slf4j
 public class RegisterCommand implements Command {
     private final ExchangeServer exchangeServer;
 
+    /**
+     * Constructor for the Register Command.
+     * @param exchangeServer The exchange server that receives the command.
+     */
     public RegisterCommand(ExchangeServer exchangeServer) {
         this.exchangeServer = exchangeServer;
     }

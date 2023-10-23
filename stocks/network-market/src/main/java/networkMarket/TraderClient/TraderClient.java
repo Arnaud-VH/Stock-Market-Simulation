@@ -2,10 +2,13 @@ package networkMarket.TraderClient;
 
 import lombok.extern.slf4j.Slf4j;
 import networkMarket.MarketSerializer;
+import networkMarket.TraderClient.TraderCommandHandler.TraderCommandHandler;
+import networkMarket.TraderClient.TraderCommandHandler.TraderCommandHandlerFactory;
 import nl.rug.aoop.market.Stock.Stock;
 import nl.rug.aoop.market.Trader.Trader;
 import nl.rug.aoop.market.Transaction.Ask;
 import nl.rug.aoop.market.Transaction.Bid;
+import nl.rug.aoop.messagequeue.MessageHandlers.CommandMessageHandler;
 import nl.rug.aoop.messagequeue.MessageHandlers.LogMessageHandler;
 import nl.rug.aoop.messagequeue.Producers.MQProducer;
 import nl.rug.aoop.messagequeue.Producers.NetworkProducer;
@@ -22,9 +25,11 @@ import java.util.Map;
  */
 @Slf4j
 public class TraderClient extends Trader{
-    private static final transient int PORT = 6300; //TODO Make sure the port is the same as the exchangeServer port.
+    //TODO: Command message handler that can handle an update command.
+    private static final transient int PORT = 6400; //TODO Make sure the port is the same as the exchangeServer port.
     private final transient Client client;
     private final transient MQProducer producer;
+    private final transient TraderCommandHandler commandHandler;
 
     /**
      * Constructor for the trader client.
@@ -35,9 +40,9 @@ public class TraderClient extends Trader{
      */
     public TraderClient(String id, String name, int funds, Map<Stock, Integer> ownedStocks) {
         super(id, name, funds, ownedStocks);
-        //this.trader = new Trader(id, name, funds, ownedStocks);
         InetSocketAddress address = new InetSocketAddress("localhost", getPort());
-        this.client = new Client(address, new LogMessageHandler());
+        this.commandHandler = new TraderCommandHandlerFactory(this).createCommandHandler();
+        this.client = new Client(address, new CommandMessageHandler(commandHandler)); //TODO Make the logMessageHandler a command message handler
         this.producer = new NetworkProducer(client);
         register();
     }
@@ -61,7 +66,7 @@ public class TraderClient extends Trader{
         try {
             return Integer.parseInt(System.getenv("MESSAGE_QUEUE_PORT"));
         } catch (NullPointerException | NumberFormatException e) {
-            log.info("Could not find environment variable for port: ", e);
+            log.info("Could not find environment variable for port");
             return PORT;
         }
     }
@@ -115,4 +120,15 @@ public class TraderClient extends Trader{
             log.error("Cannot serialise in Client register", e);
         }
     }
+
+    /**
+     * Updates the traders information.
+     * @param funds The new funds of the trader.
+     * @param newStocks The new stocks that the trader has.
+     */
+    public void updateTrader(int funds, Map<Stock, Integer> newStocks) {
+        setFunds(funds);
+        setOwnedStocks(newStocks);
+    }
+
 }
