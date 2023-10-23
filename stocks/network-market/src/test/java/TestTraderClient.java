@@ -171,7 +171,7 @@ public class TestTraderClient {
     }
 
     @Test
-    public void testUpdate() throws IOException {
+    public void testUpdate() throws IOException, InterruptedException {
         traderClient.start();
         serverOut.println("0");
 
@@ -182,7 +182,7 @@ public class TestTraderClient {
         NetworkMessage message = new NetworkMessage("update",MarketSerializer.toString(info));
         serverOut.println(message.toJson());
 
+        await().atMost(Duration.ofSeconds(1)).until(() -> traderClient.getFunds() == 1500);
         log.info("Trader client funds is: " + traderClient.getFunds());
-        assertEquals(traderClient.getFunds(), 1500);
     }
 }
