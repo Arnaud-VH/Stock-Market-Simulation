@@ -1,6 +1,5 @@
 package networkMarket.TraderClient;
 
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import networkMarket.MarketSerializer;
 import nl.rug.aoop.market.Stock.Stock;
@@ -15,18 +14,17 @@ import nl.rug.aoop.networking.Client.Client;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
  * The TraderClient is a trader that can communicate over the network.
  */
 @Slf4j
-public class TraderClient {
-    private static final int PORT = 6400;
-    private final Client client;
-    private final MQProducer producer;
-    @Getter
-    private final Trader trader;
+public class TraderClient extends Trader{
+    private static final transient int PORT = 6300; //TODO Make sure the port is the same as the exchangeServer port.
+    private final transient Client client;
+    private final transient MQProducer producer;
 
     /**
      * Constructor for the trader client.
@@ -36,11 +34,12 @@ public class TraderClient {
      * @param ownedStocks The stocks the trader owns.
      */
     public TraderClient(String id, String name, int funds, Map<Stock, Integer> ownedStocks) {
-        //super(id, name, funds, ownedStocks);
-        this.trader = new Trader(id, name, funds, ownedStocks);
+        super(id, name, funds, ownedStocks);
+        //this.trader = new Trader(id, name, funds, ownedStocks);
         InetSocketAddress address = new InetSocketAddress("localhost", getPort());
         this.client = new Client(address, new LogMessageHandler());
         this.producer = new NetworkProducer(client);
+        register();
     }
 
     /**
@@ -79,10 +78,10 @@ public class TraderClient {
      */
     public void placeAsk(Stock stock, int shares, int price) {
         try {
-            Ask ask = new Ask(this.getTrader(), stock, shares, price);
+            Ask ask = new Ask(this, stock, shares, price);
             producer.put(new Message("PlaceAsk", MarketSerializer.toString(ask)));
         } catch (IOException e) {
-            log.error("Trader: " +  trader.getId() + " could not send PlaceAsk command", e);
+            log.error("Trader: " +  this.getId() + " could not send PlaceAsk command", e);
         }
     }
 
@@ -94,10 +93,26 @@ public class TraderClient {
      */
     public void placeBid(Stock stock, int shares, int price) {
         try {
-            Bid bid = new Bid(this.getTrader(), stock, shares, price);
+            Bid bid = new Bid(this, stock, shares, price);
             producer.put(new Message("PlaceBid", MarketSerializer.toString(bid)));
         } catch (IOException e) {
-            log.error("Trader: " + trader.getId() + " could not send PlaceBid command", e);
+            log.error("Trader: " + this.getId() + " could not send PlaceBid command", e);
+        }
+    }
+
+    private void register() {
+        ArrayList<String> list = new ArrayList<>();
+        try {
+            list.add(MarketSerializer.toString(this));
+        } catch (IOException e) {
+            log.error("Not able to serialise trader client: ", e);
+        }
+        list.add(String.valueOf(client.getId()));
+
+        try {
+            producer.put(new Message("register", MarketSerializer.toString(list)));
+        } catch (IOException e) {
+            log.error("Cannot serialise in Client register", e);
         }
     }
 }

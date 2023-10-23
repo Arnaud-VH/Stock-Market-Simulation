@@ -49,9 +49,4 @@ public class IntegrationTest {
         assertEquals("Test Body", message.getBody());
     }
 
-    @Test
-    public void testNullIntegration() throws IOException {
-        // TODO integration test when sending null
-    }
-
 }
