@@ -5,7 +5,6 @@ import networkMarket.exchangeServer.exchangeCommandHandler.commands.PlaceAskComm
 import networkMarket.exchangeServer.exchangeCommandHandler.commands.PlaceBidCommand;
 import networkMarket.exchangeServer.exchangeCommandHandler.commands.RegisterCommand;
 import nl.rug.aoop.messagequeue.CommandHandler.AbstractCommandHandlerFactory;
-import nl.rug.aoop.messagequeue.CommandHandler.QueueCommandHandler;
 
 /**
  * Factory that creates the commands for the Exchange.
@@ -22,11 +21,11 @@ public class ExchangeCommandHandlerFactory implements AbstractCommandHandlerFact
     }
 
     @Override
-    public QueueCommandHandler createCommandHandler() {
-        QueueCommandHandler queueCommandHandler = QueueCommandHandler.getInstance();
-        queueCommandHandler.registerCommand("PlaceBid", new PlaceBidCommand(exchange));
-        queueCommandHandler.registerCommand("PlaceAsk", new PlaceAskCommand(exchange));
-        queueCommandHandler.registerCommand("register", new RegisterCommand(exchange));
-        return queueCommandHandler;
+    public ExchangeCommandHandler createCommandHandler() {
+        ExchangeCommandHandler exchangeCommandHandler = ExchangeCommandHandler.getInstance();
+        exchangeCommandHandler.registerCommand("PlaceBid", new PlaceBidCommand(exchange));
+        exchangeCommandHandler.registerCommand("PlaceAsk", new PlaceAskCommand(exchange));
+        exchangeCommandHandler.registerCommand("register", new RegisterCommand(exchange));
+        return exchangeCommandHandler;
     }
 }

@@ -7,6 +7,7 @@ import nl.rug.aoop.market.Transaction.Ask;
 import nl.rug.aoop.market.Transaction.Bid;
 import nl.rug.aoop.messagequeue.Queues.Message;
 import nl.rug.aoop.networking.NetworkMessage.NetworkMessage;
+import nl.rug.aoop.networking.Server.Server;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,8 +26,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 public class TestTraderClient {
-    private TraderClient traderClient;
-    private static final int PORT = 6300;
+    private volatile TraderClient traderClient;
+    private static final int PORT = 6400;
 
     private BufferedReader serverIn;
     private PrintWriter serverOut;
@@ -41,7 +42,6 @@ public class TestTraderClient {
             try {
                 this.serverSocket = new ServerSocket(getPort());
                 serverStarted = true;
-                log.info("HEYYY");
                 Socket socket = serverSocket.accept();
                 log.info("connected");
                 serverIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -60,7 +60,7 @@ public class TestTraderClient {
         try {
             return Integer.parseInt(System.getenv("MESSAGE_QUEUE_PORT"));
         } catch (Exception e) {
-            log.info("could not find environment variable for port: ", e);
+            log.info("could not find environment variable for port: ");
             return PORT;
         }
     }
@@ -105,7 +105,6 @@ public class TestTraderClient {
 
     @Test
     public void testPlacingAsk() throws IOException, ClassNotFoundException {
-        startTempServer();
         traderClient.start();
         serverOut.println("0");
         await().atMost(Duration.ofSeconds(2)).until(traderClient::isRunning);
@@ -135,7 +134,6 @@ public class TestTraderClient {
 
     @Test
     public void testPlacingBid() throws IOException, ClassNotFoundException {
-        startTempServer();
         traderClient.start();
         serverOut.println("0");
         await().atMost(Duration.ofSeconds(2)).until(traderClient::isRunning);
@@ -162,18 +160,29 @@ public class TestTraderClient {
 
     @Test
     public void testRegister() throws IOException, ClassNotFoundException {
-        startTempServer();
         traderClient.start();
         serverOut.println("0");
 
         String receivedServer = serverIn.readLine();
-
-
-        ;
         Message message = Message.fromJson(NetworkMessage.fromJson(receivedServer).getBody());
         ArrayList<String> list = MarketSerializer.fromString(message.getBody(),ArrayList.class);
         assertEquals(traderClient, MarketSerializer.fromString(list.get(0), Trader.class));
         assertEquals(0, Integer.parseInt(list.get(1)));
+    }
 
+    @Test
+    public void testUpdate() throws IOException {
+        traderClient.start();
+        serverOut.println("0");
+
+        Trader trader = new Trader("4", "Arnaud", 1500, new HashMap<>());
+        ArrayList<Serializable> info = new ArrayList<>();
+        info.add(new ArrayList<>());
+        info.add(trader);
+        NetworkMessage message = new NetworkMessage("update",MarketSerializer.toString(info));
+        serverOut.println(message.toJson());
+
+        log.info("Trader client funds is: " + traderClient.getFunds());
+        assertEquals(traderClient.getFunds(), 1500);
     }
 }
