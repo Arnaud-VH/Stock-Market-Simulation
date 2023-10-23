@@ -3,6 +3,7 @@ package networkMarket.exchangeServer.clientUpdater;
 import lombok.extern.slf4j.Slf4j;
 import networkMarket.MarketSerializer;
 import nl.rug.aoop.market.Exchange.Exchange;
+import nl.rug.aoop.networking.NetworkMessage.NetworkMessage;
 import nl.rug.aoop.networking.Server.Server;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
  */
 @Slf4j
 public class ClientUpdater implements Runnable {
-    private Exchange exchange;
+    private ExchangeServer exchange;
     private Server server;
 
     /**
@@ -22,7 +23,7 @@ public class ClientUpdater implements Runnable {
      * @param exchange The exchange on which the client updater works.
      * @param server The server to which the client updater is connected.
      */
-    public ClientUpdater(Exchange exchange, Server server) {
+    public ClientUpdater(ExchangeServer exchange, Server server) {
         this.exchange = exchange;
         this.server = server;
     }
@@ -31,12 +32,13 @@ public class ClientUpdater implements Runnable {
     public void run() {
         log.info("Updating clients with latest exchange information");
         try {
-            ArrayList<Serializable> exchangeInfo = new ArrayList<>();
-            exchangeInfo.add(exchange.getStocks());
-            exchangeInfo.add(exchange.getTraders());
-            String info = MarketSerializer.toString(exchangeInfo);
-            for (var entry : server.getClientHandlers().entrySet()) {
-                entry.getValue().sendMessage(info);
+            for (var entry : exchange.getTraderIDMap().entrySet()) {
+                ArrayList<Serializable> exchangeInfo = new ArrayList<>();
+                exchangeInfo.add(exchange.getStocks());
+                exchangeInfo.add(entry.getKey());
+                NetworkMessage message = new NetworkMessage("update",
+                        MarketSerializer.toString(exchangeInfo));
+                server.sendMessage(entry.getValue(),message.toJson());
             }
         } catch (IOException e) {
             log.error("Failed to serialize exchange information to send to clients");

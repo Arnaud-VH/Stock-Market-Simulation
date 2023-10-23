@@ -1,5 +1,5 @@
 import lombok.extern.slf4j.Slf4j;
-import networkMarket.exchangeServer.ExchangeServer;
+import networkMarket.exchangeServer.clientUpdater.ExchangeServer;
 import nl.rug.aoop.market.Stock.Stock;
 import nl.rug.aoop.market.Trader.Trader;
 import nl.rug.aoop.market.Transaction.Ask;
@@ -48,35 +48,6 @@ public class TestExchangeServer {
         exchangeServer = new ExchangeServer(stocks);
     }
 
-    /**
-     * Dear Arnaud,
-     *
-     * As I am doing some testing on the exchangeServer class right now, I realize I find it very hard to
-     * test whether an exchangeServer is actually running.
-     *
-     * This is because the exchangeServer spawns three threads (a server, a custom message handler and a trader notifier),
-     * who all work together to receive messages over the network, apply their commands to the exchange and notify traders.
-     * Unlike server this means that the exchangeServer doesn't actually contain any loop, it just spawns those threads and is done.
-     * So it's futile to put it in a new thread, hence we can't test if it's running by checking if a hypothetical new thread is
-     * still open. Ideally we'd want to check if the three threads it spawns are running.
-     *
-     * This made me think however, if I try to test whether the three threads are running then I am most definitely making
-     * my test, implementation specific.
-     *
-     * So for now I think it's ok to just test if exchangeServer.isRunning() is set to true. I know this is contradictory
-     * to what I told you about tests in the past. But I believe that because as of now I am not 100% certain of how
-     * I want the exchangeServer to behave (either spawning it in a new thread -> implying it contains a loop OR for it
-     * to be started through a simple method call) there is no way for me to do a test that is not implementation specific,
-     * apart from this vague and poor test.
-     *
-     * Ideally I would already have planned out EXACTLY how exchangeServer should behave, but I find that quite challenging to do
-     * because it's honestly a pretty irrelevant decision and should be decided when we have a clearer idea of the code
-     * calling the exchangeServer.
-     *
-     * Hope this message finds you well,
-     * Yours sincerely,
-     * Clement
-     */
     private void setupTempClient() throws IOException {
         InetSocketAddress address = new InetSocketAddress("localhost",6400);
         socketToClose =  new Socket();

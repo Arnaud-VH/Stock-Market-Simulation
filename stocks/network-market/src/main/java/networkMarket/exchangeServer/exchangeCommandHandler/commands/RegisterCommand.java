@@ -2,7 +2,7 @@ package networkMarket.exchangeServer.exchangeCommandHandler.commands;
 
 import lombok.extern.slf4j.Slf4j;
 import networkMarket.MarketSerializer;
-import networkMarket.exchangeServer.ExchangeServer;
+import networkMarket.exchangeServer.clientUpdater.ExchangeServer;
 import nl.rug.aoop.command.Command.Command;
 import nl.rug.aoop.market.Trader.Trader;
 

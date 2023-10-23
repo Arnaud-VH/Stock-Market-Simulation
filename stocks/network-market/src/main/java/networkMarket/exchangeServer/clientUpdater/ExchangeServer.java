@@ -1,5 +1,6 @@
-package networkMarket.exchangeServer;
+package networkMarket.exchangeServer.clientUpdater;
 
+import lombok.Getter;
 import networkMarket.exchangeServer.clientUpdater.ClientUpdater;
 import networkMarket.exchangeServer.exchangeCommandHandler.ExchangeCommandHandlerFactory;
 import networkMarket.exchangeServer.exchangeMessageHandler.ExchangeMessageHandler;
@@ -40,6 +41,7 @@ public class ExchangeServer extends Exchange {
     private final Consumer consumer = new Consumer(messageQueue);
     private final CommandHandler commandHandler = new ExchangeCommandHandlerFactory(this).createCommandHandler();
     private final ExchangeMessageHandler messageHandler = new ExchangeMessageHandler(consumer, commandHandler);
+    @Getter
     private final Map<Trader, Integer> traderIDMap = new HashMap<>();
 
     /**
