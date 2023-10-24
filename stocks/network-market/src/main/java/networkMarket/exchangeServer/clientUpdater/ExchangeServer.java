@@ -111,5 +111,9 @@ public class ExchangeServer extends Exchange {
         log.info("Trader " + traderID + " already registered");
     }
 
+    public boolean isRegistered(Trader trader) {
+        return traderIDMap.containsKey(trader);
+    }
+
     // TODO client updater
 }

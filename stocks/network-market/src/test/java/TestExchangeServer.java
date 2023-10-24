@@ -9,7 +9,6 @@ import nl.rug.aoop.networking.NetworkMessage.NetworkMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import networkMarket.MarketSerializer;
-
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -112,33 +111,28 @@ public class TestExchangeServer {
     }
 
     @Test
-    public void clientUpdated() throws IOException, ClassNotFoundException {
+    public void clientUpdated() throws IOException, ClassNotFoundException, InterruptedException {
         exchangeServer.start();
         setupTempClient();
 
-        // second message so we skip the server sending us our id
-        Runnable runnable = () -> {
-            int count = 0;
-            String s = null;
-            while (count != 2) {
-                try {
-                    s = in.readLine();
-                    count++;
-                } catch (IOException e) {
-                    log.error("Exception when reading line: ", e);
-                }
-            }
-            inString = s;
-        };
+        String id = in.readLine(); // eat id
+        ArrayList<Serializable> register = new ArrayList<>();
+        register.add(traderArnaud);
+        NetworkMessage idMessage = NetworkMessage.fromJson(id);
+        register.add(Integer.parseInt(idMessage.getBody()));
+        Message message = new Message("register",MarketSerializer.toString(register));
+        out.println(new NetworkMessage("MQPut",message.toJson()).toJson());
 
-        Thread thread = new Thread(runnable);
-        thread.start();
 
-        await().atMost(Duration.ofSeconds(3)).until(() -> inString != null);
+        Thread.sleep(1000);
 
-        ArrayList list = MarketSerializer.fromString(inString, ArrayList.class);
-        assertEquals(list.get(0),exchangeServer.getStocks());
-        assertEquals(list.get(1),exchangeServer.getTraders());
+        inString = in.readLine(); // eat echo
+        inString = in.readLine();
+        NetworkMessage received = NetworkMessage.fromJson(inString);
+        log.info("header: " + received.getHeader());
+        ArrayList<Serializable> info = MarketSerializer.fromString(received.getBody(), ArrayList.class);
+        assertEquals(info.get(0),exchangeServer.getStocks());
+        assertEquals(info.get(1),traderArnaud);
         exchangeServer.terminate();
         socketToClose.close();
     }

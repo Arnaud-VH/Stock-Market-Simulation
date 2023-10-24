@@ -1,5 +1,7 @@
 package networkMarket.TraderClient;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import networkMarket.MarketSerializer;
 import networkMarket.TraderClient.TraderCommandHandler.TraderCommandHandler;
@@ -16,6 +18,7 @@ import nl.rug.aoop.messagequeue.Queues.Message;
 import nl.rug.aoop.networking.Client.Client;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Map;
@@ -44,7 +47,6 @@ public class TraderClient extends Trader{
         this.commandHandler = new TraderCommandHandlerFactory(this).createCommandHandler();
         this.client = new Client(address, new CommandMessageHandler(commandHandler)); //TODO Make the logMessageHandler a command message handler
         this.producer = new NetworkProducer(client);
-        register();
     }
 
     /**
@@ -105,15 +107,10 @@ public class TraderClient extends Trader{
         }
     }
 
-    private void register() {
-        ArrayList<String> list = new ArrayList<>();
-        try {
-            list.add(MarketSerializer.toString(this));
-        } catch (IOException e) {
-            log.error("Not able to serialise trader client: ", e);
-        }
-        list.add(String.valueOf(client.getId()));
-
+    public void register(int id) {
+        ArrayList<Serializable> list = new ArrayList<>();
+        list.add(this);
+        list.add(id);
         try {
             producer.put(new Message("register", MarketSerializer.toString(list)));
         } catch (IOException e) {

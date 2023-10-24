@@ -30,9 +30,9 @@ public class ClientUpdater implements Runnable {
 
     @Override
     public void run() {
-        log.info("Updating clients with latest exchange information");
         try {
             for (var entry : exchange.getTraderIDMap().entrySet()) {
+                log.info("Updating trader " + entry.getKey().getId());
                 ArrayList<Serializable> exchangeInfo = new ArrayList<>();
                 exchangeInfo.add(exchange.getStocks());
                 exchangeInfo.add(entry.getKey());

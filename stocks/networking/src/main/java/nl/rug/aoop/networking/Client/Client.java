@@ -41,7 +41,6 @@ public class Client implements Runnable{
     public Client(InetSocketAddress address, MessageHandler messageHandler) {
         this.messageHandler = messageHandler;
         this.address = address;
-        initSocket(address);
     }
 
     private void initSocket(InetSocketAddress address) {
@@ -56,18 +55,6 @@ public class Client implements Runnable{
         } catch (IOException e) {
             log.error("Couldn't connect to server: ", e);
         }
-
-        Thread thread = new Thread(() -> {
-            try {
-                id = Integer.parseInt(in.readLine());
-            } catch (IOException e) {
-                log.error("Unable to read client id: ", e);
-            }
-        });
-        thread.start();
-        Timer timer = new Timer();
-        TimeOutTask timeoutTask = new TimeOutTask(thread, timer);
-        timer.schedule(timeoutTask,1500);
     }
 
     /**
@@ -75,6 +62,7 @@ public class Client implements Runnable{
      */
     @Override
     public void run() {
+        initSocket(address);
         if(!isConnected()) {
             log.info("Client not connected");
             terminate = true;

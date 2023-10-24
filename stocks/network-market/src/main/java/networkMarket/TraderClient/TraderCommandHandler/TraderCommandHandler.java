@@ -10,14 +10,9 @@ import java.util.Map;
 @Slf4j
 public class TraderCommandHandler implements CommandHandler {
     private final Map<String, Command> commandMap;
-    private static final TraderCommandHandler COMMAND_HANDLER = new TraderCommandHandler();
 
-    private TraderCommandHandler() {
+    public TraderCommandHandler() {
         this.commandMap = new HashMap<>();
-    }
-
-    public static TraderCommandHandler getInstance() {
-        return COMMAND_HANDLER;
     }
 
     public void registerCommand(String command, Command commandClass) {

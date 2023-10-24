@@ -7,6 +7,7 @@ import nl.rug.aoop.command.Command.Command;
 import nl.rug.aoop.market.Trader.Trader;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -28,10 +29,11 @@ public class RegisterCommand implements Command {
     @Override
     public void execute(Map<String, Object> params) {
         try {
-            ArrayList<String> list = MarketSerializer.fromString((String) params.get("body"), ArrayList.class);
-            Trader trader = MarketSerializer.fromString(list.get(0), Trader.class);
-            int clientID = Integer.parseInt(list.get(1));
+            ArrayList<Serializable> list = MarketSerializer.fromString((String) params.get("body"), ArrayList.class);
+            Trader trader = (Trader)list.get(0);
+            int clientID = (int)list.get(1);
             exchangeServer.registerTrader(trader, clientID);
+            log.info("Registered Trader " + trader.getId() + " to clientID " + clientID);
         } catch (IOException | ClassNotFoundException e) {
             log.error("Unable to execute register client command, failed to deserialize IDs ", e);
         }
