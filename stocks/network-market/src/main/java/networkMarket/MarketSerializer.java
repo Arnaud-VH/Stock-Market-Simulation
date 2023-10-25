@@ -18,8 +18,8 @@ public class MarketSerializer {
      */
     public static <T extends Serializable> T fromString(String s, Class<T> type) throws IOException,
             ClassNotFoundException {
-        byte[] Byte_Data = Base64.getDecoder().decode(s);
-        ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(Byte_Data));
+        byte[] byte_Data = Base64.getDecoder().decode(s);
+        ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(byte_Data));
         Object o = objectInputStream.readObject();
         objectInputStream.close();
         return type.cast(o);

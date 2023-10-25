@@ -1,21 +1,18 @@
 package networkMarket.TraderClient;
 
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import networkMarket.MarketSerializer;
 import networkMarket.TraderClient.TraderCommandHandler.TraderCommandHandler;
 import networkMarket.TraderClient.TraderCommandHandler.TraderCommandHandlerFactory;
-import nl.rug.aoop.market.Stock.Stock;
-import nl.rug.aoop.market.Trader.Trader;
-import nl.rug.aoop.market.Transaction.Ask;
-import nl.rug.aoop.market.Transaction.Bid;
-import nl.rug.aoop.messagequeue.MessageHandlers.CommandMessageHandler;
-import nl.rug.aoop.messagequeue.MessageHandlers.LogMessageHandler;
-import nl.rug.aoop.messagequeue.Producers.MQProducer;
-import nl.rug.aoop.messagequeue.Producers.NetworkProducer;
-import nl.rug.aoop.messagequeue.Queues.Message;
-import nl.rug.aoop.networking.Client.Client;
+import nl.rug.aoop.market.stock.Stock;
+import nl.rug.aoop.market.trader.Trader;
+import nl.rug.aoop.market.transaction.Ask;
+import nl.rug.aoop.market.transaction.Bid;
+import nl.rug.aoop.messagequeue.messagehandlers.CommandMessageHandler;
+import nl.rug.aoop.messagequeue.producers.MQProducer;
+import nl.rug.aoop.messagequeue.producers.NetworkProducer;
+import nl.rug.aoop.messagequeue.queues.Message;
+import nl.rug.aoop.networking.client.Client;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -45,7 +42,7 @@ public class TraderClient extends Trader{
         super(id, name, funds, ownedStocks);
         InetSocketAddress address = new InetSocketAddress("localhost", getPort());
         this.commandHandler = new TraderCommandHandlerFactory(this).createCommandHandler();
-        this.client = new Client(address, new CommandMessageHandler(commandHandler)); //TODO Make the logMessageHandler a command message handler
+        this.client = new Client(address, new CommandMessageHandler(commandHandler));
         this.producer = new NetworkProducer(client);
     }
 
@@ -107,6 +104,10 @@ public class TraderClient extends Trader{
         }
     }
 
+    /**
+     * Registers the trader with the server.
+     * @param id The ID of the trader.
+     */
     public void register(int id) {
         ArrayList<Serializable> list = new ArrayList<>();
         list.add(this);

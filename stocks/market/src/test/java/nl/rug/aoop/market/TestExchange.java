@@ -1,11 +1,11 @@
 package nl.rug.aoop.market;
 
 import lombok.extern.slf4j.Slf4j;
-import nl.rug.aoop.market.Exchange.Exchange;
-import nl.rug.aoop.market.Stock.Stock;
-import nl.rug.aoop.market.Trader.Trader;
-import nl.rug.aoop.market.Transaction.Ask;
-import nl.rug.aoop.market.Transaction.Bid;
+import nl.rug.aoop.market.exchange.Exchange;
+import nl.rug.aoop.market.stock.Stock;
+import nl.rug.aoop.market.trader.Trader;
+import nl.rug.aoop.market.transaction.Ask;
+import nl.rug.aoop.market.transaction.Bid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

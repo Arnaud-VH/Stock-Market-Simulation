@@ -1,8 +1,8 @@
 package nl.rug.aoop.market;
 
-import nl.rug.aoop.market.Stock.Stock;
-import nl.rug.aoop.market.Trader.Trader;
-import nl.rug.aoop.market.Transaction.Ask;
+import nl.rug.aoop.market.stock.Stock;
+import nl.rug.aoop.market.trader.Trader;
+import nl.rug.aoop.market.transaction.Ask;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import static org.junit.jupiter.api.Assertions.*;

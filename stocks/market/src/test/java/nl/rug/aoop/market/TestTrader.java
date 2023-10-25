@@ -1,7 +1,7 @@
 package nl.rug.aoop.market;
 
-import nl.rug.aoop.market.Stock.Stock;
-import nl.rug.aoop.market.Trader.Trader;
+import nl.rug.aoop.market.stock.Stock;
+import nl.rug.aoop.market.trader.Trader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

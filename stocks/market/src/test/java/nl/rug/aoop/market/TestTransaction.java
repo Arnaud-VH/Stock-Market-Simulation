@@ -1,7 +1,7 @@
 package nl.rug.aoop.market;
 
-import nl.rug.aoop.market.Stock.Stock;
-import nl.rug.aoop.market.Transaction.Transaction;
+import nl.rug.aoop.market.stock.Stock;
+import nl.rug.aoop.market.transaction.Transaction;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import static org.junit.jupiter.api.Assertions.*;

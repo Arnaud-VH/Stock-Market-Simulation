@@ -4,11 +4,18 @@ import networkMarket.TraderClient.TraderClient;
 import networkMarket.TraderClient.TraderCommandHandler.Commands.ClientIDCommand;
 import networkMarket.TraderClient.TraderCommandHandler.Commands.EchoCommand;
 import networkMarket.TraderClient.TraderCommandHandler.Commands.UpdateCommand;
-import nl.rug.aoop.messagequeue.CommandHandler.AbstractCommandHandlerFactory;
+import nl.rug.aoop.messagequeue.commandhandler.AbstractCommandHandlerFactory;
 
+/**
+ * Factory that creates the commands for the traderCommand handler.
+ */
 public class TraderCommandHandlerFactory implements AbstractCommandHandlerFactory {
     private volatile TraderClient trader;
 
+    /**
+     * Constructor for the trader command handler factor.
+     * @param trader The trader that the command handler works with.
+     */
     public TraderCommandHandlerFactory(TraderClient trader) {
         this.trader = trader;
     }
