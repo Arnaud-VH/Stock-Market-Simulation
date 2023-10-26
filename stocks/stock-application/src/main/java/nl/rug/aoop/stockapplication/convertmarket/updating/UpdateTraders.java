@@ -1,4 +1,4 @@
-package nl.rug.aoop.stockapplication.convertmarket;
+package nl.rug.aoop.stockapplication.convertmarket.updating;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.rug.aoop.market.stock.Stock;

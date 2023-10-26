@@ -4,6 +4,9 @@ import nl.rug.aoop.initialization.SimpleViewFactory;
 import nl.rug.aoop.model.StockExchangeData;
 import nl.rug.aoop.networkmarket.clientUpdater.ExchangeServer;
 import nl.rug.aoop.stockapplication.convertmarket.*;
+import nl.rug.aoop.stockapplication.convertmarket.updating.UpdateAll;
+import nl.rug.aoop.stockapplication.convertmarket.updating.UpdateStocks;
+import nl.rug.aoop.stockapplication.convertmarket.updating.UpdateTraders;
 
 import java.io.IOException;
 

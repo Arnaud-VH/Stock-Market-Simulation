@@ -1,4 +1,4 @@
-package nl.rug.aoop.stockapplication.convertmarket;
+package nl.rug.aoop.stockapplication.convertmarket.updating;
 
 import nl.rug.aoop.market.stock.Stock;
 import nl.rug.aoop.model.StockExchangeData;

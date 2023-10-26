@@ -1,4 +1,4 @@
-package nl.rug.aoop.stockapplication.convertmarket;
+package nl.rug.aoop.stockapplication.convertmarket.updating;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
