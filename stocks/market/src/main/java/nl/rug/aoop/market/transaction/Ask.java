@@ -16,8 +16,8 @@ public class Ask implements Comparable<Ask>, Serializable {
     private static final long serialVersionUID = 1L;
     private final Trader trader;
     private final Stock stock;
-    private final int price;
-    @Setter private int shares;
+    private final double price;
+    @Setter private long shares;
 
     /**
      * Constructor for an ask.
@@ -26,7 +26,7 @@ public class Ask implements Comparable<Ask>, Serializable {
      * @param shares Amount of shares to purchase.
      * @param price Highest price at which to purchase.
      */
-    public Ask(Trader trader, Stock stock, int shares, int price) {
+    public Ask(Trader trader, Stock stock, long shares, double price) {
         this.trader = trader;
         this.stock = stock;
         this.shares = shares;
@@ -35,6 +35,6 @@ public class Ask implements Comparable<Ask>, Serializable {
 
     @Override
     public int compareTo(Ask o) {
-        return o.price-this.price;
+        return (int) (o.price-this.price);
     }
 }

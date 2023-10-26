@@ -18,7 +18,7 @@ import java.util.*;
 @Getter
 public class Exchange {
     private final ArrayList<Stock> stocks;
-    private ArrayList<Trader> traders = new ArrayList<>();
+    private ArrayList<Trader> traders;
     private final Map<Stock, SortedSet<Bid>> bids = new HashMap<>();
     private final Map<Stock, SortedSet<Ask>> asks = new HashMap<>();
 
@@ -30,8 +30,8 @@ public class Exchange {
         this.stocks = stocks;
         for (Stock stock : this.stocks) {
             log.info("Creating bids and asks for stock " + stock.getSymbol());
-            bids.put(stock,new TreeSet<Bid>());
-            asks.put(stock,new TreeSet<Ask>());
+            bids.put(stock,new TreeSet<>());
+            asks.put(stock,new TreeSet<>());
         }
     }
 
@@ -43,22 +43,6 @@ public class Exchange {
     public Exchange(ArrayList<Stock> stocks, ArrayList<Trader> traders) {
         this(stocks);
         this.traders = traders;
-    }
-
-    /**
-     * Adds a trader into the active traders on the exchange.
-     * @param trader The trader that is on the exchange.
-     */
-    public void addTrader(Trader trader) {
-        traders.add(trader);
-    }
-
-    /**
-     * Adds a stock onto the exchange.
-     * @param stock The stock to be added.
-     */
-    public void addStock(Stock stock) {
-        stocks.add(stock);
     }
 
     /**
@@ -132,7 +116,6 @@ public class Exchange {
      * @return True if traders are valid, false if traders cannot trade.
      */
     private boolean validTrade(Ask ask, Bid bid) {
-        //TODO test this with edge cases and see if it verifies
         boolean validBid = validBid(bid);
         boolean validAsk = validAsk(ask);
         if (!validBid) {
@@ -161,12 +144,15 @@ public class Exchange {
      * @param price The price at which it was sold.
      */
 
-    private void resolveBid(Bid bid, int price){
+    private void resolveBid(Bid bid, double price){
         getBids(bid.getStock()).remove(bid);
         Transaction transaction = new Transaction(bid.getStock(),price,bid.getShares());
         bid.getTrader().getTransactionHistory().add(transaction);
         bid.getTrader().addFunds(price*bid.getShares());
         bid.getTrader().removeShares(bid.getStock(),bid.getShares());
+        bid.getStock().setPrice(price);
+        int index = getStockIndex(bid.getStock());
+        stocks.get(index).setPrice(bid.getPrice());
         log.info("Trader " + bid.getTrader().getId() + " sold " + bid.getShares()
             + " shares of " + bid.getStock().getSymbol() + " for a total of " +
                 price * bid.getShares() + "$ currency");
@@ -182,6 +168,9 @@ public class Exchange {
         ask.getTrader().getTransactionHistory().add(transaction);
         ask.getTrader().removeFunds(ask.getPrice()*ask.getShares());
         ask.getTrader().addShares(ask.getStock(),ask.getShares());
+        int index = getStockIndex(ask.getStock());
+        stocks.get(index).setPrice(ask.getPrice());
+        ask.getStock().setPrice(ask.getPrice());
         log.info("Trader " + ask.getTrader().getId() + " bought " + ask.getShares()
                 + " shares of " + ask.getStock().getSymbol() + " for a total of " +
                 ask.getPrice() * ask.getShares() + "$ currency");
@@ -193,12 +182,18 @@ public class Exchange {
      * @param shares Amount of shares to trade
      * @param price Price at which is being traded
      */
-    private void resolvePartialBid(Bid bid, int shares, int price) {
+    private void resolvePartialBid(Bid bid, long shares, double price) {
         Transaction transaction = new Transaction(bid.getStock(), price, shares);
         bid.getTrader().getTransactionHistory().add(transaction);
         bid.getTrader().addFunds(shares*price);
+        int indexTrader = getTraderIndex(bid.getTrader());
+        traders.get(indexTrader).removeFunds(shares*bid.getPrice());
+        traders.get(indexTrader).addShares(bid.getStock(),shares);
         bid.getTrader().removeShares(bid.getStock(),shares);
         bid.setShares(bid.getShares()-shares);
+        bid.getStock().setPrice(price);
+        int index = getStockIndex(bid.getStock());
+        stocks.get(index).setPrice(bid.getPrice());
         log.info("Trader " + bid.getTrader().getId() + " sold " + shares
                 + " shares of " + bid.getStock().getSymbol() + " for a total of " +
                 price * shares + "$ currency");
@@ -210,12 +205,18 @@ public class Exchange {
      * @param ask Ask to partially resolve
      * @param shares Amount of shares to trade
      */
-    private void resolvePartialAsk(Ask ask, int shares) {
+    private void resolvePartialAsk(Ask ask, long shares) {
         Transaction transaction = new Transaction(ask.getStock(), ask.getPrice(), shares);
         ask.getTrader().getTransactionHistory().add(transaction);
+        int indexTrader = getTraderIndex(ask.getTrader());
+        traders.get(indexTrader).removeFunds(shares* ask.getPrice());
+        traders.get(indexTrader).addShares(ask.getStock(),shares);
         ask.getTrader().removeFunds(shares*ask.getPrice());
         ask.getTrader().addShares(ask.getStock(),shares);
         ask.setShares(ask.getShares()-shares);
+        int indexStock = getStockIndex(ask.getStock());
+        stocks.get(indexStock).setPrice(ask.getPrice());
+        ask.getStock().setPrice(ask.getPrice());
         log.info("Trader " + ask.getTrader().getId() + " bought " + shares
                 + " shares of " + ask.getStock().getSymbol() + " for a total of " +
                 ask.getPrice() * shares + "$ currency");
@@ -238,5 +239,29 @@ public class Exchange {
      */
     public SortedSet<Ask> getAsks(Stock stock) {
         return asks.get(stock);
+    }
+
+    private int getStockIndex(Stock stock) {
+        int index = 0;
+        for (Stock s : stocks) {
+            if (s.equals(stock)) {
+                break;
+            } else {
+                index++;
+            }
+        }
+        return index;
+    }
+
+    private int getTraderIndex(Trader trader) {
+        int index = 0;
+        for (Trader t : traders) {
+            if (t.equals(trader)) {
+                break;
+            } else {
+                index++;
+            }
+        }
+        return index;
     }
 }

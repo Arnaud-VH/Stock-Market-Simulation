@@ -13,10 +13,10 @@ public class Stock implements Serializable {
     @Serial
     private static final long serialVersionUID = 2L;
     private final String symbol;
-    private int price;
+    private double price;
     private final String name;
-    private final int outstandingShares;
-    private int marketCap;
+    private final long outstandingShares;
+    private double marketCap;
 
     /**
      * The constructor for a Stock.
@@ -25,7 +25,7 @@ public class Stock implements Serializable {
      * @param name The name of the stock.
      * @param outstandingShares The amount of shares on the market of the stock.
      */
-    public Stock(String symbol, int price, String name, int outstandingShares) {
+    public Stock(String symbol, double price, String name, long outstandingShares) {
         this.symbol = symbol;
         this.price = price;
         this.name = name;
@@ -44,7 +44,7 @@ public class Stock implements Serializable {
      * Sets the price of the stock and updates the market cap accordingly.
      * @param price The new price of the stock.
      */
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
         updateMarketCap();
     }

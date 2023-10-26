@@ -16,8 +16,8 @@ public class Bid implements Comparable<Bid>, Serializable {
     private static final long serialVersionUID = 4L;
     private final Trader trader;
     private final Stock stock;
-    private final int price;
-    @Setter private int shares;
+    private final double price;
+    @Setter private long shares;
 
     /**
      * Constructor for a bid.
@@ -26,7 +26,7 @@ public class Bid implements Comparable<Bid>, Serializable {
      * @param shares Amount of shares to bid
      * @param price Price at which to bid
      */
-    public Bid(Trader trader, Stock stock, int shares, int price) {
+    public Bid(Trader trader, Stock stock, long shares, double price) {
         this.trader = trader;
         this.stock = stock;
         this.shares = shares;
@@ -35,6 +35,6 @@ public class Bid implements Comparable<Bid>, Serializable {
 
     @Override
     public int compareTo(Bid o) {
-        return this.price-o.price;
+        return (int) (this.price-o.price);
     }
 }

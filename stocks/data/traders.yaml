@@ -1,3 +1,4 @@
+traders:
 - id: "bot1"
   name: "Just Bob"
   funds: 10450

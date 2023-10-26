@@ -1,7 +1,7 @@
 package nl.rug.aoop.networkmarket;
 
 import lombok.extern.slf4j.Slf4j;
-import nl.rug.aoop.networkmarket.exchangeServer.clientUpdater.ExchangeServer;
+import nl.rug.aoop.networkmarket.clientUpdater.ExchangeServer;
 import nl.rug.aoop.market.stock.Stock;
 import nl.rug.aoop.market.trader.Trader;
 import nl.rug.aoop.market.transaction.Ask;
@@ -10,7 +10,7 @@ import nl.rug.aoop.messagequeue.queues.Message;
 import nl.rug.aoop.networking.networkmessage.NetworkMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import networkMarket.MarketSerializer;
+import nl.rug.aoop.networkmarket.serialiser.MarketSerializer;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,6 +34,7 @@ public class TestExchangeServer {
     private Trader traderArnaud;
     private volatile String inString = null;
     Socket socketToClose;
+
     @BeforeEach
     public void setupExchange() {
         // we use real stocks and traders because Mockito mocks are not serializable
@@ -42,9 +43,9 @@ public class TestExchangeServer {
         stocks = new ArrayList<>();
         stocks.add(stock1);
         stocks.add(stock2);
-        Map<Stock,Integer> arnaudsPortfolio = new HashMap<>();
-        arnaudsPortfolio.put(stock1,100);
-        arnaudsPortfolio.put(stock2,10);
+        Map<Stock,Long> arnaudsPortfolio = new HashMap<>();
+        arnaudsPortfolio.put(stock1, 100L);
+        arnaudsPortfolio.put(stock2, 10L);
         traderArnaud = new Trader("T-RN0","TraderArnaud",10000,arnaudsPortfolio);
         exchangeServer = new ExchangeServer(stocks);
     }

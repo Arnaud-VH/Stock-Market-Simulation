@@ -28,5 +28,4 @@ public class TestNetworkProducer {
         assertTrue(methodNames.contains("put"));
     }
 
-    // TODO test network producer 'put'
 }

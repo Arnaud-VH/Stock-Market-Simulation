@@ -20,8 +20,8 @@ public class Trader implements Serializable {
     private final String id;
     private final String name;
     private final ArrayList<Transaction> transactionHistory = new ArrayList<>();
-    @Setter private volatile int funds;
-    @Setter private Map<Stock,Integer> ownedStocks;
+    @Setter private volatile double funds;
+    @Setter private Map<Stock,Long> ownedStocks;
 
     /**
      * Constructor for the trader.
@@ -30,7 +30,7 @@ public class Trader implements Serializable {
      * @param funds The amount of funds the trader has.
      * @param ownedStocks The stocks that the trader owns By symbol and amount.
      */
-    public Trader(String id, String name, int funds, Map<Stock, Integer> ownedStocks) {
+    public Trader(String id, String name, double funds, Map<Stock, Long> ownedStocks) {
         this.id = id;
         this.name = name;
         this.funds = funds;
@@ -42,9 +42,9 @@ public class Trader implements Serializable {
      * @param stock Stock for which to add shares
      * @param amount Amount of shares to add
      */
-    public void addShares(Stock stock, int amount) {
+    public void addShares(Stock stock, long amount) {
         if (this.ownedStocks.containsKey(stock)) {
-            int currentAmount = this.ownedStocks.get(stock);
+            long currentAmount = this.ownedStocks.get(stock);
             this.ownedStocks.put(stock,currentAmount + amount);
         } else {
             this.ownedStocks.put(stock, amount);
@@ -56,8 +56,8 @@ public class Trader implements Serializable {
      * @param stock Stock for which to remove shares
      * @param amount Amount of shares to remove
      */
-    public void removeShares(Stock stock, int amount) {
-        int currentAmount = this.ownedStocks.get(stock);
+    public void removeShares(Stock stock, long amount) {
+        long currentAmount = this.ownedStocks.get(stock);
         if (currentAmount - amount <= 0) {
             this.ownedStocks.remove(stock);
         } else {
@@ -69,7 +69,7 @@ public class Trader implements Serializable {
      * Method to add funds to a trader.
      * @param amount Amount of funds to add
      */
-    public void addFunds(int amount) {
+    public void addFunds(double amount) {
         this.funds = this.funds + amount;
     }
 
@@ -77,7 +77,7 @@ public class Trader implements Serializable {
      * Method to remove funds from a trader.
      * @param amount Amount of funds to remove
      */
-    public void removeFunds(int amount) {
+    public void removeFunds(double amount) {
         this.funds = Math.max(this.funds - amount, 0);
     }
 
@@ -86,7 +86,7 @@ public class Trader implements Serializable {
      * @param stock Stock to get amount of shares of
      * @return Amount of shares owned by trader
      */
-    public int getShares(Stock stock) {
+    public long getShares(Stock stock) {
         if (this.ownedStocks.containsKey(stock)) {
             return this.getOwnedStocks().get(stock);
         }

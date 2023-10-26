@@ -16,10 +16,10 @@ public class TestTrader {
 
     @BeforeEach
     public void setUp() {
-        Map<Stock, Integer> stockMap = new HashMap<>();
+        Map<Stock, Long> stockMap = new HashMap<>();
         this.mockStock1 = Mockito.mock(Stock.class);
         Mockito.when(mockStock1.getName()).thenReturn("mockStock1");
-        stockMap.put(mockStock1, 10);
+        stockMap.put(mockStock1, 10L);
         trader1 = new Trader("1", "Arnaud", 100, stockMap);
     }
 

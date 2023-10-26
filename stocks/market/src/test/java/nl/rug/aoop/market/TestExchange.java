@@ -27,13 +27,13 @@ public class TestExchange {
     public void setup() {
         this.mockTraderArnaud = Mockito.mock(Trader.class);
         Mockito.when(mockTraderArnaud.getId()).thenReturn("T-RN0");
-        Mockito.when(mockTraderArnaud.getFunds()).thenReturn(10000);
-        Mockito.when(mockTraderArnaud.getShares(Mockito.any(Stock.class))).thenReturn(100);
+        Mockito.when(mockTraderArnaud.getFunds()).thenReturn(10000.0);
+        Mockito.when(mockTraderArnaud.getShares(Mockito.any(Stock.class))).thenReturn(100L);
 
         this.mockTraderClement = Mockito.mock(Trader.class);
         Mockito.when(mockTraderClement.getId()).thenReturn("T-CLMN7");
-        Mockito.when(mockTraderClement.getFunds()).thenReturn(50000); // logically mock trader clement is wealthier
-        Mockito.when(mockTraderClement.getShares(Mockito.any(Stock.class))).thenReturn(100);
+        Mockito.when(mockTraderClement.getFunds()).thenReturn(50000.0); // logically mock trader clement is wealthier
+        Mockito.when(mockTraderClement.getShares(Mockito.any(Stock.class))).thenReturn(100L);
 
 
         this.mockStock1 = Mockito.mock(Stock.class);
@@ -81,7 +81,6 @@ public class TestExchange {
         Mockito.verify(mockTraderClement).removeShares(mockStock1, 20);
     }
 
-    // TODO test trade when prices are not equal
     @Test
     public void InvalidAsk() {
         Ask ask = new Ask (mockTraderArnaud, mockStock1, 50, 1000);
