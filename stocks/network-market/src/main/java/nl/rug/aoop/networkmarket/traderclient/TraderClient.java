@@ -12,7 +12,7 @@ import nl.rug.aoop.messagequeue.queues.Message;
 import nl.rug.aoop.networking.client.Client;
 import nl.rug.aoop.networkmarket.traderclient.tradercommandhandler.TraderCommandHandler;
 import nl.rug.aoop.networkmarket.traderclient.tradercommandhandler.TraderCommandHandlerFactory;
-import nl.rug.aoop.networkmarket.serialiser.MarketSerializer;
+import nl.rug.aoop.util.serialiser.MarketSerializer;
 
 import java.io.IOException;
 import java.io.Serializable;

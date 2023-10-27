@@ -10,7 +10,7 @@ import nl.rug.aoop.networking.networkmessage.NetworkMessage;
 import nl.rug.aoop.networkmarket.exchangeserver.ExchangeServer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import nl.rug.aoop.networkmarket.serialiser.MarketSerializer;
+import nl.rug.aoop.util.serialiser.MarketSerializer;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.*;
 

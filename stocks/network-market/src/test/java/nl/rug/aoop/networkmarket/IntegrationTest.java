@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.time.Duration;
@@ -54,5 +55,8 @@ public class IntegrationTest {
         traderArnaud.start();
         await().atMost(Duration.ofSeconds(1)).until(() -> exchangeServer.isRegistered(traderClement));
         await().atMost(Duration.ofSeconds(1)).until(() -> exchangeServer.isRegistered(traderArnaud));
+        exchangeServer.terminate();
+        traderArnaud.terminate();
+        traderClement.terminate();
     }
 }

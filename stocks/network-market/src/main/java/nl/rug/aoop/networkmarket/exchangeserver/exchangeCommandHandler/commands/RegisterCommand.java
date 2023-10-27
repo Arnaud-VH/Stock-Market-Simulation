@@ -1,7 +1,7 @@
 package nl.rug.aoop.networkmarket.exchangeserver.exchangeCommandHandler.commands;
 
 import lombok.extern.slf4j.Slf4j;
-import nl.rug.aoop.networkmarket.serialiser.MarketSerializer;
+import nl.rug.aoop.util.serialiser.MarketSerializer;
 import nl.rug.aoop.networkmarket.exchangeserver.ExchangeServer;
 import nl.rug.aoop.command.command.Command;
 import nl.rug.aoop.market.trader.Trader;

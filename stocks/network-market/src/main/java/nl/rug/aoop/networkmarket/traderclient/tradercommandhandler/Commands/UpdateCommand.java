@@ -5,7 +5,7 @@ import nl.rug.aoop.command.command.Command;
 import nl.rug.aoop.market.stock.Stock;
 import nl.rug.aoop.market.trader.Trader;
 import nl.rug.aoop.networkmarket.traderclient.TraderClient;
-import nl.rug.aoop.networkmarket.serialiser.MarketSerializer;
+import nl.rug.aoop.util.serialiser.MarketSerializer;
 
 import java.io.IOException;
 import java.io.Serializable;
