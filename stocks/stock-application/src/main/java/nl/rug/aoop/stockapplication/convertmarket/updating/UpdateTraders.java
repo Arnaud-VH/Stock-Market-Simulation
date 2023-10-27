@@ -6,7 +6,7 @@ import nl.rug.aoop.market.trader.Trader;
 import nl.rug.aoop.model.StockExchangeData;
 import nl.rug.aoop.model.traderdata.DataTrader;
 import nl.rug.aoop.model.traderdata.StockPortfolio;
-import nl.rug.aoop.networkmarket.clientUpdater.ExchangeServer;
+import nl.rug.aoop.networkmarket.exchangeserver.ExchangeServer;
 
 import java.util.ArrayList;
 import java.util.HashMap;

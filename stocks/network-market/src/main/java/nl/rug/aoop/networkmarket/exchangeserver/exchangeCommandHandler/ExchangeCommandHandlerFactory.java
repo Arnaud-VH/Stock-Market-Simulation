@@ -1,9 +1,9 @@
-package nl.rug.aoop.networkmarket.exchangeCommandHandler;
+package nl.rug.aoop.networkmarket.exchangeserver.exchangeCommandHandler;
 
-import nl.rug.aoop.networkmarket.exchangeCommandHandler.commands.PlaceAskCommand;
-import nl.rug.aoop.networkmarket.exchangeCommandHandler.commands.RegisterCommand;
-import nl.rug.aoop.networkmarket.clientUpdater.ExchangeServer;
-import nl.rug.aoop.networkmarket.exchangeCommandHandler.commands.PlaceBidCommand;
+import nl.rug.aoop.networkmarket.exchangeserver.exchangeCommandHandler.commands.PlaceAskCommand;
+import nl.rug.aoop.networkmarket.exchangeserver.exchangeCommandHandler.commands.RegisterCommand;
+import nl.rug.aoop.networkmarket.exchangeserver.ExchangeServer;
+import nl.rug.aoop.networkmarket.exchangeserver.exchangeCommandHandler.commands.PlaceBidCommand;
 import nl.rug.aoop.messagequeue.commandhandler.AbstractCommandHandlerFactory;
 
 /**

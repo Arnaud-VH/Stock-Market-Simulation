@@ -1,10 +1,9 @@
 package nl.rug.aoop.networkmarket;
 
-import nl.rug.aoop.networkmarket.TraderClient.TraderClient;
-import nl.rug.aoop.networkmarket.clientUpdater.ExchangeServer;
+import nl.rug.aoop.networkmarket.traderclient.TraderClient;
 import nl.rug.aoop.market.stock.Stock;
+import nl.rug.aoop.networkmarket.exchangeserver.ExchangeServer;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
@@ -26,6 +25,7 @@ public class IntegrationTest {
     private PrintWriter out;
     private TraderClient traderArnaud;
     private TraderClient traderClement;
+    private Map<Stock,Long> arnaudsPortfolio;
     private volatile String inString = null;
     Socket socketToClose;
 
@@ -36,18 +36,17 @@ public class IntegrationTest {
         stocks = new ArrayList<>();
         stocks.add(stock1);
         stocks.add(stock2);
-        Map<Stock,Long> arnaudsPortfolio = new HashMap<>();
+        arnaudsPortfolio = new HashMap<>();
         arnaudsPortfolio.put(stock1, 100L);
         arnaudsPortfolio.put(stock2, 10L);
-        traderArnaud = new TraderClient("T-RN0","TraderArnaud",10000, arnaudsPortfolio);
-        traderClement = new TraderClient("T-CLMN7", "TraderClement", 50000, arnaudsPortfolio);
         exchangeServer = new ExchangeServer(stocks);
     }
 
-    @Disabled //TODO Fix this
     @Test
     public void integrationTest() {
         exchangeServer.start();
+        traderArnaud = new TraderClient("T-RN0","TraderArnaud",10000, arnaudsPortfolio);
+        traderClement = new TraderClient("T-CLMN7", "TraderClement", 50000, arnaudsPortfolio);
         await().atMost(Duration.ofSeconds(1)).until(exchangeServer::isRunning);
         traderClement.start();
         traderArnaud.start();

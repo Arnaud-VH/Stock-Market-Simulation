@@ -1,4 +1,4 @@
-package nl.rug.aoop.networkmarket.TraderClient.TraderCommandHandler;
+package nl.rug.aoop.networkmarket.traderclient.tradercommandhandler;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.rug.aoop.command.command.Command;

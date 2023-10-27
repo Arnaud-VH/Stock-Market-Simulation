@@ -1,7 +1,7 @@
-package nl.rug.aoop.networkmarket.TraderClient.TraderCommandHandler.Commands;
+package nl.rug.aoop.networkmarket.traderclient.tradercommandhandler.Commands;
 
 import nl.rug.aoop.command.command.Command;
-import nl.rug.aoop.networkmarket.TraderClient.TraderClient;
+import nl.rug.aoop.networkmarket.traderclient.TraderClient;
 
 import java.util.Map;
 

@@ -1,8 +1,9 @@
-package nl.rug.aoop.networkmarket.clientUpdater;
+package nl.rug.aoop.networkmarket.exchangeserver;
 
 import lombok.Getter;
-import nl.rug.aoop.networkmarket.exchangeCommandHandler.ExchangeCommandHandlerFactory;
-import nl.rug.aoop.networkmarket.exchangeMessageHandler.ExchangeMessageHandler;
+import nl.rug.aoop.networkmarket.exchangeserver.clientUpdater.ClientUpdater;
+import nl.rug.aoop.networkmarket.exchangeserver.exchangeCommandHandler.ExchangeCommandHandlerFactory;
+import nl.rug.aoop.networkmarket.exchangeserver.exchangeMessageHandler.ExchangeMessageHandler;
 import nl.rug.aoop.market.trader.Trader;
 import nl.rug.aoop.messagequeue.commandhandler.QueueCommandHandlerFactory;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +42,7 @@ public class ExchangeServer extends Exchange {
     private final CommandHandler commandHandler = new ExchangeCommandHandlerFactory(this).createCommandHandler();
     private final ExchangeMessageHandler messageHandler = new ExchangeMessageHandler(consumer, commandHandler);
     @Getter
-    private final Map<Trader, Integer> traderIDMap = new HashMap<>();
+    private final Map<Trader, Integer> traderRegister = new HashMap<>();
 
     /**
      * Constructor for ExchangeServer.
@@ -115,8 +116,8 @@ public class ExchangeServer extends Exchange {
      * @param clientID The clientID.
      */
     public void registerTrader(Trader traderID, int clientID) {
-        if (!traderIDMap.containsKey(traderID)) {
-            traderIDMap.put(traderID,clientID);
+        if (!traderRegister.containsKey(traderID)) {
+            traderRegister.put(traderID,clientID);
             return;
         }
         log.info("Trader " + traderID + " already registered");
@@ -128,7 +129,7 @@ public class ExchangeServer extends Exchange {
      * @return If the clientID is registered or not.
      */
     public boolean isRegistered(Trader trader) {
-        return traderIDMap.containsKey(trader);
+        return traderRegister.containsKey(trader);
     }
 
 }

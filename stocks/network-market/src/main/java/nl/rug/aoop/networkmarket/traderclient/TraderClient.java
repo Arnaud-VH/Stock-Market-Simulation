@@ -1,4 +1,4 @@
-package nl.rug.aoop.networkmarket.TraderClient;
+package nl.rug.aoop.networkmarket.traderclient;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.rug.aoop.market.stock.Stock;
@@ -10,8 +10,8 @@ import nl.rug.aoop.messagequeue.producers.MQProducer;
 import nl.rug.aoop.messagequeue.producers.NetworkProducer;
 import nl.rug.aoop.messagequeue.queues.Message;
 import nl.rug.aoop.networking.client.Client;
-import nl.rug.aoop.networkmarket.TraderClient.TraderCommandHandler.TraderCommandHandler;
-import nl.rug.aoop.networkmarket.TraderClient.TraderCommandHandler.TraderCommandHandlerFactory;
+import nl.rug.aoop.networkmarket.traderclient.tradercommandhandler.TraderCommandHandler;
+import nl.rug.aoop.networkmarket.traderclient.tradercommandhandler.TraderCommandHandlerFactory;
 import nl.rug.aoop.networkmarket.serialiser.MarketSerializer;
 
 import java.io.IOException;
@@ -25,8 +25,7 @@ import java.util.Map;
  */
 @Slf4j
 public class TraderClient extends Trader{
-    //TODO: Command message handler that can handle an update command.
-    private static final transient int PORT = 6400; //TODO Make sure the port is the same as the exchangeServer port.
+    private static final transient int PORT = 6400;
     private final transient Client client;
     private final transient MQProducer producer;
     private final transient TraderCommandHandler commandHandler;

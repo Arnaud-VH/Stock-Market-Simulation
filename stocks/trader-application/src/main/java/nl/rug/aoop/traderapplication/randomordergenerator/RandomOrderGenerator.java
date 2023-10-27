@@ -1,7 +1,7 @@
 package nl.rug.aoop.traderapplication.randomordergenerator;
 
 import nl.rug.aoop.market.stock.Stock;
-import nl.rug.aoop.networkmarket.TraderClient.TraderClient;
+import nl.rug.aoop.networkmarket.traderclient.TraderClient;
 import nl.rug.aoop.traderapplication.order.LimitOrder;
 
 import java.util.ArrayList;

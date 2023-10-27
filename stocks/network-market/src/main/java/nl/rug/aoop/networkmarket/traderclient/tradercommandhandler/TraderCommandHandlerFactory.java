@@ -1,10 +1,10 @@
-package nl.rug.aoop.networkmarket.TraderClient.TraderCommandHandler;
+package nl.rug.aoop.networkmarket.traderclient.tradercommandhandler;
 
 import nl.rug.aoop.messagequeue.commandhandler.AbstractCommandHandlerFactory;
-import nl.rug.aoop.networkmarket.TraderClient.TraderClient;
-import nl.rug.aoop.networkmarket.TraderClient.TraderCommandHandler.Commands.ClientIDCommand;
-import nl.rug.aoop.networkmarket.TraderClient.TraderCommandHandler.Commands.EchoCommand;
-import nl.rug.aoop.networkmarket.TraderClient.TraderCommandHandler.Commands.UpdateCommand;
+import nl.rug.aoop.networkmarket.traderclient.TraderClient;
+import nl.rug.aoop.networkmarket.traderclient.tradercommandhandler.Commands.ClientIDCommand;
+import nl.rug.aoop.networkmarket.traderclient.tradercommandhandler.Commands.EchoCommand;
+import nl.rug.aoop.networkmarket.traderclient.tradercommandhandler.Commands.UpdateCommand;
 
 /**
  * Factory that creates the commands for the traderCommand handler.

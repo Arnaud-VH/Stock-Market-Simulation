@@ -1,13 +1,13 @@
 package nl.rug.aoop.networkmarket;
 
 import lombok.extern.slf4j.Slf4j;
-import nl.rug.aoop.networkmarket.clientUpdater.ExchangeServer;
 import nl.rug.aoop.market.stock.Stock;
 import nl.rug.aoop.market.trader.Trader;
 import nl.rug.aoop.market.transaction.Ask;
 import nl.rug.aoop.market.transaction.Bid;
 import nl.rug.aoop.messagequeue.queues.Message;
 import nl.rug.aoop.networking.networkmessage.NetworkMessage;
+import nl.rug.aoop.networkmarket.exchangeserver.ExchangeServer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import nl.rug.aoop.networkmarket.serialiser.MarketSerializer;

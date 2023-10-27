@@ -3,7 +3,7 @@ package nl.rug.aoop.stockapplication.convertmarket.updating;
 import nl.rug.aoop.market.stock.Stock;
 import nl.rug.aoop.model.StockExchangeData;
 import nl.rug.aoop.model.stockdata.StockData;
-import nl.rug.aoop.networkmarket.clientUpdater.ExchangeServer;
+import nl.rug.aoop.networkmarket.exchangeserver.ExchangeServer;
 import lombok.extern.slf4j.Slf4j;
 import java.util.ArrayList;
 import java.util.Map;

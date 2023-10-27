@@ -1,4 +1,4 @@
-package nl.rug.aoop.networkmarket.exchangeMessageHandler;
+package nl.rug.aoop.networkmarket.exchangeserver.exchangeMessageHandler;
 
 import lombok.Getter;
 import nl.rug.aoop.command.command.CommandHandler;

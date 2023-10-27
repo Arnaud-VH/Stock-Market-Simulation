@@ -3,7 +3,7 @@ package nl.rug.aoop.traderapplication;
 import nl.rug.aoop.market.stock.Stock;
 import nl.rug.aoop.market.trader.Trader;
 import nl.rug.aoop.model.StockExchangeData;
-import nl.rug.aoop.networkmarket.TraderClient.TraderClient;
+import nl.rug.aoop.networkmarket.traderclient.TraderClient;
 import nl.rug.aoop.stockapplication.convertmarket.MakeStocks;
 import nl.rug.aoop.stockapplication.convertmarket.MakeTraders;
 import nl.rug.aoop.traderapplication.randomordergenerator.RandomOrderGenerator;

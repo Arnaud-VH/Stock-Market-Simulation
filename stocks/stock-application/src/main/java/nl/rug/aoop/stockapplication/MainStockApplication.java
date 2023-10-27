@@ -2,7 +2,7 @@ package nl.rug.aoop.stockapplication;
 
 import nl.rug.aoop.initialization.SimpleViewFactory;
 import nl.rug.aoop.model.StockExchangeData;
-import nl.rug.aoop.networkmarket.clientUpdater.ExchangeServer;
+import nl.rug.aoop.networkmarket.exchangeserver.ExchangeServer;
 import nl.rug.aoop.stockapplication.convertmarket.*;
 import nl.rug.aoop.stockapplication.convertmarket.updating.UpdateAll;
 import nl.rug.aoop.stockapplication.convertmarket.updating.UpdateStocks;

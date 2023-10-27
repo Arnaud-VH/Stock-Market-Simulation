@@ -1,6 +1,6 @@
 package nl.rug.aoop.networkmarket;
 
-import nl.rug.aoop.networkmarket.TraderClient.TraderClient;
+import nl.rug.aoop.networkmarket.traderclient.TraderClient;
 import nl.rug.aoop.networkmarket.serialiser.MarketSerializer;
 import lombok.extern.slf4j.Slf4j;
 import nl.rug.aoop.market.stock.Stock;
@@ -158,18 +158,18 @@ public class TestTraderClient {
         assertEquals(networkedBid.getTrader(), traderClient);
     }
 
-    @Disabled //TODO Fix this test
     @Test
     public void testRegister() throws IOException, ClassNotFoundException {
-        //TODO: Fix the register test
         traderClient.start();
         await().atMost(Duration.ofSeconds(1)).until(traderClient::isRunning);
+        serverOut.println(new NetworkMessage("client_id",String.valueOf(0)).toJson());
 
         String receivedServer = serverIn.readLine();
-        Message message = Message.fromJson(NetworkMessage.fromJson(receivedServer).getBody());
-        ArrayList<String> list = MarketSerializer.fromString(message.getBody(),ArrayList.class);
-        assertEquals(traderClient, MarketSerializer.fromString(list.get(0), Trader.class));
-        assertEquals(0, Integer.parseInt(list.get(1)));
+        Message msg = Message.fromJson(NetworkMessage.fromJson(receivedServer).getBody());
+        assertEquals("register",msg.getHeader());
+        ArrayList<Serializable> list = MarketSerializer.fromString(msg.getBody(),ArrayList.class);
+        assertEquals(traderClient, (Trader)list.get(0));
+        assertEquals(0, list.get(1));
     }
 
     @Test

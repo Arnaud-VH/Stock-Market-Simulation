@@ -1,6 +1,7 @@
-package nl.rug.aoop.networkmarket.clientUpdater;
+package nl.rug.aoop.networkmarket.exchangeserver.clientUpdater;
 
 import lombok.extern.slf4j.Slf4j;
+import nl.rug.aoop.networkmarket.exchangeserver.ExchangeServer;
 import nl.rug.aoop.networkmarket.serialiser.MarketSerializer;
 import nl.rug.aoop.networking.networkmessage.NetworkMessage;
 import nl.rug.aoop.networking.server.Server;
@@ -30,7 +31,7 @@ public class ClientUpdater implements Runnable {
     @Override
     public void run() {
         try {
-            for (var entry : exchange.getTraderIDMap().entrySet()) {
+            for (var entry : exchange.getTraderRegister().entrySet()) {
                 ArrayList<Serializable> exchangeInfo = new ArrayList<>();
                 exchangeInfo.add(exchange.getStocks());
                 exchangeInfo.add(entry.getKey());

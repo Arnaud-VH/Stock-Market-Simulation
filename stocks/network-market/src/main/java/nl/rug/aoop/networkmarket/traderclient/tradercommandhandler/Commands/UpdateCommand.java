@@ -1,10 +1,10 @@
-package nl.rug.aoop.networkmarket.TraderClient.TraderCommandHandler.Commands;
+package nl.rug.aoop.networkmarket.traderclient.tradercommandhandler.Commands;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.rug.aoop.command.command.Command;
 import nl.rug.aoop.market.stock.Stock;
 import nl.rug.aoop.market.trader.Trader;
-import nl.rug.aoop.networkmarket.TraderClient.TraderClient;
+import nl.rug.aoop.networkmarket.traderclient.TraderClient;
 import nl.rug.aoop.networkmarket.serialiser.MarketSerializer;
 
 import java.io.IOException;
