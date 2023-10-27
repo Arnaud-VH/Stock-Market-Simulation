@@ -31,13 +31,12 @@ public class MainTraderApplication {
         MakeStocks makeStocks = new MakeStocks(data);
         ArrayList<Stock> allStocks = makeStocks.createStocks();
 
-        //Initialise all the trader clients. Schedule the orders from the bots.
         for (Trader t : makeTrader.createTraders()) {
             TraderClient traderClient = new TraderClient(t.getId(), t.getName(), t.getFunds(), t.getOwnedStocks());
             traderClient.start();
             Random rand = new Random();
             RandomOrderGenerator orderGenerator = new RandomOrderGenerator(traderClient, allStocks, rand);
-            TraderBot traderBot = new TraderBot(traderClient, orderGenerator);
+            TraderBot traderBot = new TraderBot(orderGenerator);
             traderBot.placeOrder();
         }
 
