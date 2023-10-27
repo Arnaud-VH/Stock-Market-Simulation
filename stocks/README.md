@@ -63,20 +63,27 @@ Describe how to run your program here. These should be a few very simple steps.
 ## Modules
 
 - ####command Module
-The command module holds the Command interface and the Command Handler interface. 
+The `command` module contains two interfaces the `Command` interface and the `CommandHandler`. The command interface is used to implement the Command Pattern throughout the project. It defines the contract for all Command classes, so that every Command class must override the `execute()` method. The `CommandHandler` interface defines the contract for the class that handle incoming commands. It takes the commandKey as a parameter and then maps this commandKey onto the corresponding command and executes it. An example of where the `CommandHandler` is used is in the ExchangeServer where we create a `ExchangeServerCommandHandler`.
+These two interfaces allow for a modular and extensible design. Allowing us to easily add new Commands and handle these commands accordingly using the CommandHandlers. As well, these interfaces work well together with the factory pattern to create new commands. 
 
-Complete this with more information. 
 
 - ####market Module
+The `market` Module contains all the logic for the trader and the exchange. This logic is network independent as we created this module to act as a library, that can be used whenever you want to implement a stock exchange simulation, regardless of the implementations you use. 
+In this module we have all our fundamental classes, like the `Stock`, `Trader`, `Transaction`, `Ask`, `Bid` and `Exchange` class. The Exchange class has the logic for resolving bids and asks that are placed by traders. As well, it validates trades and ensures that the traders who are placing bids or asks are placing valid bids and asks. 
+For example, it validates that a trader does not create a bid (Sell order) for a stock it doesn't own. The market module defines the central logic for the interaction of the exchange with the traders.  
+
 
 - ####message-queue Module
 The `message-queue` module is a library like module that we use in the networking module. The `message-queue` module has a variety of queues that can be used to store messages. The messages it stores are commands that are sent across the network by the client. 
 A message queue consumer, in our case the server, then constantly polls the message queue to see what messages it has received. 
 
 - ####network-market Module
-
+The `network-market` Module takes our `market` module and adds networking features by it. The Exchange because and ExchangeServer and the Trader becomes a TraderClient. As this uses networking the ExchangeServer class and the TraderClient class contain networking method like `start()` and `terminate()`. 
+As well, in this module we have the commandHandlers for the `ExchangeSever` and for the `TraderClient`. These command Handlers are central to the functionality of the program. Commands by the ExchangeServer and the TraderClient are sent across the network as strings containing a header and a body. The command handlers turn these strings into the commands and execute them accordingly.
+To implement these commands we use the Command Pattern. As well to create the commands, such as `PlaceAskCommand` and `PlaceBidCommand` we use the factory pattern. Overall, the `network-market` module is used to apply trader-exchange communication over the network through the use of commands while using the `market` module to handle the logic of trading stocks.
 
 - ####networking Module
+The `networking` Module  
 
 - ####stock-application Module
 The `stock-application` Module is the module where the Exchange hosted on the Server is initialised by running the `public static void main`. When the `public static void main` is run it instantiates the view using the appropriate classes from the `stock-market-ui` module. To initialise the ExchangeServer the data from the `stocks.yaml` and `traders.yaml` files is needed.
