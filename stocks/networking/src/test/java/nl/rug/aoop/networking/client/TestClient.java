@@ -96,6 +96,7 @@ public class TestClient {
         assertTrue(client.isRunning());
         String message = "hello";
         serverOut.println(message);
+        await().atLeast(Duration.ofSeconds(2));
         Mockito.verify(mockHandler).handleMessage("hello");
         client.terminate();
     }
