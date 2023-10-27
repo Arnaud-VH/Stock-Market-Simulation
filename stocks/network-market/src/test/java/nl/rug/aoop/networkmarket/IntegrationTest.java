@@ -4,6 +4,7 @@ import nl.rug.aoop.networkmarket.traderclient.TraderClient;
 import nl.rug.aoop.market.stock.Stock;
 import nl.rug.aoop.networkmarket.exchangeserver.ExchangeServer;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
@@ -41,6 +42,7 @@ public class IntegrationTest {
         arnaudsPortfolio.put(stock2, 10L);
         exchangeServer = new ExchangeServer(stocks);
     }
+
 
     @Test
     public void integrationTest() {

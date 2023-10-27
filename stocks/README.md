@@ -70,8 +70,11 @@ Complete this with more information.
 - ####market Module
 
 - ####message-queue Module
+The `message-queue` module is a library like module that we use in the networking module. The `message-queue` module has a variety of queues that can be used to store messages. The messages it stores are commands that are sent across the network by the client. 
+A message queue consumer, in our case the server, then constantly polls the message queue to see what messages it has received. 
 
 - ####network-market Module
+
 
 - ####networking Module
 

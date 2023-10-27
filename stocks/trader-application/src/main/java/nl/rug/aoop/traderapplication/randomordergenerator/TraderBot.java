@@ -1,7 +1,5 @@
 package nl.rug.aoop.traderapplication.randomordergenerator;
 
-import nl.rug.aoop.networkmarket.traderclient.TraderClient;
-
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
