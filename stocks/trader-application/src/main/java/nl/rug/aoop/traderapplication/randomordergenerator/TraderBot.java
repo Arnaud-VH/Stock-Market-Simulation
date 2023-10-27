@@ -10,17 +10,14 @@ import java.util.concurrent.TimeUnit;
  * The trader bot is a client that randomly places order onto the exchange server.
  */
 public class TraderBot {
-    private final TraderClient traderClient;
     private final RandomOrderGenerator randomOrderGenerator;
     private ScheduledExecutorService executer;
 
     /**
      * Constructor for the trader bot.
-     * @param traderClient The trader client that is able to communicate over the network.
      * @param randomOrderGenerator The class that allows for random order to be generated.
      */
-    public TraderBot(TraderClient traderClient, RandomOrderGenerator randomOrderGenerator) {
-        this.traderClient = traderClient;
+    public TraderBot(RandomOrderGenerator randomOrderGenerator) {
         this.randomOrderGenerator = randomOrderGenerator;
         this.executer = Executors.newScheduledThreadPool(1);
     }
