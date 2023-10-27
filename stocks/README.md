@@ -116,7 +116,7 @@ After creating this instance of the call we call the `load` method to load in th
 We use this module in the `stock-application` and `trader-application` module to load in the stock data and construct the Stock Exchange and to construct the traders. 
 <!--
 
-    
+
 Describe each module in the project, what their purpose is and how they are used in your program. Try to aim for at least 100 words per module.
 -->
 
@@ -127,6 +127,13 @@ List all the design patterns you used in your program. For every pattern, descri
 - Where it is used in your application.
 - What benefit it provides in your application. Try to be specific here. For example, don't just mention a pattern improves maintainability, but explain in what way it does so.
 -->
+- Command Pattern
+  - The command pattern is used in many places in our application. The command pattern is an elegant solution to having an easily extendable application. This is, for example, made apparent in our `ExchangeServer` class. The `ExchangeServer` should be able to handle incoming requests by `TraderClients`, if in the future were to want to add functionality to the exchange we could easily add said functionality through commands and the command pattern. We also used the command pattern in our `network` module, and the `traderClient`.
+- Factory Pattern
+  - The factory pattern is used alongside the command pattern in our code. The factory pattern allows us to increase decoupling between the `commandHandlers` in our code and the classes using them, as the factory pattern handles the initialization. This design pattern is used every time the command pattern is used.
+- Other design considerations
+  - Aside from the mentioned specific design patterns a lot of design considerations were made when building the application.
+  - A very obvious design consideration comes from the way we structured our code. We tried to take an approach that would maximaze reusability of modules and code and also decoupling between modules. For example we have a `market` module that does nothing more than just hold the datastructures for an exchange market. This means this can be reused in many ways. One of them being the `network-market` module, which simply extends the market module but adds networking capability. This module again can be reused in many ways and for many applications. The way we use it is in our final application. This means that the `market` module has no non-external dependencies. The `network-market` module only depends on market, networking and message queue. The final application simply depends on network market. We also hope that by creating our project this way, it increases code readability, as every module has a very clear and consise function.
 
 ## Evaluation
 
