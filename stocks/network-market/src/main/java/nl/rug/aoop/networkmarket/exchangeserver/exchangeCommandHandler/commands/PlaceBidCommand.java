@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import nl.rug.aoop.command.command.Command;
 import nl.rug.aoop.market.exchange.Exchange;
 import nl.rug.aoop.market.transaction.Bid;
-import nl.rug.aoop.networkmarket.serialiser.MarketSerializer;
+import nl.rug.aoop.util.serialiser.MarketSerializer;
 
 import java.io.IOException;
 import java.util.Map;

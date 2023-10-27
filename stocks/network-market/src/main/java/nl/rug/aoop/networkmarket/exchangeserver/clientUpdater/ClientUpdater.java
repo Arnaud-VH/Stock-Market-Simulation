@@ -2,9 +2,9 @@ package nl.rug.aoop.networkmarket.exchangeserver.clientUpdater;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.rug.aoop.networkmarket.exchangeserver.ExchangeServer;
-import nl.rug.aoop.networkmarket.serialiser.MarketSerializer;
 import nl.rug.aoop.networking.networkmessage.NetworkMessage;
 import nl.rug.aoop.networking.server.Server;
+import nl.rug.aoop.util.serialiser.MarketSerializer;
 
 import java.io.IOException;
 import java.io.Serializable;

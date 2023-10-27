@@ -1,7 +1,7 @@
 package nl.rug.aoop.networkmarket;
 
 import nl.rug.aoop.networkmarket.traderclient.TraderClient;
-import nl.rug.aoop.networkmarket.serialiser.MarketSerializer;
+import nl.rug.aoop.util.serialiser.MarketSerializer;
 import lombok.extern.slf4j.Slf4j;
 import nl.rug.aoop.market.stock.Stock;
 import nl.rug.aoop.market.trader.Trader;
@@ -11,7 +11,6 @@ import nl.rug.aoop.messagequeue.queues.Message;
 import nl.rug.aoop.networking.networkmessage.NetworkMessage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 

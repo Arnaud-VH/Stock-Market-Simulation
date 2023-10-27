@@ -1,4 +1,4 @@
-package nl.rug.aoop.networkmarket.serialiser;
+package nl.rug.aoop.util.serialiser;
 
 import java.io.*;
 import java.util.Base64;

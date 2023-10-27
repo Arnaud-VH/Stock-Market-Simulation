@@ -4,11 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import nl.rug.aoop.command.command.Command;
 import nl.rug.aoop.market.exchange.Exchange;
 import nl.rug.aoop.market.transaction.Ask;
+import nl.rug.aoop.util.serialiser.MarketSerializer;
 
 import java.io.IOException;
 import java.util.Map;
-
-import nl.rug.aoop.networkmarket.serialiser.MarketSerializer;
 
 /**
  * Command that places an ask into the exchange.

@@ -1,5 +1,4 @@
 module network.market {
-    exports nl.rug.aoop.networkmarket.serialiser;
     exports nl.rug.aoop.networkmarket.traderclient;
     exports nl.rug.aoop.networkmarket.exchangeserver.clientUpdater;
     //exports nl.rug.aoop.networkmarket;
@@ -11,4 +10,5 @@ module network.market {
     requires org.slf4j;
     requires messagequeue;
     requires networking;
+    requires util;
 }
