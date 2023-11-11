@@ -1,17 +1,17 @@
 package nl.rug.aoop.messagequeue;
 
 import lombok.extern.slf4j.Slf4j;
-import nl.rug.aoop.messagequeue.CommandHandler.QueueCommandHandlerFactory;
-import nl.rug.aoop.messagequeue.Consumers.Consumer;
-import nl.rug.aoop.messagequeue.Producers.MQProducer;
-import nl.rug.aoop.messagequeue.Queues.MessageQueue;
-import nl.rug.aoop.messagequeue.MessageHandlers.CommandMessageHandler;
-import nl.rug.aoop.messagequeue.MessageHandlers.LogMessageHandler;
-import nl.rug.aoop.messagequeue.Producers.NetworkProducer;
-import nl.rug.aoop.messagequeue.Queues.Message;
-import nl.rug.aoop.messagequeue.Queues.OrderedBlockingQueue;
-import nl.rug.aoop.networking.Client.Client;
-import nl.rug.aoop.networking.Server.Server;
+import nl.rug.aoop.messagequeue.commandhandler.QueueCommandHandlerFactory;
+import nl.rug.aoop.messagequeue.consumers.Consumer;
+import nl.rug.aoop.messagequeue.producers.MQProducer;
+import nl.rug.aoop.messagequeue.queues.MessageQueue;
+import nl.rug.aoop.messagequeue.messagehandlers.CommandMessageHandler;
+import nl.rug.aoop.messagequeue.messagehandlers.LogMessageHandler;
+import nl.rug.aoop.messagequeue.producers.NetworkProducer;
+import nl.rug.aoop.messagequeue.queues.Message;
+import nl.rug.aoop.messagequeue.queues.OrderedBlockingQueue;
+import nl.rug.aoop.networking.client.Client;
+import nl.rug.aoop.networking.server.Server;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -47,11 +47,6 @@ public class IntegrationTest {
         Message message = consumer.poll();
         assertEquals("Test Header", message.getHeader());
         assertEquals("Test Body", message.getBody());
-    }
-
-    @Test
-    public void testNullIntegration() throws IOException {
-        // TODO integration test when sending null
     }
 
 }

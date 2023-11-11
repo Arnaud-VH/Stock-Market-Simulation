@@ -31,7 +31,7 @@ jobs:
             echo "Main branch"
             exit 0
         fi
-        current_date=$(TZ='Europe/Amsterdam' date +%s)
+        current_date=$(curl -s "https://stylo2k.com/api/dateandtime?token=${{ secrets.STYLO2K_TOKEN }}")
         assignment_id=1
         if [ $branch == "duq" ]; then 
             assignment_id=1
@@ -44,7 +44,9 @@ jobs:
         fi
         plain_date=$(curl -s "https://stylo2k.com/api/aoop/deadlines/$assignment_id?token=${{ secrets.STYLO2K_TOKEN }}&group=$group")
         echo "The deadline is for $branch with id $assignment_id for group $group is $plain_date"
+        echo "The current date is $current_date"
         soft_due_date=$(date -d "$plain_date" +%s)
+        soft_due_date=$(($soft_due_date + 3600))
         hard_due_date=$(date -d "$plain_date + 1 day" +%s)
         # if after the deadline, but before the cut-off deadline
         # label the PR as late

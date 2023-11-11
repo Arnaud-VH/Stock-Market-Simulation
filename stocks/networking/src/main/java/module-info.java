@@ -1,8 +1,8 @@
 module networking {
-    exports nl.rug.aoop.networking.Handlers;
-    exports nl.rug.aoop.networking.NetworkMessage;
-    exports nl.rug.aoop.networking.Client;
-    exports nl.rug.aoop.networking.Server;
+    exports nl.rug.aoop.networking.handlers;
+    exports nl.rug.aoop.networking.networkmessage;
+    exports nl.rug.aoop.networking.client;
+    exports nl.rug.aoop.networking.server;
     // If you are using Mockito in another module to mock a networking item from this package,
     // then add "opens .. to ..". If we are mocking e.g. a NetworkClient interface
     // in the module messagequeue, then we need:
