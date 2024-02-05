@@ -124,18 +124,18 @@ We use this module in the `stock-application` and `trader-application` module to
 
 ## Evaluation
 
-###Stability of Implementation
+### Stability of Implementation
 Our implementation of the Stock Market Simulation has a high degree of stability. When running both the `stock-application` and the `trader-application`
 there will be no crashes. The core functionality of the project, including the client-server network communication, sending buy and sell orders, handling the commands (both on the client and server side), and the live updating view of the stock trading simulation, all operate without any critical bugs. 
 
-###Successful Aspects
-- ####Design and Modular implementation
+### Successful Aspects
+- #### Design and Modular implementation
 We focused a lot on having a modular and de-coupled design planned out, by drawing a diagram, before we started writing out our code. This made the implementation process a lot easier for most parts of the project. By implementing a modular design we broke the project down into smaller, more manageable, sub problems such as: the exchange logic, the networking between the exchange and the traders, the loading of the data and the updating of the Simulation UI, as examples.
 The modular design also meant we had reusable components reducing the code duplication in our project. This also made bug fixing and changes easier to manage as fixing a problem in one class meant this fix automatically propagated to all places this module/class was used. Overall, the modular design improves the maintainability of project.
 By having modules that focused on specific parts of the project we could test these modules in isolation and ensure that the module works as intended. Then, to see if our modules worked well together we wrote some integration tests. We focused a lot on testing the logic of the `ExchangeSever` and the `TraderClient` as these are the central parts of the project, testing edge cases trying to get full test coverage. 
 
 ### Improvements 
-- ####Model and Input Data
+- #### Model and Input Data
 Even though we planned ahead and drew a diagram to help us with our implementation we did not look at how the data (`stocks.yaml` and `traders.yaml`) that was given to us was formatted. This meant we created a market module, that handles all the logic of our project: handling bids and asks, creating transactions, updating traders, creating stocks etc... without the input data in mind. 
 This meant we had a model, the market module, that was fully functional in testing, but didn't match the input data. This lead to us needing to either fully change our market module, and the logic that goes with it, or convert the input data into data that fit our model. We choose the latter. 
 Although this works, this is not an ideal implementation. If we could re-do the project we would keep in mind the input data when creating the logic and model that use the input data. 
